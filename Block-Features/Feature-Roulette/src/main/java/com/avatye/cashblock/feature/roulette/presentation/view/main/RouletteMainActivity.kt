@@ -77,6 +77,16 @@ internal class RouletteMainActivity : AppBaseActivity() {
         AcbsrActivityRouletteMainBinding.inflate(LayoutInflater.from(this))
     }
 
+    override fun receiveActionInspection() {
+        leakHandler.post {
+            ViewOpenContract.openInspectionView(
+                activity = this@RouletteMainActivity,
+                blockCode = RouletteConfig.blockCode,
+                close = true
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root, logKey = "view:roulette-main")

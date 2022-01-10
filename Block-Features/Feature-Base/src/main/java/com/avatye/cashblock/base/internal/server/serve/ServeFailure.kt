@@ -1,52 +1,14 @@
 package com.avatye.cashblock.base.internal.server.serve
 
-import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.library.miscellaneous.toDateTimeValue
-import com.avatye.cashblock.base.library.miscellaneous.toStringValue
-import com.avatye.cashblock.module.data.serve.ServeStatusType
-import org.joda.time.DateTime
 import org.json.JSONObject
 
 data class ServeFailure(
-    val blockType: BlockType,
     val statusCode: Int = 0,
     private val serverCode: String = "",
     private val message: String = "",
     private val body: JSONObject? = null
 ) {
-    data class InspectionEntity(
-        val startDateTime: DateTime? = null,
-        val endDateTime: DateTime? = null,
-        val message: String,
-        val link: String
-    )
-
-    val serveStatusType: ServeStatusType
-        get() {
-            return when (statusCode) {
-                401 -> {
-                    EventBusContract.postUnauthorized(blockType = blockType)
-                    ServeStatusType.UNAUTHENTICATED
-                }
-                403 -> {
-                    EventBusContract.postForbidden(blockType = blockType)
-                    ServeStatusType.FORBIDDEN
-                }
-                503, 504 -> {
-                    EventBusContract.postInspection(blockType = blockType)
-                    ServeStatusType.INSPECTION
-                }
-                else -> {
-                    ServeStatusType.ERROR
-                }
-            }
-        }
-
-    val errorCode: String
-        get() {
-            return serverCode
-        }
+    val errorCode: String get() = serverCode
 
     val errorMessage: String
         get() {
@@ -56,21 +18,11 @@ data class ServeFailure(
             }
         }
 
-    val inspectionData: InspectionEntity?
-        get() {
-            var entity: InspectionEntity? = null
-            if (serveStatusType == ServeStatusType.INSPECTION) {
-                body?.let {
-                    entity = InspectionEntity(
-                        startDateTime = it.toDateTimeValue("startDateTime"),
-                        endDateTime = it.toDateTimeValue("endDateTime"),
-                        message = it.toStringValue("message"),
-                        link = it.toStringValue("link")
-                    )
-                }
-            }
-            return entity
-        }
+    val isUnauthenticated: Boolean get() = statusCode == 401
+
+    val isForbidden: Boolean get() = statusCode == 403
+
+    val isInspection: Boolean get() = (statusCode == 503 || statusCode == 504)
 
     override fun toString(): String {
         return "{ statusCode: ${statusCode}, serverCode: $serverCode, message: $message, body: $body }"

@@ -12,6 +12,8 @@ import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.component.contract.data.CoreDataContract
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
+import com.avatye.cashblock.base.component.domain.model.parcel.EventBusParcel
+import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.widget.dialog.DialogLoadingView
 import com.avatye.cashblock.base.component.widget.dialog.IDialogView
 import com.avatye.cashblock.base.internal.controller.BlockEventController
@@ -190,6 +192,7 @@ abstract class CoreBaseActivity : AppCompatActivity() {
 
     private inner class BroadcastWatchReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            val parel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
             LogHandler.i(moduleName = blockName) {
                 "${this::class.java.simpleName} -> BroadcastWatchReceiver -> onReceive { action: ${intent?.action ?: "null"} }"
             }
@@ -197,7 +200,11 @@ abstract class CoreBaseActivity : AppCompatActivity() {
             if (actionName.isNotEmpty()) {
                 when (actionName) {
                     ActionType.UNAUTHORIZED.actionName -> receiveActionUnAuthorized()
-                    ActionType.INSPECTION.actionName -> receiveActionInspection()
+                    ActionType.INSPECTION.actionName -> {
+                        if (blockCode.blockType == parel?.blockType) {
+                            receiveActionInspection()
+                        }
+                    }
                     ActionType.FORBIDDEN.actionName -> receiveActionForbidden()
                     ActionType.TICKET_BOX_UPDATE.actionName -> receiveActionTicketBox()
                     ActionType.TICKET_BALANCE_UPDATE.actionName -> receiveActionTicketBalance()

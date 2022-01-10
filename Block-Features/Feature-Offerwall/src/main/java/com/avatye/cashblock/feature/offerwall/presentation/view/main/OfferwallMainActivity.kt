@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.avatye.cashblock.base.component.contract.ViewOpenContract
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.launch
+import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
@@ -26,6 +28,16 @@ internal class OfferwallMainActivity : AppBaseActivity() {
 
     private val vb: AcbsoActivityOfferwallMainBinding by lazy {
         AcbsoActivityOfferwallMainBinding.inflate(LayoutInflater.from(this))
+    }
+
+    override fun receiveActionInspection() {
+        leakHandler.post {
+            ViewOpenContract.openInspectionView(
+                activity = this@OfferwallMainActivity,
+                blockCode = OfferwallConfig.blockCode,
+                close = true
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

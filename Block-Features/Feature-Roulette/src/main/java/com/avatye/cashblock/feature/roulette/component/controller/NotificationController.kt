@@ -17,6 +17,8 @@ import com.avatye.cashblock.base.component.contract.RemoteContract
 import com.avatye.cashblock.base.component.contract.data.CoreDataContract
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.entity.base.LandingType
+import com.avatye.cashblock.base.component.domain.model.parcel.EventBusParcel
+import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.isScreenOn
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
@@ -398,6 +400,7 @@ internal object NotificationController {
             lateinit var updateListener: IUpdateNotification
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                val parel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
                 when (val actionName = intent?.action) {
                     Intent.ACTION_TIME_TICK -> {
                         if (PreferenceData.Notification.allow) {

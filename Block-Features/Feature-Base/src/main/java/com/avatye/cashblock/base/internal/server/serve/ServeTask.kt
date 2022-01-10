@@ -5,6 +5,9 @@ import android.os.Build
 import com.android.volley.Request
 import com.avatye.cashblock.base.FeatureCore
 import com.avatye.cashblock.base.block.BlockCode
+import com.avatye.cashblock.base.component.contract.EventBusContract
+import com.avatye.cashblock.base.component.domain.entity.app.AppInspection
+import com.avatye.cashblock.base.library.miscellaneous.toDateTimeValue
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.library.rally.Rally
 import com.avatye.cashblock.base.library.rally.request.RallyRequest
@@ -158,24 +161,46 @@ internal class ServeTask<T : ServeSuccess>(
             responseEntity.setResponseRawValue(response.body)
             responseCallback.onSuccess(responseEntity)
         } catch (e: Exception) {
-            responseCallback.onFailure(
-                failure = ServeFailure(
-                    blockType = blockCode.blockType,
-                    message = e.message ?: "unknown error"
-                )
-            )
+            responseCallback.onFailure(failure = ServeFailure(message = e.message ?: "unknown error"))
         }
     }
 
     private fun parseError(error: RallyFailure) {
+        // status Unauthorized
+        if (error.statusCode == 401) {
+            EventBusContract.postUnauthorized(blockType = this.blockCode.blockType)
+        }
+        // status Forbidden
+        if (error.statusCode == 403) {
+            EventBusContract.postForbidden(blockType = this.blockCode.blockType)
+        }
+        // status Inspection
+        if (error.statusCode == 503 || error.statusCode == 504) {
+            FeatureCore.appInspection = makeInspectionEntity(rallyFailure = error)
+            EventBusContract.postInspection(blockType = this.blockCode.blockType)
+        }
+
         responseCallback.onFailure(
             failure = ServeFailure(
-                blockType = blockCode.blockType,
                 statusCode = error.statusCode,
                 serverCode = error.body?.toStringValue("code") ?: "",
                 message = error.body?.toStringValue("message") ?: "",
                 body = error.body
             )
         )
+    }
+
+    private fun makeInspectionEntity(rallyFailure: RallyFailure): AppInspection? {
+        var entity: AppInspection? = null
+        rallyFailure.body?.let {
+            entity = AppInspection(
+                blockType = this.blockCode.blockType,
+                fromDateTime = it.toDateTimeValue("startDateTime"),
+                toDateTime = it.toDateTimeValue("endDateTime"),
+                message = it.toStringValue("message"),
+                link = it.toStringValue("link")
+            )
+        }
+        return entity
     }
 }
