@@ -1,30 +1,31 @@
 package com.avatye.cashblock.base.component.contract
 
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.controller.BlockEventController
 
 object EventBusContract {
 
     fun makeWatcherFilter() = BlockEventController.makeBlockEventWatcherFilter()
 
-    fun postUnauthorized() = BlockEventController.postEventUnauthorized()
+    fun postUnauthorized(blockType: BlockType) = BlockEventController.postEventUnauthorized(blockType = blockType)
 
-    fun postForbidden() = BlockEventController.postEventForbidden()
+    fun postForbidden(blockType: BlockType) = BlockEventController.postEventForbidden(blockType = blockType)
 
-    fun postInspection() = BlockEventController.postEventInspection()
+    fun postInspection(blockType: BlockType) = BlockEventController.postEventInspection(blockType = blockType)
 
-    fun postTicketBalanceUpdate() = BlockEventController.postEventTicketBalanceUpdate()
+    fun postTicketBalanceUpdate(blockType: BlockType) = BlockEventController.postEventTicketBalanceUpdate(blockType = blockType)
 
-    fun postTicketBoxUpdate() = BlockEventController.postEventTicketBoxUpdate()
+    fun postTicketBoxUpdate(blockType: BlockType) = BlockEventController.postEventTicketBoxUpdate(blockType = blockType)
 
-    fun postTouchTicketConditionUpdate() = BlockEventController.postEventTouchTicketConditionUpdate()
+    fun postTouchTicketConditionUpdate(blockType: BlockType) = BlockEventController.postEventTouchTicketConditionUpdate(blockType = blockType)
 
-    fun postVideoTicketConditionUpdate() = BlockEventController.postEventVideoTicketConditionUpdate()
+    fun postVideoTicketConditionUpdate(blockType: BlockType) = BlockEventController.postEventVideoTicketConditionUpdate(blockType = blockType)
 
-    fun postBoxConditionUpdate() = BlockEventController.postEventBoxConditionUpdate()
+    fun postBoxConditionUpdate(blockType: BlockType) = BlockEventController.postEventBoxConditionUpdate(blockType = blockType)
 
-    fun postWinnerBoardUpdate() = BlockEventController.postEventWinnerBoardUpdate()
+    fun postWinnerBoardUpdate(blockType: BlockType) = BlockEventController.postEventWinnerBoardUpdate(blockType = blockType)
 
-    fun postAppLaunchMainActivity() = BlockEventController.postEventAppLaunchMainActivity()
+    fun postAppLaunchMainActivity(blockType: BlockType) = BlockEventController.postEventAppLaunchMainActivity(blockType = blockType)
 
-    fun postNotificationStatusUpdate() = BlockEventController.postEventNotificationStatusUpdate()
+    fun postNotificationStatusUpdate(blockType: BlockType) = BlockEventController.postEventNotificationStatusUpdate(blockType = blockType)
 }

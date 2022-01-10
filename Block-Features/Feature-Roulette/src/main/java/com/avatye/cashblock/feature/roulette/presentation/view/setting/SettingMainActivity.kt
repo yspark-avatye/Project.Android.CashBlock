@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.core.view.isVisible
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.RemoteContract
 import com.avatye.cashblock.base.component.contract.ViewOpenContract
@@ -137,7 +138,7 @@ internal class SettingMainActivity : AppBaseActivity() {
             if (NotificationController.Host.useHostNotification) {
                 PreferenceData.Notification.update(allow = isChecked)
                 NotificationController.Host.setNotificationEnabled(context = this@SettingMainActivity)
-                EventBusContract.postNotificationStatusUpdate()
+                EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             } else {
                 NotificationController.SDK.activationNotification(activity = this@SettingMainActivity, callback = {
                     button?.isChecked = it
@@ -147,7 +148,7 @@ internal class SettingMainActivity : AppBaseActivity() {
             if (NotificationController.Host.useHostNotification) {
                 PreferenceData.Notification.update(allow = isChecked)
                 NotificationController.SDK.stopNotificationService(context = this@SettingMainActivity)
-                EventBusContract.postNotificationStatusUpdate()
+                EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             } else {
                 NotificationController.SDK.deactivationNotification(activity = this@SettingMainActivity)
                 button?.isChecked = false

@@ -15,7 +15,6 @@ import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class BoxDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
 
     private val tokenizer = object : IServeToken {
         override fun makeBasicToken() = blockCode.basicToken
@@ -23,16 +22,24 @@ class BoxDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveAvailable(boxType: BoxType, response: (contract: ContractResult<BoxAvailableEntity>) -> Unit) {
-        APIBox.getTicketBoxAvailable(appId = appId, tokenizer = tokenizer, boxType = boxType, response = object : ServeResponse<ResBoxAvailable> {
-            override fun onSuccess(success: ResBoxAvailable) = response(Contract.onSuccess(success.boxAvailable))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIBox.getTicketBoxAvailable(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            boxType = boxType,
+            response = object : ServeResponse<ResBoxAvailable> {
+                override fun onSuccess(success: ResBoxAvailable) = response(Contract.onSuccess(success.boxAvailable))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postUse(boxType: BoxType, response: (contract: ContractResult<BoxUseEntity>) -> Unit) {
-        APIBox.postUseBox(appId = appId, tokenizer = tokenizer, boxType = boxType, response = object : ServeResponse<ResBoxUse> {
-            override fun onSuccess(success: ResBoxUse) = response(Contract.onSuccess(success.boxUse))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIBox.postUseBox(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            boxType = boxType,
+            response = object : ServeResponse<ResBoxUse> {
+                override fun onSuccess(success: ResBoxUse) = response(Contract.onSuccess(success.boxUse))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

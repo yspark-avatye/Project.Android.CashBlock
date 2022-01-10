@@ -23,23 +23,35 @@ class SupportDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveNoticeList(offset: Int = 0, limit: Int = 50, response: (contract: ContractResult<MutableList<NoticeEntity>>) -> Unit) {
-        APISupport.getNoticeList(appId = appId, tokenizer = tokenizer, offset = offset, limit = limit, response = object : ServeResponse<ResNoticeList> {
-            override fun onSuccess(success: ResNoticeList) = response(Contract.onSuccess(success = success.noticeEntities))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APISupport.getNoticeList(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            offset = offset,
+            limit = limit,
+            response = object : ServeResponse<ResNoticeList> {
+                override fun onSuccess(success: ResNoticeList) = response(Contract.onSuccess(success = success.noticeEntities))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun retrieveNoticeView(noticeId: String, response: (contract: ContractResult<NoticeEntity>) -> Unit) {
-        APISupport.getNoticeView(appId = appId, tokenizer = tokenizer, noticeId = noticeId, response = object : ServeResponse<ResNotice> {
-            override fun onSuccess(success: ResNotice) = response(Contract.onSuccess(success = success.noticeEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APISupport.getNoticeView(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            noticeId = noticeId,
+            response = object : ServeResponse<ResNotice> {
+                override fun onSuccess(success: ResNotice) = response(Contract.onSuccess(success = success.noticeEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun retrievePopups(response: (contract: ContractResult<MutableList<PopupNoticeEntity>>) -> Unit) {
-        APISupport.getPopups(appId = appId, tokenizer = tokenizer, response = object : ServeResponse<ResPopupNotice> {
-            override fun onSuccess(success: ResPopupNotice) = response(Contract.onSuccess(success.popupNoticeEntities))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APISupport.getPopups(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            response = object : ServeResponse<ResPopupNotice> {
+                override fun onSuccess(success: ResPopupNotice) = response(Contract.onSuccess(success.popupNoticeEntities))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

@@ -1,15 +1,16 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.internal.server.entity.banner.ResBannerBalance
 import com.avatye.cashblock.base.internal.server.entity.banner.ResBannerReward
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 object APIRewardBanner {
-    fun getBannerDirectReward(appId: String, tokenizer: IServeToken, response: ServeResponse<ResBannerReward>) {
+    fun getBannerDirectReward(blockCode: BlockCode, tokenizer: IServeToken, response: ServeResponse<ResBannerReward>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -20,9 +21,9 @@ object APIRewardBanner {
         ).execute()
     }
 
-    fun postBannerDirectReward(appId: String, tokenizer: IServeToken, ticketTransactionId: String, response: ServeResponse<ResBannerBalance>) {
+    fun postBannerDirectReward(blockCode: BlockCode, tokenizer: IServeToken, ticketTransactionId: String, response: ServeResponse<ResBannerBalance>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.POST,

@@ -1,16 +1,17 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.internal.server.entity.support.ResNotice
 import com.avatye.cashblock.base.internal.server.entity.support.ResNoticeList
 import com.avatye.cashblock.base.internal.server.entity.support.ResPopupNotice
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 object APISupport {
-    fun getNoticeList(appId: String, tokenizer: IServeToken, offset: Int = 0, limit: Int = 50, response: ServeResponse<ResNoticeList>) {
+    fun getNoticeList(blockCode: BlockCode, tokenizer: IServeToken, offset: Int = 0, limit: Int = 50, response: ServeResponse<ResNoticeList>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BASIC,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -25,9 +26,9 @@ object APISupport {
         ).execute()
     }
 
-    fun getNoticeView(appId: String, tokenizer: IServeToken, noticeId: String, response: ServeResponse<ResNotice>) {
+    fun getNoticeView(blockCode: BlockCode, tokenizer: IServeToken, noticeId: String, response: ServeResponse<ResNotice>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BASIC,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -39,9 +40,9 @@ object APISupport {
         ).execute()
     }
 
-    fun getPopups(appId: String, tokenizer: IServeToken, response: ServeResponse<ResPopupNotice>) {
+    fun getPopups(blockCode: BlockCode, tokenizer: IServeToken, response: ServeResponse<ResPopupNotice>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BASIC,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,

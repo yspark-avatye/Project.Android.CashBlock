@@ -26,30 +26,46 @@ class TicketDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveCondition(ticketType: TicketType, response: (contract: ContractResult<TicketCountEntity>) -> Unit) {
-        APITicket.getTicketCount(appId = appId, tokenizer = tokenizer, ticketType = ticketType, response = object : ServeResponse<ResTicketCount> {
-            override fun onSuccess(success: ResTicketCount) = response(Contract.onSuccess(success.ticketCountEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APITicket.getTicketCount(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            ticketType = ticketType,
+            response = object : ServeResponse<ResTicketCount> {
+                override fun onSuccess(success: ResTicketCount) = response(Contract.onSuccess(success.ticketCountEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun retrieveBalance(response: (contract: ContractResult<TicketBalanceEntity>) -> Unit) {
-        APITicket.getTicketBalance(appId = appId, tokenizer = tokenizer, response = object : ServeResponse<ResTicketBalance> {
-            override fun onSuccess(success: ResTicketBalance) = response(Contract.onSuccess(success.ticketBalanceEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APITicket.getTicketBalance(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            response = object : ServeResponse<ResTicketBalance> {
+                override fun onSuccess(success: ResTicketBalance) = response(Contract.onSuccess(success.ticketBalanceEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postTransaction(ticketType: TicketType, response: (contract: ContractResult<TicketRequestEntity>) -> Unit) {
-        APITicket.postTicketRequest(appId = appId, tokenizer = tokenizer, ticketType = ticketType, response = object : ServeResponse<ResTicketRequest> {
-            override fun onSuccess(success: ResTicketRequest) = response(Contract.onSuccess(success.ticketRequestEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APITicket.postTicketRequest(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            ticketType = ticketType,
+            response = object : ServeResponse<ResTicketRequest> {
+                override fun onSuccess(success: ResTicketRequest) = response(Contract.onSuccess(success.ticketRequestEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postTicketing(ticketType: TicketType, transactionId: String, response: (Contract: ContractResult<TicketBalanceEntity>) -> Unit) {
-        APITicket.putTicketGive(appId = appId, tokenizer = tokenizer, ticketType = ticketType, transactionId = transactionId, response = object : ServeResponse<ResTicketGive> {
-            override fun onSuccess(success: ResTicketGive) = response(Contract.onSuccess(success.ticketBalanceEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APITicket.putTicketGive(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            ticketType = ticketType,
+            transactionId = transactionId,
+            response = object : ServeResponse<ResTicketGive> {
+                override fun onSuccess(success: ResTicketGive) = response(Contract.onSuccess(success.ticketBalanceEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

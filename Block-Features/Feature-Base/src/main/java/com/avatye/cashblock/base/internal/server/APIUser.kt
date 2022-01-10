@@ -1,15 +1,16 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.user.ResLogin
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 object APIUser {
-    fun putLogin(appId: String, tokenizer: IServeToken, appUserId: String, response: ServeResponse<ResLogin>) {
+    fun putLogin(blockCode: BlockCode, tokenizer: IServeToken, appUserId: String, response: ServeResponse<ResLogin>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BASIC,
             tokenizer = tokenizer,
             method = ServeTask.Method.PUT,
@@ -21,9 +22,9 @@ object APIUser {
         ).execute()
     }
 
-    fun putVerifyAge(appId: String, tokenizer: IServeToken, birthDate: String, response: ServeResponse<ResVoid>) {
+    fun putVerifyAge(blockCode: BlockCode, tokenizer: IServeToken, birthDate: String, response: ServeResponse<ResVoid>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.POST,

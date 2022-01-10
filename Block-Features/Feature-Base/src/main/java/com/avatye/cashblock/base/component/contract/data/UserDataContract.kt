@@ -21,16 +21,24 @@ class UserDataContract(private val blockCode: BlockCode) {
     }
 
     fun postLogin(appUserId: String, response: (contract: ContractResult<LoginEntity>) -> Unit) {
-        APIUser.putLogin(appId = appId, tokenizer = tokenizer, appUserId = appUserId, response = object : ServeResponse<ResLogin> {
-            override fun onSuccess(success: ResLogin) = response(Contract.onSuccess(success.loginEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIUser.putLogin(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            appUserId = appUserId,
+            response = object : ServeResponse<ResLogin> {
+                override fun onSuccess(success: ResLogin) = response(Contract.onSuccess(success.loginEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postVerifyAge(birthDate: String, response: (contract: ContractResult<Unit>) -> Unit) {
-        APIUser.putVerifyAge(appId = appId, tokenizer = tokenizer, birthDate = birthDate, response = object : ServeResponse<ResVoid> {
-            override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(Unit))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIUser.putVerifyAge(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            birthDate = birthDate,
+            response = object : ServeResponse<ResVoid> {
+                override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(Unit))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

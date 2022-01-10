@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import com.android.volley.Request
 import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.library.rally.Rally
 import com.avatye.cashblock.base.library.rally.request.RallyRequest
@@ -12,7 +13,7 @@ import com.avatye.cashblock.base.library.rally.response.RallyResponse
 import com.avatye.cashblock.base.library.rally.response.RallySuccess
 
 internal class ServeTask<T : ServeSuccess>(
-    private val appId: String? = null,
+    private val blockCode: BlockCode,
     private val authorization: Authorization,
     private val tokenizer: IServeToken? = null,
     private val method: Method,
@@ -135,9 +136,7 @@ internal class ServeTask<T : ServeSuccess>(
 
     private fun makeBodyArgs() = (argsBody ?: HashMap<String, Any>()).apply {
         if (!this.containsKey("appID")) {
-            appId?.let {
-                this["appID"] = it
-            }
+            this["appID"] = blockCode.blockId
         }
     }
 
@@ -160,7 +159,10 @@ internal class ServeTask<T : ServeSuccess>(
             responseCallback.onSuccess(responseEntity)
         } catch (e: Exception) {
             responseCallback.onFailure(
-                failure = ServeFailure(message = e.message ?: "unknown error")
+                failure = ServeFailure(
+                    blockType = blockCode.blockType,
+                    message = e.message ?: "unknown error"
+                )
             )
         }
     }
@@ -168,6 +170,7 @@ internal class ServeTask<T : ServeSuccess>(
     private fun parseError(error: RallyFailure) {
         responseCallback.onFailure(
             failure = ServeFailure(
+                blockType = blockCode.blockType,
                 statusCode = error.statusCode,
                 serverCode = error.body?.toStringValue("code") ?: "",
                 message = error.body?.toStringValue("message") ?: "",

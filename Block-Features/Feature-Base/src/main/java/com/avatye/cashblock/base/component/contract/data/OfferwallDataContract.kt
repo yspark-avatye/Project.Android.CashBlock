@@ -5,7 +5,6 @@ import com.avatye.cashblock.base.component.contract.AccountContract
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
 
 class OfferwallDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
 
     private val tokenizer = object : IServeToken {
         override fun makeBasicToken() = blockCode.basicToken

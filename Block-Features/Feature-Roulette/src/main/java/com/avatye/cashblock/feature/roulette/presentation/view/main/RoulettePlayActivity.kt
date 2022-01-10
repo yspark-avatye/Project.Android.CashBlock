@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.RemoteContract
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
@@ -326,7 +327,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                     loadingView?.dismiss()
                     vb.resultContainer.isVisible = false
                     winnerViewModel.request()
-                    EventBusContract.postWinnerBoardUpdate()
+                    EventBusContract.postWinnerBoardUpdate(blockType = BlockType.ROULETTE)
                     hideKeyboard()
                 }
             }

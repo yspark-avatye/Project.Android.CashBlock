@@ -10,11 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.isVisible
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.EventBusContract
+import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
-import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
@@ -23,8 +24,8 @@ import com.avatye.cashblock.base.library.ad.curator.popup.ICuratorPopupCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
-import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
@@ -303,7 +304,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     .toHtml
             }
             // notification update
-            EventBusContract.postTicketBoxUpdate()
+            EventBusContract.postTicketBoxUpdate(blockType = BlockType.ROULETTE)
             // status
             leakHandler.postDelayed({
                 currentStatus = TicketBoxStatus.COMPLETE
@@ -478,7 +479,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
     private fun close(withLaunch: Boolean = false) {
         if (!isBoxOpened) {
             if (withLaunch) {
-                EventBusContract.postAppLaunchMainActivity()
+                EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
             }
             finish()
             return
@@ -501,7 +502,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun onComplete(success: Boolean) {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity()
+                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }
@@ -509,7 +510,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun ondFailed(isBlocked: Boolean) {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity()
+                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }
@@ -517,7 +518,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun onNeedAgeVerification() {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity()
+                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }

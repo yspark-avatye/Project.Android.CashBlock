@@ -1,21 +1,22 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameList
 import com.avatye.cashblock.base.internal.server.entity.game.ResGamePlay
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameView
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameWinnerBoard
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 object APIGame {
     /**
      * get 'roulette' game info
      */
-    fun getGameView(appId: String, tokenizer: IServeToken, gameId: String, response: ServeResponse<ResGameView>) {
+    fun getGameView(blockCode: BlockCode, tokenizer: IServeToken, gameId: String, response: ServeResponse<ResGameView>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -30,9 +31,9 @@ object APIGame {
     /**
      * get 'roulette' game list
      */
-    fun getGameList(appId: String, tokenizer: IServeToken, response: ServeResponse<ResGameList>) {
+    fun getGameList(blockCode: BlockCode, tokenizer: IServeToken, response: ServeResponse<ResGameList>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -46,9 +47,9 @@ object APIGame {
     /**
      * participate 'roulette' game
      */
-    fun postGamePlay(appId: String, tokenizer: IServeToken, gameId: String, response: ServeResponse<ResGamePlay>) {
+    fun postGamePlay(blockCode: BlockCode, tokenizer: IServeToken, gameId: String, response: ServeResponse<ResGamePlay>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.POST,
@@ -63,9 +64,9 @@ object APIGame {
     /**
      * insert 'roulette' winner message
      */
-    fun postGameWinBoard(appId: String, tokenizer: IServeToken, participateId: String, message: String, response: ServeResponse<ResVoid>) {
+    fun postGameWinBoard(blockCode: BlockCode, tokenizer: IServeToken, participateId: String, message: String, response: ServeResponse<ResVoid>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.POST,
@@ -83,9 +84,9 @@ object APIGame {
     /**
      * get 'roulette' winner messages
      */
-    fun getWinnerBoard(appId: String, tokenizer: IServeToken, response: ServeResponse<ResGameWinnerBoard>) {
+    fun getWinnerBoard(blockCode: BlockCode, tokenizer: IServeToken, response: ServeResponse<ResGameWinnerBoard>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,

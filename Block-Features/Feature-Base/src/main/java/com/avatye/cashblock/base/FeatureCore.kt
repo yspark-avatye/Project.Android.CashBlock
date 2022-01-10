@@ -5,7 +5,6 @@ import androidx.annotation.Keep
 import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.app.AppInspection
-import com.avatye.cashblock.base.component.domain.entity.base.AppStatusType
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.internal.controller.LoginController
 import com.avatye.cashblock.base.internal.server.serve.ServeEnvironment
@@ -105,13 +104,6 @@ object FeatureCore {
 
 
     // region # core server config
-    internal var appStatus = AppStatusType.IDEAL
-        set(value) {
-            if (field != value) {
-                field = value
-            }
-        }
-
     internal var appInspection: AppInspection? = null
         set(value) {
             if (field != value) {

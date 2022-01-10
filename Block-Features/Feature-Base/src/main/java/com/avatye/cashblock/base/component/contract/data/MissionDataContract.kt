@@ -12,7 +12,6 @@ import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class MissionDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
 
     private val tokenizer = object : IServeToken {
         override fun makeBasicToken() = blockCode.basicToken
@@ -20,16 +19,25 @@ class MissionDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveMission(missionId: String, response: (contract: ContractResult<MissionEntity>) -> Unit) {
-        APIMission.getUser(appId = appId, tokenizer = tokenizer, missionId = missionId, response = object : ServeResponse<ResMission> {
-            override fun onSuccess(success: ResMission) = response(Contract.onSuccess(success.missionEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIMission.getUser(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            missionId = missionId,
+            response = object : ServeResponse<ResMission> {
+                override fun onSuccess(success: ResMission) = response(Contract.onSuccess(success.missionEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postAction(missionID: String, actionValue: Int, response: (contract: ContractResult<MissionEntity>) -> Unit) {
-        APIMission.postAction(appId = appId, tokenizer = tokenizer, missionId = missionID, actionValue = actionValue, response = object : ServeResponse<ResMission> {
-            override fun onSuccess(success: ResMission) = response(Contract.onSuccess(success.missionEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIMission.postAction(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            missionId = missionID,
+            actionValue = actionValue,
+            response = object : ServeResponse<ResMission> {
+                override fun onSuccess(success: ResMission) = response(Contract.onSuccess(success.missionEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

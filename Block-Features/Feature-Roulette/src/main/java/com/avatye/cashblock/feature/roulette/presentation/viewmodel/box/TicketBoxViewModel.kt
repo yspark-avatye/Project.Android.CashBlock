@@ -1,6 +1,7 @@
 package com.avatye.cashblock.unit.roulette.viewmodel.box
 
 import androidx.lifecycle.*
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.data.BoxDataContract
 import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
@@ -56,7 +57,7 @@ internal class TicketBoxViewModel : ViewModel() {
                 is ContractResult.Success -> {
                     _boxUse.value = Contract.postComplete(it.contract)
                     TicketBoxController.updateComplete(isComplete = true)
-                    EventBusContract.postTicketBoxUpdate()
+                    EventBusContract.postTicketBoxUpdate(blockType = BlockType.ROULETTE)
                 }
             }
         }

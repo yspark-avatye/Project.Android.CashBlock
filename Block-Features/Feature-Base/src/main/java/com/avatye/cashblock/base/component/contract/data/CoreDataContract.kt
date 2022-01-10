@@ -12,7 +12,6 @@ import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class CoreDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
 
     private val tokenizer = object : IServeToken {
         override fun makeBasicToken() = blockCode.basicToken
@@ -20,13 +19,22 @@ class CoreDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveAppSettings(keys: List<String>? = null, response: (contract: ContractResult<SettingEntity>) -> Unit) {
-        APICore.getAppSettings(appId = appId, tokenizer = tokenizer, keys = keys, response = object : ServeResponse<ResSettings> {
-            override fun onSuccess(success: ResSettings) = response(Contract.onSuccess(success.settings))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APICore.getAppSettings(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            keys = keys,
+            response = object : ServeResponse<ResSettings> {
+                override fun onSuccess(success: ResSettings) = response(Contract.onSuccess(success.settings))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postEventLog(eventKey: String, eventParam: HashMap<String, Any>? = null) {
-        APICore.postEventLog(appId = appId, tokenizer = tokenizer, eventKey = eventKey, eventParam = eventParam)
+        APICore.postEventLog(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            eventKey = eventKey,
+            eventParam = eventParam
+        )
     }
 }

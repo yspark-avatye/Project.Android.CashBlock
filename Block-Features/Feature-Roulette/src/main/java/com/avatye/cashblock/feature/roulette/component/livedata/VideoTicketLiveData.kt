@@ -1,14 +1,15 @@
 package com.avatye.cashblock.feature.roulette.component.livedata
 
 import androidx.lifecycle.MutableLiveData
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.RemoteContract
 import com.avatye.cashblock.base.component.contract.data.TicketDataContract
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.MODULE_NAME
+import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import org.joda.time.DateTime
 
@@ -26,7 +27,7 @@ internal object VideoTicketLiveData : MutableLiveData<Int>() {
                 PreferenceData.Ticket.update(videoReceivableCount = value)
                 VideoTicketLiveData.postValue(value)
                 // send broadcast event
-                EventBusContract.postVideoTicketConditionUpdate()
+                EventBusContract.postVideoTicketConditionUpdate(blockType = BlockType.ROULETTE)
             }
         }
 

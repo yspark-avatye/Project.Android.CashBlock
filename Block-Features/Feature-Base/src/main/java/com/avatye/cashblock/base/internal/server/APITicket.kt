@@ -1,21 +1,22 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.internal.server.entity.ticket.ResTicketBalance
 import com.avatye.cashblock.base.internal.server.entity.ticket.ResTicketCount
 import com.avatye.cashblock.base.internal.server.entity.ticket.ResTicketGive
 import com.avatye.cashblock.base.internal.server.entity.ticket.ResTicketRequest
 import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 object APITicket {
     /**
      * get 'ticket' count
      */
-    fun getTicketCount(appId: String, tokenizer: IServeToken, ticketType: TicketType, response: ServeResponse<ResTicketCount>) {
+    fun getTicketCount(blockCode: BlockCode, tokenizer: IServeToken, ticketType: TicketType, response: ServeResponse<ResTicketCount>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -30,9 +31,9 @@ object APITicket {
     /**
      * get 'ticket' balance
      */
-    fun getTicketBalance(appId: String, tokenizer: IServeToken, response: ServeResponse<ResTicketBalance>) {
+    fun getTicketBalance(blockCode: BlockCode, tokenizer: IServeToken, response: ServeResponse<ResTicketBalance>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.GET,
@@ -46,9 +47,9 @@ object APITicket {
     /**
      * post 'ticket' request (transaction request)
      */
-    fun postTicketRequest(appId: String, tokenizer: IServeToken, ticketType: TicketType, response: ServeResponse<ResTicketRequest>) {
+    fun postTicketRequest(blockCode: BlockCode, tokenizer: IServeToken, ticketType: TicketType, response: ServeResponse<ResTicketRequest>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.POST,
@@ -63,9 +64,9 @@ object APITicket {
     /**
      * put 'ticket' give (transaction complete)
      */
-    fun putTicketGive(appId: String, tokenizer: IServeToken, ticketType: TicketType, transactionId: String, response: ServeResponse<ResTicketGive>) {
+    fun putTicketGive(blockCode: BlockCode, tokenizer: IServeToken, ticketType: TicketType, transactionId: String, response: ServeResponse<ResTicketGive>) {
         ServeTask(
-            appId = appId,
+            blockCode = blockCode,
             authorization = ServeTask.Authorization.BEARER,
             tokenizer = tokenizer,
             method = ServeTask.Method.PUT,

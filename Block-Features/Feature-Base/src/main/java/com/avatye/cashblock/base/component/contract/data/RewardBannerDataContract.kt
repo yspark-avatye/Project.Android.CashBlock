@@ -14,7 +14,6 @@ import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class RewardBannerDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
 
     private val tokenizer = object : IServeToken {
         override fun makeBasicToken() = blockCode.basicToken
@@ -22,16 +21,23 @@ class RewardBannerDataContract(private val blockCode: BlockCode) {
     }
 
     fun retrieveDirectReward(response: (contract: ContractResult<BannerRewardEntity>) -> Unit) {
-        APIRewardBanner.getBannerDirectReward(appId = appId, tokenizer = tokenizer, response = object : ServeResponse<ResBannerReward> {
-            override fun onSuccess(success: ResBannerReward) = response(Contract.onSuccess(success.bannerRewardEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIRewardBanner.getBannerDirectReward(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            response = object : ServeResponse<ResBannerReward> {
+                override fun onSuccess(success: ResBannerReward) = response(Contract.onSuccess(success.bannerRewardEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 
     fun postDirectReward(transactionId: String, response: (contract: ContractResult<BannerBalanceEntity>) -> Unit) {
-        APIRewardBanner.postBannerDirectReward(appId = appId, tokenizer = tokenizer, ticketTransactionId = transactionId, response = object : ServeResponse<ResBannerBalance> {
-            override fun onSuccess(success: ResBannerBalance) = response(Contract.onSuccess(success.bannerBalanceEntity))
-            override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-        })
+        APIRewardBanner.postBannerDirectReward(
+            blockCode = blockCode,
+            tokenizer = tokenizer,
+            ticketTransactionId = transactionId,
+            response = object : ServeResponse<ResBannerBalance> {
+                override fun onSuccess(success: ResBannerBalance) = response(Contract.onSuccess(success.bannerBalanceEntity))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            })
     }
 }

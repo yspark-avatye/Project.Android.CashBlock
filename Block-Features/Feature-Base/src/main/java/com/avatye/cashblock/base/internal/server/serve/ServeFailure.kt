@@ -1,5 +1,7 @@
 package com.avatye.cashblock.base.internal.server.serve
 
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.library.miscellaneous.toDateTimeValue
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.module.data.serve.ServeStatusType
@@ -7,6 +9,7 @@ import org.joda.time.DateTime
 import org.json.JSONObject
 
 data class ServeFailure(
+    val blockType: BlockType,
     val statusCode: Int = 0,
     private val serverCode: String = "",
     private val message: String = "",
@@ -22,10 +25,21 @@ data class ServeFailure(
     val serveStatusType: ServeStatusType
         get() {
             return when (statusCode) {
-                401 -> ServeStatusType.UNAUTHENTICATED
-                403 -> ServeStatusType.FORBIDDEN
-                503, 504 -> ServeStatusType.INSPECTION
-                else -> ServeStatusType.ERROR
+                401 -> {
+                    EventBusContract.postUnauthorized(blockType = blockType)
+                    ServeStatusType.UNAUTHENTICATED
+                }
+                403 -> {
+                    EventBusContract.postForbidden(blockType = blockType)
+                    ServeStatusType.FORBIDDEN
+                }
+                503, 504 -> {
+                    EventBusContract.postInspection(blockType = blockType)
+                    ServeStatusType.INSPECTION
+                }
+                else -> {
+                    ServeStatusType.ERROR
+                }
             }
         }
 

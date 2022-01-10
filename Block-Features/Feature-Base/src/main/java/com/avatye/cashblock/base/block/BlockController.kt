@@ -3,6 +3,7 @@ package com.avatye.cashblock.base.block
 import android.app.Application
 import android.content.Context
 import com.avatye.cashblock.base.FeatureCore.logger
+import com.avatye.cashblock.base.block.BlockType.Companion.connector
 import com.avatye.cashblock.base.component.support.CoreUtil.showToast
 import com.avatye.cashblock.base.internal.controller.LoginController
 import com.avatye.cashblock.base.internal.controller.RemoteSettingSyncController
@@ -13,7 +14,9 @@ object BlockController {
 
     /** block module checker */
     internal fun hasBlock(blockType: BlockType): Boolean {
-        return kotlin.runCatching { Class.forName(blockType.value) }.isSuccess
+        return kotlin.runCatching { Class.forName(blockType.connector) }.isSuccess
+
+
     }
 
     fun launchBlock(context: Context, blockCode: BlockCode, callback: (success: Boolean) -> Unit) {
@@ -73,7 +76,7 @@ object BlockController {
         var connector: BlockConnector? = null
         if (hasBlock(blockType = blockType)) {
             try {
-                Class.forName(blockType.value).let { cls ->
+                Class.forName(blockType.connector).let { cls ->
                     cls.getConstructor().newInstance().let {
                         connector = (it as BlockConnector)
                         logger.i { "$tagName -> makeBlockConnector -> success { functionName: $referenceName, connector: $blockType }" }

@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.AccountContract
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.RemoteContract
@@ -283,7 +284,7 @@ internal object NotificationController {
                         if (allowHostApp) {
                             PreferenceData.Notification.update(allow = true)
                             setNotificationEnabled(context = activity) {
-                                EventBusContract.postNotificationStatusUpdate()
+                                EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
                             }
                         } else {
                             if (enabled) {
@@ -338,7 +339,7 @@ internal object NotificationController {
                     if (allowHostApp) {
                         PreferenceData.Notification.update(allow = true, popupCheckTime = DateTime().millis)
                         setNotificationEnabled(context = activity) {
-                            EventBusContract.postNotificationStatusUpdate()
+                            EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
                         }
                     } else {
                         if (enabled) {

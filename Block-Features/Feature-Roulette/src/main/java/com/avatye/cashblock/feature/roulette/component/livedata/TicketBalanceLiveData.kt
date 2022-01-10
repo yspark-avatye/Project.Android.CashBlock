@@ -1,6 +1,7 @@
 package com.avatye.cashblock.feature.roulette.component.livedata
 
 import androidx.lifecycle.MutableLiveData
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.AccountContract
 import com.avatye.cashblock.base.component.contract.EventBusContract
 import com.avatye.cashblock.base.component.contract.data.TicketDataContract
@@ -21,7 +22,7 @@ internal object TicketBalanceLiveData : MutableLiveData<Int>() {
                 PreferenceData.Ticket.update(balance = value)
                 postValue(value)
                 // send broadcast event
-                EventBusContract.postTicketBalanceUpdate()
+                EventBusContract.postTicketBalanceUpdate(blockType = BlockType.ROULETTE)
             }
         }
 
