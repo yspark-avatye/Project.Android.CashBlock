@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CashBlock" />
+    <!-- region { app theme } -->
+    <style name="CashMore.Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/acb_core_color_window_background</item>
+        <!-- primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
+        <item name="colorAccent">@color/colorOnPrimary</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { progress circle } -->
+    <style name="CashBlock.Widget.Progress.Circle">
+        <item name="android:indeterminateTintMode">src_atop</item>
+        <item name="android:indeterminateTint">@color/acb_core_color_white</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { button } -->
+    <style name="CashBlock.Widget.Button">
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/acb_core_color_white</item>
+    </style>
+    <!-- endregion -->
+
+</resources>

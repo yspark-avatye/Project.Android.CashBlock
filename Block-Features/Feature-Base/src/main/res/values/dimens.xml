@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="acb_dimen_widget_banner_linear_view_height">55dp</dimen>
+    <dimen name="acb_dimen_widget_header_main_title_size">20dp</dimen>
+    <dimen name="acb_dimen_widget_header_sub_title_size">16dp</dimen>
+    <dimen name="acb_dimen_widget_header_popup_title_size">20dp</dimen>
+</resources>

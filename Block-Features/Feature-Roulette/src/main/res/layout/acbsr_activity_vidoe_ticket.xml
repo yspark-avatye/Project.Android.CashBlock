@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#606B77">
+
+
+    <!-- region { close } -->
+    <FrameLayout
+        android:id="@+id/video_ticket_action_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingStart="0dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="24dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/CashBlock.Widget.ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/acb_common_ic_close_black_14x14" />
+
+    </FrameLayout>
+    <!-- endregion -->
+
+
+    <!-- region { 캐시 티켓 준비중 영역 } -->
+    <RelativeLayout
+        android:id="@+id/video_ticket_container_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@id/banner_linear_view"
+        android:layout_below="@+id/video_ticket_action_close"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/video_ticket_loading_image"
+            style="@style/CashBlock.Widget.ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="180dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/acbsr_animation_ticket_loading" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/video_ticket_loading_period"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:text="@string/acbsr_string_video_ticket_ready"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_ticket_loading_period"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="96dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            tools:text="티켓은 1식간마다 2장씩 얻을 수 있어요." />
+
+
+    </RelativeLayout>
+    <!-- endregion -->
+
+
+    <!-- region { 캐시 티켓 조각 영역 } -->
+    <RelativeLayout
+        android:id="@+id/video_ticket_container_acquire"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@+id/banner_linear_view"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/video_ticket_acquire_pieces"
+            style="@style/CashBlock.Widget.ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="180dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/acbsr_ic_puzzle_tk10"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_ticket_acquire_description"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/video_ticket_acquire_period"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="6dp"
+            android:text="@string/acbsr_string_video_ticket_complete"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_ticket_acquire_period"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/video_ticket_acquire_button"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="96dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            tools:text="티켓은 1식간마다 2장씩 얻을 수 있어요." />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/video_ticket_acquire_button"
+            style="@style/CashBlock.Widget.Button"
+            android:layout_width="320dp"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="36dp"
+            android:background="@drawable/acb_common_selector_button_ef5350_c1bfd4_r4"
+            android:enabled="false"
+            android:gravity="center"
+            android:maxWidth="320dp"
+            android:textColor="#FFFFFF" />
+
+
+    </RelativeLayout>
+    <!-- endregion -->
+
+
+    <!-- region { LinearBannerView } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+    <!-- endregion -->
+
+
+</RelativeLayout>

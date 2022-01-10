@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region { global } -->
+    <attr name="acbsr_widget_display_type" format="enum">
+        <enum name="fill" value="0" />
+        <enum name="stroke" value="1" />
+    </attr>
+    <!-- endregion -->
+
+
+    <!-- region { WinnerDisplay } -->
+    <declare-styleable name="WinnerDisplayView">
+        <attr name="acbsr_widget_display_type" />
+    </declare-styleable>
+    <!-- endregion -->
+
+
+</resources>

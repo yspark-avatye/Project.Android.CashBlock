@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.avatye.cashblock.app.partner">
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ProjectAndroidCashBlock">
+        <activity
+            android:name=".IntroActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <!-- region { cash-block config } -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+        <meta-data
+            android:name="cashblock.app.key"
+            android:value="98d4d4c35d594451b21f54718e2bc986:c395dbe200ad4493ade96fb92c988fcf1c8df2d3687d49a9ab6f31f7c05e2bf4" />
+        <meta-data
+            android:name="cashblock.app.key.offerwall"
+            android:value="98d4d4c35d594451b21f54718e2bc986:c395dbe200ad4493ade96fb92c988fcf1c8df2d3687d49a9ab6f31f7c05e2bf4" />
+        <meta-data
+            android:name="cashblock.config.environment"
+            android:value="${config_app_environment}" />
+        <meta-data
+            android:name="cashblock.config.developer"
+            android:value="${config_app_developer}" />
+        <meta-data
+            android:name="cashblock.config.log"
+            android:value="${config_app_log}" />
+        <!-- endregion -->
+    </application>
+
+</manifest>

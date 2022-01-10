@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8">
+
+    <!-- region { skeleton-intro } -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/introSkeleton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="104dp"
+                android:layout_height="24dp"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="88dp"
+                android:layout_height="118dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                android:layout_width="104dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="125dp"
+                android:layout_height="152dp"
+                android:layout_marginTop="42dp"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                android:layout_width="220dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_rectangle_skeleton" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_rectangle_skeleton" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- endregion -->
+
+    <!-- region { skeleton-main } -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mainViewSkeleton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="108dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <View
+            android:layout_width="160dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/acb_common_rectangle_skeleton" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- endregion -->
+
+    <!-- region { content-intro } -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/introContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/introViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/introViewPagerIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/introViewPagerIndicatorDot1"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_dot_black" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/introViewPagerIndicatorDot2"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_dot_gray" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/introViewPagerIndicatorDot3"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/acb_common_dot_gray" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- endregion -->
+
+</RelativeLayout>

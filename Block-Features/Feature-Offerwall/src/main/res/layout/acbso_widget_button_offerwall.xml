@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#00FFFFFF"
+    tools:background="#FFFFFF">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        style="@style/CashBlock.Widget.ImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:src="@drawable/acbso_ic_button_offerwall" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/widget_button_badge"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/acbso_base_badge_button"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="2"
+        tools:visibility="visible" />
+
+
+</FrameLayout>

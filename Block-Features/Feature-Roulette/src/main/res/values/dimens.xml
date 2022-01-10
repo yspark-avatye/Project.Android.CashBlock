@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region { intro } -->
+    <dimen name="acbsr_intro_margin_top_1_1">30dp</dimen>
+    <dimen name="acbsr_intro_margin_top_1_2">16dp</dimen>
+    <dimen name="acbsr_intro_margin_top_1_3">42dp</dimen>
+    <dimen name="acbsr_intro_margin_top_1_4">16dp</dimen>
+    <dimen name="acbsr_intro_margin_top_2_1">45dp</dimen>
+    <dimen name="acbsr_intro_margin_top_2_2">16dp</dimen>
+    <dimen name="acbsr_intro_margin_top_2_3">101dp</dimen>
+    <dimen name="acbsr_intro_margin_top_2_4">16dp</dimen>
+    <dimen name="acbsr_intro_margin_top_3_1">45dp</dimen>
+    <dimen name="acbsr_intro_margin_top_3_2">10dp</dimen>
+    <dimen name="acbsr_intro_margin_top_3_3">77dp</dimen>
+    <dimen name="acbsr_intro_margin_top_3_4">16dp</dimen>
+    <dimen name="acbsr_intro_margin_top_3_5">57dp</dimen>
+    <!-- endregion -->
+</resources>

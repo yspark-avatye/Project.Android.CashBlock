@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CashBlock" />
+    <!-- region { app theme } -->
+    <style name="CashMore.Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/acb_core_color_window_background</item>
+        <!-- primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
+        <item name="colorAccent">@color/colorOnPrimary</item>
+        <item name="android:windowLightStatusBar">@bool/booleanWindowLightStatusBar</item>
+    </style>
+    <!-- endregion -->
+
+</resources>

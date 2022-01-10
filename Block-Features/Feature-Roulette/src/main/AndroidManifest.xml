@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.avatye.cashblock.feature.roulette">
+    <!-- region # permissions -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-sdk tools:overrideLibrary="com.unity3d.ads" />
+    <!-- endregion -->
+    <!-- application, activities -->
+    <application>
+        <!-- region { service } -->
+        <service
+            android:name=".component.service.SDKNotificationService"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".component.service.SDKCommonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <!-- endregion -->
+        <activity
+            android:name=".presentation.view.intro.IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.main.RouletteMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.main.RoulettePlayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.ticket.TouchTicketActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.ticket.VideoTicketActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.box.TicketBoxActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.setting.SettingMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+    </application>
+</manifest>

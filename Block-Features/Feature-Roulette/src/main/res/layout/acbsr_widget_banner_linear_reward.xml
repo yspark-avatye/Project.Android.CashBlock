@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/acb_common_outline_f8b2b2_r10"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <!-- region { cpc banner frame } -->
+    <FrameLayout
+        android:id="@+id/linear_reward_banner_frame"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        tools:background="#F1F1F1" />
+    <!-- endregion -->
+
+</androidx.appcompat.widget.LinearLayoutCompat>

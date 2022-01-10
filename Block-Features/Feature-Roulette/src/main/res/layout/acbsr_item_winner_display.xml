@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="24dp"
+    android:paddingLeft="24dp"
+    android:paddingEnd="24dp"
+    android:paddingRight="24dp"
+    tools:background="@drawable/acb_common_outline_ef5350_r10">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/winner_message"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp"
+        tools:text="닉퓨리님 가나슈 조각케이크 당첨!" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/winner_reward"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        tools:text="200 CASH" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/winner_datetime"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="#FFAEAC"
+        android:textSize="12dp"
+        tools:text="\u2022 3분 전" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

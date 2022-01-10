@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <attr name="acb_widget_title" />
+    <!-- region { ticker view } -->
+    <declare-styleable name="TickerView">
+        <attr name="acb_widget_animation_duration" format="reference|integer" />
+        <attr name="acb_widget_animate_measurement_change" format="reference|boolean" />
+        <attr name="acb_widget_character_list" format="enum">
+            <enum name="number" value="1" />
+            <enum name="alphabet" value="2" />
+        </attr>
+        <attr name="acb_widget_preferred_scrolling_direction" format="enum">
+            <enum name="any" value="0" />
+            <enum name="up" value="1" />
+            <enum name="down" value="2" />
+        </attr>
+        <!-- Custom implementations of common android text attributes -->
+        <attr name="android:gravity" tools:ignore="ResourceName" />
+        <attr name="android:shadowColor" tools:ignore="ResourceName" />
+        <attr name="android:shadowDx" tools:ignore="ResourceName" />
+        <attr name="android:shadowDy" tools:ignore="ResourceName" />
+        <attr name="android:shadowRadius" tools:ignore="ResourceName" />
+        <attr name="android:text" tools:ignore="ResourceName" />
+        <attr name="android:textAppearance" tools:ignore="ResourceName" />
+        <attr name="android:textColor" tools:ignore="ResourceName" />
+        <attr name="android:textSize" tools:ignore="ResourceName" />
+        <attr name="android:textStyle" tools:ignore="ResourceName" />
+        <attr name="android:fontFamily" tools:ignore="ResourceName" />
+    </declare-styleable>
+
+    <!-- region { header } -->
+    <declare-styleable name="HeaderView">
+        <attr name="acb_widget_title" />
+        <attr name="acb_widget_view_type" format="enum">
+            <enum name="main" value="0" />
+            <enum name="sub" value="1" />
+            <enum name="popup" value="2" />
+        </attr>
+        <attr name="acb_widget_visible_close" format="boolean" />
+        <attr name="acb_widget_visible_more" format="boolean" />
+    </declare-styleable>
+    <!-- endregion -->
+
+</resources>

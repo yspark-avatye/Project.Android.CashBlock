@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.avatye.cashblock">
+    <!-- region permissions -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- endregion -->
+    <!-- application, activities -->
+    <application>
+        <activity
+            android:name=".base.presentation.view.notice.NoticeListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".base.presentation.view.notice.NoticeViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".base.presentation.view.terms.TermsViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".base.presentation.view.inspection.InspectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+    </application>
+</manifest>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/winner_display_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/acb_common_rectangle_ef5350_r10">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/winner_display_list"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        tools:itemCount="1"
+        tools:listitem="@layout/acbsr_item_winner_display" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/winner_display_null"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center"
+        android:text="@string/acbsr_string_winner_null"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+</FrameLayout>

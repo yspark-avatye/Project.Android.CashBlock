@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="#4C000000"
+    tools:theme="@style/CashBlock.Widget.Dialog">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_marginEnd="40dp"
+        tools:layout_marginLeft="40dp"
+        tools:layout_marginRight="40dp"
+        tools:layout_marginStart="40dp">
+
+        <!-- region { content } -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/acb_common_rectangle_ffffff_r2"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/dialog_title"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/acb_core_color_main_text"
+                android:textSize="20dp"
+                android:visibility="gone"
+                tools:text="dialog title"
+                tools:visibility="visible" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/dialog_message"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:textColor="@color/acb_core_color_main_text"
+                android:textSize="14dp"
+                tools:text="dialog message" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <!-- endregion -->
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+
+        <!-- region { button } -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dialog_button_negative"
+                style="@style/CashBlock.Widget.Button.Dialog"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/acb_common_selector_button_dialog"
+                android:gravity="center"
+                android:text="@string/acb_common_button_cancel"
+                android:textColor="@color/acb_core_color_main_text"
+                android:textSize="14dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+            <View
+                android:id="@+id/dialog_button_divider"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dialog_button_positive"
+                style="@style/CashBlock.Widget.Button.Dialog"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/acb_common_selector_button_dialog"
+                android:gravity="center"
+                android:text="@string/acb_common_button_confirm"
+                android:textColor="@color/acb_core_color_main_text"
+                android:textSize="14dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <!-- endregion -->
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</FrameLayout>

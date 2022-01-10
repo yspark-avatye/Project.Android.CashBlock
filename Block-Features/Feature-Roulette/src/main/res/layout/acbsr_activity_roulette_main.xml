@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8">
+
+
+    <!-- region { header } -->
+    <com.avatye.cashblock.base.component.widget.header.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:acb_widget_title="돌림판"
+        app:acb_widget_view_type="main"
+        app:acb_widget_visible_close="true"
+        app:acb_widget_visible_more="true" />
+    <!-- endregion -->
+
+
+    <!-- region { content - scroll } -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@+id/banner_linear_view"
+        android:layout_below="@+id/header_view"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+
+        <!-- region # scroll-body -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <!-- region { campaign message } -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/campaign_message"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:textColor="#212121"
+                android:textSize="14dp"
+                tools:text="꽝없는 넥슨룰렛에서 대박을 노려보세요!" />
+            <!-- endregion -->
+
+
+            <!-- region { winner-board } -->
+            <com.avatye.cashblock.feature.roulette.component.widget.winner.WinnerDisplayView
+                android:id="@+id/winner_message_board"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                app:acbsr_widget_display_type="fill" />
+            <!-- endregion -->
+
+
+            <!-- region { ticket quantity } -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/ticket_balance"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="78dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@drawable/acbsr_ic_ticket_quantity"
+                android:drawableLeft="@drawable/acbsr_ic_ticket_quantity"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:textSize="18dp"
+                tools:text="내 보유티켓 8장" />
+            <!-- endregion -->
+
+
+            <!-- region { acquire ticket } -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <!-- region { touch ticket } -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/touch_ticket_action"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/acb_common_outline_f8b2b2_r10"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/CashBlock.Widget.ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:src="@drawable/acbsr_ic_touch_ticket_acquire" />
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/touch_ticket_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_touch_ticket_action_name"
+                            android:textColor="#212121"
+                            android:textSize="12dp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_ticket_acquire"
+                            android:textColor="#212121"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/touch_ticket_period"
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_ticket_acquire_period"
+                            android:textColor="#212121"
+                            android:textSize="10dp" />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/acb_common_rectangle_212121_r8"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="2dp">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/touch_ticket_received_count"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/touch_ticket_limit_count"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / 2"
+                                android:textColor="#A4A4A4"
+                                android:textSize="8dp" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- endregion -->
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <!-- region { video ticket } -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/video_ticket_action"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/acb_common_outline_f8b2b2_r10"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/CashBlock.Widget.ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:src="@drawable/acbsr_ic_video_ticket_acquire" />
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/video_ticket_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_video_ticket_action_name"
+                            android:textColor="#212121"
+                            android:textSize="12dp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_ticket_acquire"
+                            android:textColor="#212121"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/video_ticket_period"
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/acbsr_string_ticket_acquire_period"
+                            android:textColor="#212121"
+                            android:textSize="10dp" />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/acb_common_rectangle_212121_r8"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="2dp">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/video_ticket_received_count"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/video_ticket_limit_count"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / 2"
+                                android:textColor="#A4A4A4"
+                                android:textSize="8dp" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- endregion -->
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <!-- endregion -->
+
+
+            <!-- region { reward banner, ticket box banner } -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <!-- region { reward banner } -->
+                <com.avatye.cashblock.feature.roulette.component.widget.banner.BannerLinearRewardView
+                    android:id="@+id/banner_reward_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    tools:background="#4CFFFF00"
+                    tools:layout_height="55dp" />
+                <!-- endregion -->
+
+
+                <!-- region { ticket box banner } -->
+                <com.avatye.cashblock.feature.roulette.component.widget.banner.BannerTicketBoxView
+                    android:id="@+id/ticket_box_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/banner_reward_view"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp" />
+                <!-- endregion -->
+
+
+                <!-- region { reward banner // point } -->
+                <RelativeLayout
+                    android:id="@+id/banner_reward_point_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/banner_reward_point"
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="22.5dp"
+                        android:layout_marginLeft="22.5dp"
+                        android:layout_marginTop="28dp"
+                        android:layout_marginEnd="22.5dp"
+                        android:layout_marginRight="22.5dp"
+                        android:background="@drawable/acb_common_rectangle_212121_r10"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingRight="12dp"
+                        android:singleLine="true"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10dp"
+                        tools:text="@string/acbsr_string_linear_reward_banner_point" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/acbsr_ic_hand" />
+
+                </RelativeLayout>
+                <!-- endregion -->
+
+
+            </RelativeLayout>
+            <!-- endregion -->
+
+
+            <!-- region { list } -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9.5dp"
+                android:layout_marginLeft="9.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="9.5dp"
+                android:layout_marginRight="9.5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
+                <com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
+                    android:id="@+id/place_holder_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#dfe4e9" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/acbsr_shape_wrapper_roulette_list" />
+
+            </androidx.cardview.widget.CardView>
+            <!-- endregion -->
+
+
+            <!-- region  { footer } -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/footer_service_term"
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/acb_common_service_term"
+                    android:textColor="#CCCCCC"
+                    android:textSize="10dp" />
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="match_parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/footer_sdk_version"
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/acb_common_sdk_version"
+                    android:textColor="#CCCCCC"
+                    android:textSize="10dp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <!-- endregion -->
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <!-- endregion -->
+
+
+    </androidx.core.widget.NestedScrollView>
+    <!-- endregion -->
+
+
+    <!-- region { banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true" />
+    <!-- endregion -->
+
+
+</RelativeLayout>

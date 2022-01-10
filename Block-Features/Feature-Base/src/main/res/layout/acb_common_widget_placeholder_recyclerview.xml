@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- region { empty } -->
+    <RelativeLayout
+        android:id="@+id/frame_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/acb_common_ic_list_empty"
+            android:drawablePadding="12dp"
+            android:text="@string/acb_common_page_empty"
+            android:textColor="@color/acb_core_color_sub_text"
+            android:textSize="14dp" />
+
+
+    </RelativeLayout>
+    <!-- endregion -->
+
+
+    <!-- region { error } -->
+    <RelativeLayout
+        android:id="@+id/frame_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/acb_common_ic_list_error"
+            android:drawablePadding="12dp"
+            android:text="@string/acb_common_page_error"
+            android:textColor="@color/acb_core_color_sub_text"
+            android:textSize="14dp" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/retry_button"
+            style="@style/CashBlock.Widget.Button.c01"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/acb_common_button_retry" />
+
+
+    </RelativeLayout>
+    <!-- endregion -->
+
+
+    <!-- region { loading } -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frame_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/acb_common_skeleton_item_linear"
+        tools:visibility="visible" />
+    <!-- endregion -->
+
+
+    <!-- region { content } -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frame_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        tools:visibility="visible" />
+    <!-- endregion -->
+
+
+</FrameLayout>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#40000000"
+    android:clickable="true"
+    android:focusable="true"
+    tools:ignore="MissingPrefix">
+
+
+    <!-- region { native interstitial view } -->
+    <com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd
+        android:id="@+id/sspNativeAdView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="14.5dp"
+        android:layout_marginEnd="14.5dp"
+        android:orientation="vertical">
+
+
+        <!-- region { ssp container } -->
+        <LinearLayout
+            android:id="@+id/native_interstitial_igaw_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="2.5dp"
+            tools:visibility="visible">
+
+
+            <!-- region { native interstitial image } -->
+            <ImageView
+                android:id="@+id/native_interstitial_igaw_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                tools:layout_height="250dp" />
+            <!-- endregion -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
+
+            <!-- region { native interstitial title, description } -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:id="@+id/native_interstitial_igaw_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    tools:background="#FF0000" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="0dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    tools:background="#dddddd">
+
+
+                    <TextView
+                        android:id="@+id/native_interstitial_igaw_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#212121"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+                        tools:text="native ad title" />
+
+
+                    <TextView
+                        android:id="@+id/native_interstitial_igaw_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="#212121"
+                        android:textSize="12dp"
+                        tools:text="native ad description" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <!-- endregion -->
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
+
+            <!-- region { native interstitial cta } -->
+            <TextView
+                android:id="@+id/native_interstitial_igaw_cta"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#0091EA"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#D8D8D8"
+                android:textSize="14dp"
+                tools:text="call to action" />
+            <!-- endregion -->
+
+
+        </LinearLayout>
+        <!-- endregion -->
+
+
+        <!-- region { admob container } -->
+        <ViewStub
+            android:id="@+id/native_interstitial_admob_stub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#FFFFFF"
+            android:inflatedId="@+id/native_interstitial_admob_import"
+            android:layout="@layout/acb_library_ad_stub_admob_native_interstitial" />
+        <!-- endregion -->
+
+
+    </com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd>
+    <!-- endregion -->
+
+
+    <!-- region { native interstitial close } -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/native_interstitial_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="12dp"
+        android:padding="4.5dp"
+        android:src="@drawable/acb_library_ad_ic_close_oval_18x18" />
+    <!-- endregion -->
+
+
+</RelativeLayout>

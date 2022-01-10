@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFBB86FC</color>
+    <color name="colorPrimaryVariant">#FF6200EE</color>
+    <color name="colorOnPrimary">#FF3700B3</color>
+    <color name="colorSecondary">#FF03DAC5</color>
+    <color name="colorSecondaryVariant">#FF018786</color>
+    <color name="colorOnSecondary">#FF000000</color>
+    <!-- color name -->
+    <color name="acb_core_color_window_background">#FFFFFFFF</color>
+    <color name="acb_core_color_progress_indicator">#EF5350</color>
+    <color name="acb_core_color_header_title">#DE000000</color>
+    <color name="acb_core_color_main_text">#212121</color>
+    <color name="acb_core_color_sub_text">#757575</color>
+    <!-- color define -->
+    <color name="acb_core_color_white">#FFFFFF</color>
+    <color name="acb_core_color_black">#000000</color>
+    <color name="acb_core_color_silver">#CCCCCC</color>
+    <color name="acb_core_color_greyish_brown">#424242</color>
+    <color name="acb_core_color_light_blue">#90caf9</color>
+    <color name="acb_core_color_ice_blue_two">#e0f3ff</color>
+    <color name="acb_core_color_pale_blue">#dfe4e9</color>
+
+
+</resources>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- region # intro -->
+    <string name="acbsr_intro_1_1">%s에서는</string>
+    <string name="acbsr_intro_1_2">티켓을 모아</string>
+    <string name="acbsr_intro_1_3"><![CDATA[<font color="#ef5350"><strong>%s</strong></font><font color="#212121">를 획득할 수 있어요</font>]]></string>
+    <string name="acbsr_intro_2_1"><![CDATA[<font color="#212121">다양한 방법으로</font> <font color="#ef5350"><strong>티켓</strong></font><font color="#212121">을 모아보세요</font>]]></string>
+    <string name="acbsr_intro_2_2"><![CDATA[<font color="#212121">방법1.</font> <font color="#ef5350">터치</font><font color="#212121">해서 티켓얻기</font>]]></string>
+    <string name="acbsr_intro_2_3"><![CDATA[<font color="#212121">방법2.</font> <font color="#ef5350">영상</font><font color="#212121">보고 티켓얻기</font>]]></string>
+    <string name="acbsr_intro_3_1">획득한 티켓으로</string>
+    <string name="acbsr_intro_3_2">다양한 %s 게임에 참여하여</string>
+    <string name="acbsr_intro_3_3"><![CDATA[<font color="#212121">더 많은</font> <font color="#ef5350">%s</font><font color="#212121">를 모아보세요</font>]]></string>
+    <string name="acbsr_intro_start">%s 시작</string>
+    <!-- region # setting -->
+    <string name="acbsr_setting_title">더보기</string>
+    <!-- endregion -->
+    <!-- endregion -->
+    <string name="acbsr_string_winner_null">지금 응모하세요!</string>
+    <string name="acbsr_string_winner_datetime">\u2022 %s</string>
+    <string name="acbsr_string_ticket_acquire">티켓얻기</string>
+    <string name="acbsr_string_touch_ticket_action_name">터치해서</string>
+    <string name="acbsr_string_video_ticket_action_name">영상보고</string>
+    <string name="acbsr_string_ticket_acquire_period">%1$s 마다 %2$s장 획득</string>
+    <string name="acbsr_string_roulette_campaign_text"><![CDATA[<font color="#ef5350">꽝없는</font> <font color="#212121">%1$s에서</font> <font color="#ef5350">대박</font><font color="#212121">을 노려보세요!</font>]]></string>
+    <string name="acbsr_string_roulette_ticket_quantity"><![CDATA[<font color="#212121">내 보유티켓</font> <font color="#ef5350"><strong>%s장</strong></font>]]></string>
+    <string name="acbsr_string_roulette_play">%s 돌리기</string>
+    <string name="acbsr_string_roulette_play_need_more">티켓이 부족합니다.</string>
+    <string name="acbsr_string_roulette_ticket_consume_message"><![CDATA[<font color="#212121">%1$s을 돌리면</font> <font color="#ef5350">티켓 %2$s장</font><font color="#212121">이 차감됩니다</font>]]></string>
+    <string name="acbsr_string_roulette_result_win_message_description">전광판에 노출될 당첨 소감을 남겨보세요.</string>
+    <string name="acbsr_string_roulette_result_win_message_toast">소감을 입력하지 않으셨습니다.\n소감을 남기시고 싶지 않으시면 다시 확인 버튼을 눌러주세요.</string>
+    <string-array name="acbsr_string_roulette_result_win_message_hints">
+        <item>짱짱!!</item>
+        <item>사랑해요</item>
+        <item>당첨!감사합니다!</item>
+        <item>나당첨됐어요!꺄~</item>
+        <item>당첨이다~ㅎㅎㅎ</item>
+        <item>당첨 실화냐~!ㄳ</item>
+        <item>짱 좋아요 ㅎ</item>
+        <item>잘쓸께요~ㅎㅎ</item>
+        <item>당첨 나이쓰~!</item>
+        <item>또 당첨!굿굿</item>
+        <item>따봉드림</item>
+        <item>대박!저당첨돼써열</item>
+    </string-array>
+    <!-- region # touch ticket -->
+    <string name="acbsr_string_touch_ticket_loading_title">티켓 재료 준비 중</string>
+    <string name="acbsr_string_touch_ticket_period"><![CDATA[<font color="#ffffff">티켓은</font> <font color="#ffaeac">%1$s마다 %2$s장씩</font> <font color="#ffffff">얻을 수 있어요</font>]]></string>
+    <string name="acbsr_string_touch_ticket_how_to">터치해서 티켓을 획득하세요</string>
+    <string name="acbsr_string_touch_ticket_complete_text">티켓을 획득했습니다.</string>
+    <string name="acbsr_string_touch_ticket_acquirable_count">티켓얻기(%1$s/%2$s)</string>
+    <string name="acbsr_string_touch_ticket_ad_popup_default_text">많이 모아서 돌릴수록 이득!</string>
+    <string name="acbsr_string_touch_ticket_ad_popup_default_message"><![CDATA[%1$s에 %2$s장씩 티켓을 모아<br /><strong>꽝 없는 &lsquo;%3$s&rsquo;</strong>에서 대박을 노려보세요!]]></string>
+    <string name="acbsr_string_touch_ticket_already_received_all_your_tickets">티켓을 모두 받으셨어요!</string>
+    <string name="acbsr_string_touch_ticket_no_ad">현재 광고 물량이 부족하여 티켓 발급이 지연되고 있습니다.\n잠시 후 다시 시도해 주세요.</string>
+    <!-- endregion -->
+    <!-- region # video ticket -->
+    <string name="acbsr_string_video_ticket_ready">티켓 재료 준비 중</string>
+    <string name="acbsr_string_video_ticket_complete">티켓을 획득했습니다.</string>
+    <string name="acbsr_string_video_ticket_video_stopped">영상 시청이 중단되어 티켓 발급이 되지 않았습니다.</string>
+    <!-- endregion -->
+    <string name="acbsr_string_linear_reward_banner_point"><![CDATA[지금 이 배너 클릭하면 <font color="#ef5350"><strong>%1$s %2$s장</strong></font> 즉시 지급]]></string>
+    <string name="acbsr_string_linear_reward_banner_click_message">완료 메세지가 나타날때까지\n페이지를 닫거나 이동하지마세요.</string>
+    <string name="acbsr_string_linear_reward_banner_complete_message">티켓을 획득하였습니다.</string>
+    <string name="acbsr_string_ticket_box_banner_title">티켓박스가 도착했습니다</string>
+    <string name="acbsr_string_ticket_box_banner_description">티켓박스는 하루에 1개씩 지급되는 선물상자입니다. 티켓을 최대 1,000개까지 획득할 수 있습니다.</string>
+    <string name="acbsr_string_ticket_box_banner_action_title">바로 확인하기</string>
+    <string name="acbsr_string_ticket_box_dialog_title">티켓박스 도착</string>
+    <string name="acbsr_string_ticket_box_dialog_sub_title_1"><![CDATA[티켓이 담겨있는 티켓박스를<br /><strong>알림창 상태바</strong>에서 받아보세요]]></string>
+    <string name="acbsr_string_ticket_box_dialog_sub_title_2">티켓박스는 하루에 1개씩 지급되는 선물상자입니다\n티켓 최대 100장 까지 획득 가능</string>
+    <string name="acbsr_string_ticket_box_dialog_description_1"><![CDATA[\u2022 티켓박스는 <strong>알림창 상태바</strong>에서만 획득할 수 있습니다]]></string>
+    <string name="acbsr_string_ticket_box_dialog_description_2"><![CDATA[\u2022 알림창 상태바가 안 보이나요? <font color="#EF5350"><strong><u>해결 방법 보기</u></strong></font>]]></string>
+    <string name="acbsr_string_ticket_box_dialog_description_3">알림창 상태바 설정</string>
+    <string name="acbsr_string_ticket_box_loading_title">티켓박스 준비 중</string>
+    <string name="acbsr_string_ticket_box_loading_description_1"><![CDATA[상자를 열면 <font color="#FFD400">티켓 1장 ~1,000장</font>을 얻을 수 있어요]]></string>
+    <string name="acbsr_string_ticket_box_loading_description_2">티켓박스를 열고 대박 티켓을 노려보세요</string>
+    <string name="acbsr_string_ticket_box_loading_description_3">\u2022 티켓박스는 매일 지급됩니다.</string>
+    <string name="acbsr_string_ticket_box_acquire_title">터치해서 티켓박스를 열어보세요</string>
+    <string name="acbsr_string_ticket_box_acquire_description"><![CDATA[<font color="#FFD400">10회</font>를 터치하시면 상자가 열립니다.]]></string>
+    <string name="acbsr_string_ticket_box_complete_title"><![CDATA[<font color="#FFD400">%s</font>획득!]]></string>
+    <string name="acbsr_string_ticket_box_already_received_all_your_tickets">금일 티켓박스는 이미 수령하셨습니다\n내일 지급되는 티켓박스를 기대해주세요</string>
+    <string name="acbsr_string_ticket_box_complete_description">내일 지급되는 상자도 꼭 열어보세요!</string>
+    <string name="acbsr_string_ticket_already_received">티켓을 모두 받으셨어요!</string>
+    <!-- region # attendance -->
+    <string name="acbsr_string_attendance_dialog_title">출첵 이벤트</string>
+    <string name="acbsr_string_attendance_dialog_warning_title">주의사항</string>
+    <string name="acbsr_string_attendance_dialog_warning_description_1">\u2022 신규 이용자에게 드리는 이벤트입니다</string>
+    <string name="acbsr_string_attendance_dialog_warning_description_2"><![CDATA[\u2022 본 이벤트는 <strong>더보기</strong> 메뉴에서 확인 가능합니다]]></string>
+    <string name="acbsr_string_attendance_reward_item_day">%s일</string>
+    <string name="acbsr_string_attendance_reward_item_title">출석체크</string>
+    <string name="acbsr_string_attendance_dialog_alert_message">수령하지 않은 보상이 있습니다\n그래도 이벤트 팝업을 닫으시겠습니까?\n\n내일 다시 방문하시면 수령 가능 합니다</string>
+    <!-- endregion -->
+    <!-- region # battery optimize -->
+    <string name="acbsr_string_battery_optimize_text"><![CDATA[다양한 혜택을 제공하는<br /><strong>%s 알림창 상태바</strong>가 꺼지지 않도록 <strong><font color="#ef5350">배터리 사용량 최적화 중지를</font> 허용<font color="#ef5350">해주세요</font></strong>]]></string>
+    <string name="acbsr_string_battery_optimize_notice">\u2022 상세 내용은 공지사항을 참고해주세요</string>
+    <string name="acbsr_string_battery_optimize_view_desc">자세히 보기</string>
+    <string name="acbsr_string_battery_optimize_allow">허용하고 혜택받기</string>
+    <!-- endregion -->
+    <!-- region # notification -->
+    <string name="acbsr_string_button_notification_on">알림창 상태바 켜기</string>
+    <string name="acbsr_string_notification_bar_ticket_balance">보유티켓</string>
+    <string name="acbsr_string_notification_bar_description">무료 포인트 적립 혜택 제공중</string>
+    <string name="acbsr_string_notification_channel_name">%s 알림창 상태바</string>
+    <string name="acbsr_string_notification_need_system_setting">알림창에서 \'알림표시\'와 \'%s 알림창 상태바\'를 켜주세요</string>
+    <string name="acbsr_string_notification_induce_dialog_title">알림창 상태바를\n켜시겠습니까?</string>
+    <string name="acbsr_string_notification_induce_dialog_sub_title"><![CDATA[<strong>알림창 상태바</strong>를 켜시면<br />티켓을 더 많이 모을 수 있어요]]></string>
+    <string name="acbsr_string_notification_induce_dialog_description_1"><![CDATA[\u2022 <strong>상태바</strong>에서만 매일 <strong>티켓박스</strong> 보상을 수령할 수 있습니다]]></string>
+    <string name="acbsr_string_notification_induce_dialog_description_2"><![CDATA[\u2022 알림창 상태바가 안 보이나요? <font color="#EF5350"><strong><u>해결 방법 보기</u></strong></font>]]></string>
+    <string name="acbsr_string_notification_setting_help_title">알림창 상태바가\n안 보이시나요?</string>
+    <string name="acbsr_string_notification_setting_help_sub_title">알림창 상태바가 안 보이는 경우\n아래의 설정을 진행해주세요</string>
+    <string name="acbsr_string_notification_setting_help_section_1_title">바탕 화면에서 사용하고 있는 앱 아이콘을 길게 눌러 앱 정보를 선택해주세요</string>
+    <string name="acbsr_string_notification_setting_help_section_2_title"><![CDATA[애플리케이션 정보에서 <strong>알림</strong>을 선택합니다.]]></string>
+    <string name="acbsr_string_notification_setting_help_section_3_title"><![CDATA[알림에서 <strong>알림표시</strong>와 <strong>알림창 상태바</strong>를 켜주세요]]></string>
+    <!-- endregion -->
+</resources>

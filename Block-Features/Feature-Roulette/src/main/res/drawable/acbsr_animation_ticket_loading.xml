@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false"
+    android:variablePadding="true">
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk00"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk01"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk02"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk03"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk04"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk05"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk06"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk07"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk08"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk09"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk10"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk09"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk08"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk07"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk06"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk05"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk04"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk03"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk02"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk01"
+        android:duration="125" />
+    <item
+        android:drawable="@drawable/acbsr_ic_puzzle_tk00"
+        android:duration="125" />
+</animation-list>

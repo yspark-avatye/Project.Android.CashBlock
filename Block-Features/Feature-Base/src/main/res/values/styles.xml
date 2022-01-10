@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CashBlock" />
+    <!-- region { app theme } -->
+    <style name="CashBlock.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/acb_core_color_white</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { widget root } -->
+    <style name="CashBlock.Widget">
+        <item name="android:fontFamily">@font/cashblock_font_family</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { message alert dialog } -->
+    <style name="CashBlock.Widget.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { message popup dialog } -->
+    <style name="CashBlock.Widget.Dialog.Popup" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { text view } -->
+    <style name="CashBlock.Widget.TextView">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { edit text view } -->
+    <style name="CashBlock.Widget.EditText">
+        <item name="colorControlNormal">@color/acb_core_color_white</item>
+        <item name="colorControlActivated">@color/acb_core_color_white</item>
+        <item name="android:background">@color/acb_core_color_white</item>
+        <item name="android:textColorHint">@color/acb_core_color_silver</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { image view } -->
+    <style name="CashBlock.Widget.ImageView" />
+    <!-- endregion -->
+
+
+    <!-- region { check box } -->
+    <style name="CashBlock.Widget.CheckBox" />
+    <!-- endregion -->
+
+
+    <!-- region { switch } -->
+    <style name="CashBlock.Widget.Switch">
+        <item name="colorControlActivated">#EF5350</item>
+        <item name="colorSwitchThumbNormal">#8F8F8F</item>
+        <item name="android:thumb">@drawable/acb_common_switch_thumb</item>
+        <item name="android:track">@drawable/acb_common_switch_track</item>
+    </style>
+    <!-- endregion -->
+
+
+    <!-- region { progress }  -->
+    <style name="CashBlock.Widget.Progress" />
+
+    <style name="CashBlock.Widget.Progress.Circle" />
+    <!-- endregion -->
+
+
+    <!-- region { button } -->
+    <style name="CashBlock.Widget.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/acb_core_color_white</item>
+    </style>
+
+    <style name="CashBlock.Widget.Button.c01" parent="CashBlock.Widget.Button">
+        <item name="android:background">@drawable/acb_common_selector_button_type_c1</item>
+    </style>
+
+    <style name="CashBlock.Widget.Button.i01" parent="CashBlock.Widget.Button">
+        <item name="android:background">@drawable/acb_common_selector_button_type_i1</item>
+    </style>
+
+    <style name="CashBlock.Widget.Button.i02" parent="CashBlock.Widget.Button">
+        <item name="android:background">@drawable/acb_common_selector_button_type_i2</item>
+    </style>
+
+    <style name="CashBlock.Widget.Button.Dialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/acb_core_color_white</item>
+    </style>
+    <!-- region -->
+
+</resources>

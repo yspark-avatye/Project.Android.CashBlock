@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/acb_core_color_window_background"
+    android:orientation="vertical">
+
+
+    <!-- region { header - stand alone } -->
+    <com.avatye.cashblock.base.component.widget.header.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:acb_widget_title="@string/acb_common_menu_notice"
+        app:acb_widget_view_type="sub"
+        app:acb_widget_visible_close="false" />
+    <!-- endregion -->
+
+
+    <!-- region { header - sub window } -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/section_title"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/acb_common_menu_notice"
+        android:textColor="@color/acb_core_color_main_text"
+        android:textSize="24dp"
+        android:visibility="visible" />
+    <!-- endregion -->
+
+
+    <!-- region { notice - list } -->
+    <com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
+        android:id="@+id/place_holder_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
+    <!-- endregion -->
+
+
+    <!-- region { Banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/acb_dimen_widget_banner_linear_view_height" />
+    <!-- endregion -->
+
+
+</LinearLayout>

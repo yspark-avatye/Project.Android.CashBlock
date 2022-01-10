@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="#4c000000"
+    tools:theme="@style/CashBlock.Widget.Dialog">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        tools:layout_marginEnd="40dp"
+        tools:layout_marginLeft="40dp"
+        tools:layout_marginRight="40dp"
+        tools:layout_marginStart="40dp">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <!-- region { notification content } -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/acb_common_rectangle_ffffff_r4"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp">
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/CashBlock.Widget.ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/acbsr_ic_ticket_box" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center"
+                        android:text="@string/acbsr_string_ticket_box_dialog_title"
+                        android:textColor="#212121"
+                        android:textSize="22dp"
+                        android:textStyle="bold" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/subtitle_1"
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:textColor="#212121"
+                        android:textSize="12dp"
+                        tools:text="@string/acbsr_string_ticket_box_dialog_sub_title_1" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/subtitle_2"
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="@string/acbsr_string_ticket_box_dialog_sub_title_2"
+                        android:textColor="#EF5350"
+                        android:textSize="12dp" />
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/CashBlock.Widget.ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/acbsr_bitmap_notification_window" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/description_1"
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_marginRight="14dp"
+                        android:textColor="#212121"
+                        android:textSize="10dp"
+                        tools:text="@string/acbsr_string_ticket_box_dialog_description_1" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/description_2"
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_marginRight="14dp"
+                        android:textColor="#212121"
+                        android:textSize="10dp"
+                        tools:text="@string/acbsr_string_ticket_box_dialog_description_2" />
+
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/notification_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/acb_common_outline_99a6b6_r10"
+                        android:orientation="horizontal">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="13dp"
+                            android:layout_marginLeft="13dp"
+                            android:text="@string/acbsr_string_ticket_box_dialog_description_3"
+                            android:textColor="#000000"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginRight="2dp"
+                            android:gravity="center_vertical|end"
+                            android:orientation="horizontal">
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/notification_status_on"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/acbsr_shape_switch_left_on"
+                                android:gravity="center"
+                                android:text="ON"
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/notification_status_off"
+                                style="@style/CashBlock.Widget.TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/acbsr_shape_switch_right_off"
+                                android:gravity="center"
+                                android:text="OFF"
+                                android:textColor="#000000"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- endregion -->
+
+
+                <!-- region { notification on button } -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_action"
+                    style="@style/CashBlock.Widget.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/acb_common_rectangle_ef5350_r4"
+                    android:gravity="center"
+                    android:text="@string/acbsr_string_button_notification_on"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+                <!-- endregion -->
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </ScrollView>
+
+
+        <!-- region { x button } -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/button_close"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:padding="5dp"
+                android:src="@drawable/acb_common_ic_close_black_14x14" />
+
+        </FrameLayout>
+        <!-- endregion -->
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

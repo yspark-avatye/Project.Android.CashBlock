@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="#4c000000"
+    tools:theme="@style/CashBlock.Widget.Dialog">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_marginEnd="40dp"
+        tools:layout_marginStart="40dp">
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/acb_common_rectangle_ffffff_r4"
+            android:orientation="vertical">
+
+
+            <!-- region # close -->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/attendance_close"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="5dp"
+                android:src="@drawable/acb_common_ic_close_black_14x14" />
+            <!-- endregion -->
+
+
+            <!-- region # top - icon, title -->
+            <androidx.appcompat.widget.AppCompatImageView
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/acb_common_ic_gift_box" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/acbsr_string_attendance_dialog_title"
+                android:textColor="#212121"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+            <!-- endregion -->
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <!-- region # dummy view -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/attendance_dummy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:alpha="0.5"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:alpha="0.7"
+                        android:background="@drawable/acbsr_frame_attendance_disable" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/acbsr_frame_attendance_disable" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/acbsr_frame_attendance_disable" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/acbsr_frame_attendance_disable" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/acbsr_frame_attendance_disable" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- endregion -->
+
+
+                <!-- region # list -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/attendance_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/acbsr_item_attendance_reward" />
+                <!-- endregion -->
+
+
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
+
+
+            <!-- region # warn -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/attendance_warning_title"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:text="@string/acbsr_string_attendance_dialog_warning_title"
+                android:textColor="#212121"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/attendance_warning_description_1"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="14dp"
+                android:textColor="#212121"
+                android:textSize="10dp"
+                tools:text="@string/acbsr_string_attendance_dialog_warning_description_1" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/attendance_warning_description_2"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:textColor="#212121"
+                android:textSize="10dp"
+                tools:text="@string/acbsr_string_attendance_dialog_warning_description_2" />
+            <!-- endregion -->
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</FrameLayout>

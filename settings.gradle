@@ -1,0 +1,16 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+rootProject.name = "Project.Android.CashBlock"
+// features
+include ':Block-Features:Feature-Base'
+include ':Block-Features:Feature-Roulette'
+include ':Block-Features:Feature-Offerwall'
+include ':Block-Units:Unit-Partner:SDK-View-Partner'
+include ':Block-Units:Unit-Publisher:SDK-View-Publisher'
+include ':Block-Units:Unit-Publisher:SDK-Core-Publisher'

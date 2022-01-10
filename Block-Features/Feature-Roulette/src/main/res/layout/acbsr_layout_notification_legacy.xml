@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingLeft="12dp"
+    android:paddingEnd="12dp"
+    android:paddingRight="12dp"
+    tools:background="#99CCFF">
+
+
+    <!-- region { icon } -->
+    <ImageView
+        android:id="@+id/notification_app_icon"
+        style="@style/CashBlock.Widget.ImageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        tools:background="#CCCCCC" />
+    <!-- endregion -->
+
+
+    <!-- region { appName, rouletteName } -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/notification_app_name"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="#929292"
+            android:textSize="9sp"
+            tools:text="캐시룰렛" />
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/notification_roulette_name"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:textColor="#212121"
+                android:textSize="12sp"
+                tools:text="캐시룰렛" />
+
+
+            <ImageView
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="1dp"
+                android:layout_height="9dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:background="#C4C4C4" />
+
+
+            <TextView
+                android:id="@+id/notification_ticket_balance"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:textColor="#212121"
+                android:textSize="11sp"
+                tools:text="티켓23장" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <!-- endregion -->
+
+
+    <!-- region { ticket condition } -->
+    <LinearLayout
+        android:id="@+id/notification_condition_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+
+
+            <ImageView
+                android:id="@+id/notification_box_condition_frame"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/acbsr_frame_notification_box_condition_on" />
+
+
+            <TextView
+                android:id="@+id/notification_box_condition"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center|bottom"
+                android:includeFontPadding="false"
+                android:paddingBottom="5dp"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                tools:text="1" />
+
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+
+
+            <ImageView
+                android:id="@+id/notification_ticket_condition_frame"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/acbsr_frame_notification_ticket_condition_on" />
+
+
+            <TextView
+                android:id="@+id/notification_ticket_condition"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center|bottom"
+                android:includeFontPadding="false"
+                android:paddingBottom="5dp"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                tools:text="1" />
+
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+    <!-- endregion -->
+
+
+</LinearLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sspNativeAdView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:background="#00000000"
+    tools:background="#99CCFF">
+
+    <!-- region { ssp native } -->
+    <LinearLayout
+        android:id="@+id/native_linear_igaw_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:minWidth="320dp"
+        android:orientation="horizontal"
+        tools:visibility="visible">
+
+
+        <!--  region { native icon } -->
+        <ImageView
+            android:id="@+id/native_linear_igaw_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            tools:background="#FF0000" />
+        <!-- endregion -->
+
+
+        <!--  region { native title, description } -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            tools:background="#dddddd">
+
+
+            <TextView
+                android:id="@+id/native_linear_igaw_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#212121"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                tools:text="native ad title" />
+
+
+            <TextView
+                android:id="@+id/native_linear_igaw_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#212121"
+                android:textSize="10dp"
+                tools:text="native ad description" />
+
+
+        </LinearLayout>
+        <!--  endregion -->
+
+
+        <!--  native ad call to action // -->
+        <TextView
+            android:id="@+id/native_linear_igaw_cta"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/acb_library_ad_frame_cta"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:text="@string/acb_library_ad_cta_default"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#d8d8d8"
+            android:textSize="12dp" />
+        <!--  // native ad call to action -->
+
+
+    </LinearLayout>
+    <!-- endregion -->
+
+
+</com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd>

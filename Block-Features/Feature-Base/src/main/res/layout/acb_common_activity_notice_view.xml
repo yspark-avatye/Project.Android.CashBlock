@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/acb_core_color_window_background"
+    android:orientation="vertical">
+
+
+    <!-- region { header - stand alone } -->
+    <com.avatye.cashblock.base.component.widget.header.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:acb_widget_title="@string/acb_common_menu_notice"
+        app:acb_widget_view_type="sub"
+        app:acb_widget_visible_close="false" />
+    <!-- endregion -->
+
+
+    <!-- region { title, content } -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/notice_title"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/acb_core_color_main_text"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        tools:text="[업데이트] 상태바 추가, 신규게임 &quot;LALA DASH&quot; " />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/notice_date"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:singleLine="true"
+        android:textColor="@color/acb_core_color_sub_text"
+        android:textSize="12dp"
+        tools:text="2019.07.11" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@color/acb_core_color_pale_blue" />
+
+
+    <WebView
+        android:id="@+id/notice_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
+    <!-- endregion -->
+
+
+    <!-- region { Banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/acb_dimen_widget_banner_linear_view_height" />
+    <!-- endregion -->
+
+</LinearLayout>
