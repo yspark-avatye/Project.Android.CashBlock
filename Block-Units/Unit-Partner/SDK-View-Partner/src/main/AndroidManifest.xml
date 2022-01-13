@@ -27,11 +27,11 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
         <meta-data
-            android:name="cashblock.app.key"
-            android:value="98d4d4c35d594451b21f54718e2bc986:c395dbe200ad4493ade96fb92c988fcf1c8df2d3687d49a9ab6f31f7c05e2bf4" />
+            android:name="cashblock.app.id"
+            android:value="98d4d4c35d594451b21f54718e2bc986" />
         <meta-data
-            android:name="cashblock.app.key.offerwall"
-            android:value="98d4d4c35d594451b21f54718e2bc986:c395dbe200ad4493ade96fb92c988fcf1c8df2d3687d49a9ab6f31f7c05e2bf4" />
+            android:name="cashblock.app.secret"
+            android:value="c395dbe200ad4493ade96fb92c988fcf1c8df2d3687d49a9ab6f31f7c05e2bf4" />
         <meta-data
             android:name="cashblock.config.environment"
             android:value="${config_app_environment}" />

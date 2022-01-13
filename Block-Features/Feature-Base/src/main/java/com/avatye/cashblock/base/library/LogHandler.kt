@@ -1,116 +1,170 @@
 package com.avatye.cashblock.base.library
 
 import android.util.Log
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
 import java.io.PrintWriter
 import java.io.StringWriter
 
 class LogHandler(private val moduleName: String) {
 
     // region # class instance
-    fun i(throwable: Throwable? = null, trace: () -> String) = LogHandler.i(
+    fun i(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.i(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
 
-    fun d(throwable: Throwable? = null, trace: () -> String) = LogHandler.d(
+    fun d(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.d(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
 
-    fun v(throwable: Throwable? = null, trace: () -> String) = LogHandler.v(
+    fun v(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.v(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
 
-    fun w(throwable: Throwable? = null, trace: () -> String) = LogHandler.w(
+    fun w(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.w(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
 
-    fun e(throwable: Throwable? = null, trace: () -> String) = LogHandler.e(
+    fun e(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.e(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
 
-    fun e(throwable: Throwable? = null) = LogHandler.e(
+    fun e(throwable: Throwable? = null, viewName: String? = null) = LogHandler.e(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = { "" }
     )
 
-    fun p(throwable: Throwable? = null, trace: () -> String) = LogHandler.p(
+    fun p(throwable: Throwable? = null, viewName: String? = null, trace: () -> String) = LogHandler.p(
         throwable = throwable,
         moduleName = moduleName,
+        viewName = viewName,
         trace = trace
     )
     // endregion
 
     companion object {
         private val TAG: String = "CASHBLOCK"
-        val allowLog: Boolean get() = FeatureCore.allowLog
+        val allowLog: Boolean get() = Core.allowLog
 
-        fun p(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun p(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-            println("$TAG:[$moduleName]>>>")
-            println(trace())
+            viewName?.let {
+                println("$TAG:[$moduleName]/[$it]")
+            } ?: run {
+                println("$TAG:[$moduleName]")
+            }
+            println("=> ${trace()}")
             println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         }
 
-        fun i(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun i(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.i(TAG, makeLog(throwable, moduleName, trace))
+                Log.i(
+                    TAG, makeLog(
+                        throwable = throwable,
+                        moduleName = moduleName,
+                        viewName = viewName,
+                        trace = trace
+                    )
+                )
             }
         }
 
-        fun d(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun d(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.d(TAG, makeLog(throwable, moduleName, trace))
+                Log.d(
+                    TAG, makeLog(
+                        throwable = throwable,
+                        moduleName = moduleName,
+                        viewName = viewName,
+                        trace = trace
+                    )
+                )
             }
         }
 
-        fun v(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun v(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.v(TAG, makeLog(throwable, moduleName, trace))
+                Log.v(
+                    TAG, makeLog(
+                        throwable = throwable,
+                        moduleName = moduleName,
+                        viewName = viewName,
+                        trace = trace
+                    )
+                )
             }
         }
 
-        fun w(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun w(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.w(TAG, makeLog(throwable, moduleName, trace))
+                Log.w(
+                    TAG, makeLog(
+                        throwable = throwable,
+                        moduleName = moduleName,
+                        viewName = viewName,
+                        trace = trace
+                    )
+                )
             }
         }
 
-        fun e(throwable: Throwable? = null, moduleName: String, trace: () -> String) {
+        fun e(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.e(TAG, makeLog(throwable, moduleName, trace))
+                Log.e(
+                    TAG, makeLog(
+                        throwable = throwable,
+                        moduleName = moduleName,
+                        viewName = viewName,
+                        trace = trace
+                    )
+                )
             }
         }
 
-        fun e(throwable: Throwable? = null, moduleName: String) {
+        fun e(throwable: Throwable? = null, moduleName: String, viewName: String? = null) {
             if (allowLog) {
-                Log.e(TAG, makeLog(throwable, moduleName) { "" })
+                Log.e(TAG, makeLog(throwable, moduleName, viewName = viewName) { "" })
             }
         }
 
 
-        private fun makeLog(throwable: Throwable? = null, moduleName: String, trace: () -> String): String {
+        private fun makeLog(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String): String {
             val builder = StringBuilder()
             throwable?.let {
                 builder.appendLine("")
-                builder.appendLine("$moduleName:Log =>")
-                builder.appendLine("[${trace()}]")
+                builder.appendLine("[Module: $moduleName] =>")
+                viewName?.let {
+                    builder.appendLine("Trace => [$it] => [${trace()}]")
+                } ?: run {
+                    builder.appendLine("Trace => [${trace()}]")
+                }
                 builder.appendLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-                builder.appendLine("StackTrace =>")
-                builder.appendLine("[${getStackTraceString(it)}]")
+                builder.appendLine("StackTrace => [${getStackTraceString(it)}]")
                 builder.appendLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             } ?: run {
-                builder.append("[$moduleName:Log => ${trace()}]")
+                builder.appendLine("[Module: $moduleName] =>")
+                viewName?.let {
+                    builder.appendLine("Trace => [$it] => [${trace()}]")
+                } ?: run {
+                    builder.appendLine("Trace => [${trace()}]")
+                }
             }
             return builder.toString()
         }

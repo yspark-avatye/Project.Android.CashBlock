@@ -2,7 +2,7 @@ package com.avatye.cashblock.feature.roulette.presentation.view.intro
 
 import android.os.Bundle
 import android.view.View
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
 import com.avatye.cashblock.base.component.support.toHtml
 import com.avatye.cashblock.feature.roulette.R
@@ -19,15 +19,15 @@ internal class Intro3Fragment : AppBaseFragment<AcbsrFragmentIntro3Binding>(Acbs
         super.onViewCreated(view, savedInstanceState)
         with(binding.introText32) {
             this.text = getString(R.string.acbsr_intro_3_2)
-                .format(RemoteContract.appInfoSetting.rouletteName)
+                .format(SettingContractor.appInfoSetting.rouletteName)
         }
         with(binding.introText33) {
             this.text = getString(R.string.acbsr_intro_3_3)
-                .format(RemoteContract.appInfoSetting.pointName).toHtml
+                .format(SettingContractor.appInfoSetting.pointName).toHtml
         }
         with(binding.introComplete) {
             this.text = getString(R.string.acbsr_intro_start)
-                .format(RemoteContract.appInfoSetting.rouletteName)
+                .format(SettingContractor.appInfoSetting.rouletteName)
             this.setOnClickWithDebounce {
                 parentActivity.actionStart()
             }

@@ -2,7 +2,7 @@ package com.avatye.cashblock.base.internal.server.serve
 
 import org.json.JSONObject
 
-data class ServeFailure(
+internal data class ServeFailure(
     val statusCode: Int = 0,
     private val serverCode: String = "",
     private val message: String = "",

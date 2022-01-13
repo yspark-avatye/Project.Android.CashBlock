@@ -8,25 +8,24 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.data.CoreDataContract
+import com.avatye.cashblock.base.Core.logger
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.CoreApiContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.model.parcel.EventBusParcel
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.widget.dialog.DialogLoadingView
 import com.avatye.cashblock.base.component.widget.dialog.IDialogView
-import com.avatye.cashblock.base.internal.controller.BlockEventController
 import com.avatye.cashblock.base.internal.server.serve.ServeTask
-import com.avatye.cashblock.base.library.LogHandler
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 
 
 abstract class CoreBaseActivity : AppCompatActivity() {
 
-    abstract val blockCode: BlockCode
-    abstract val blockName: String
+    abstract val blockType: BlockType
 
     protected val viewTag: String = this::class.java.simpleName
     protected open val exitTransitionType: ActivityTransitionType = ActivityTransitionType.NONE
@@ -116,13 +115,10 @@ abstract class CoreBaseActivity : AppCompatActivity() {
                 unregisterReceiver(it)
             }
             // logging
-            LogHandler.i(moduleName = blockName) {
-                "${this::class.java.simpleName} -> onDestroy()"
-            }
+            logger.i(viewName = this::class.java.simpleName) { "onDestroy()" }
         } catch (e: Exception) {
-            LogHandler.e(throwable = e, moduleName = blockName) {
-                "${this::class.java.simpleName} -> onDestroy"
-            }
+            // logging
+            logger.e(throwable = e, viewName = this::class.java.simpleName) { "onDestroy()" }
         }
     }
     // endregion
@@ -134,7 +130,7 @@ abstract class CoreBaseActivity : AppCompatActivity() {
         loadingView = DialogLoadingView.create(this)
         broadcastWatcher = BroadcastWatchReceiver()
         broadcastWatcher?.let {
-            registerReceiver(it, BlockEventController.makeBlockEventWatcherFilter())
+            registerReceiver(it, EventContractor.makeWatcherFilter())
         }
     }
 
@@ -143,7 +139,7 @@ abstract class CoreBaseActivity : AppCompatActivity() {
         setContentView(view)
         // post event log
         logKey?.let {
-            CoreDataContract(blockCode = blockCode).let { contract ->
+            CoreApiContractor(blockType = BlockType.CORE).let { contract ->
                 contract.postEventLog(eventKey = it, eventParam = logParam)
             }
         }
@@ -193,15 +189,15 @@ abstract class CoreBaseActivity : AppCompatActivity() {
     private inner class BroadcastWatchReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val parel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
-            LogHandler.i(moduleName = blockName) {
-                "${this::class.java.simpleName} -> BroadcastWatchReceiver -> onReceive { action: ${intent?.action ?: "null"} }"
+            logger.i(viewName = this::class.java.simpleName) {
+                "BroadcastWatchReceiver -> onReceive { action: ${intent?.action ?: "null"} }"
             }
             val actionName = intent?.action ?: return
             if (actionName.isNotEmpty()) {
                 when (actionName) {
                     ActionType.UNAUTHORIZED.actionName -> receiveActionUnAuthorized()
                     ActionType.INSPECTION.actionName -> {
-                        if (blockCode.blockType == parel?.blockType) {
+                        if (blockType == parel?.blockType) {
                             receiveActionInspection()
                         }
                     }

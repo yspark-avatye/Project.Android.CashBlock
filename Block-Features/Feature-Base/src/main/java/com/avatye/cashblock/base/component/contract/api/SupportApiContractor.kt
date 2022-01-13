@@ -1,7 +1,6 @@
-package com.avatye.cashblock.base.component.contract.data
+package com.avatye.cashblock.base.component.contract.api
 
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.support.NoticeEntity
 import com.avatye.cashblock.base.component.domain.entity.support.PopupNoticeEntity
 import com.avatye.cashblock.base.component.domain.model.contract.Contract
@@ -10,22 +9,13 @@ import com.avatye.cashblock.base.internal.server.APISupport
 import com.avatye.cashblock.base.internal.server.entity.support.ResNotice
 import com.avatye.cashblock.base.internal.server.entity.support.ResNoticeList
 import com.avatye.cashblock.base.internal.server.entity.support.ResPopupNotice
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
 import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
-class SupportDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
-
-    private val tokenizer = object : IServeToken {
-        override fun makeBasicToken() = blockCode.basicToken
-        override fun makeBearerToken() = AccountContract.accessToken
-    }
-
+class SupportApiContractor(private val blockType: BlockType) {
     fun retrieveNoticeList(offset: Int = 0, limit: Int = 50, response: (contract: ContractResult<MutableList<NoticeEntity>>) -> Unit) {
         APISupport.getNoticeList(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             offset = offset,
             limit = limit,
             response = object : ServeResponse<ResNoticeList> {
@@ -36,8 +26,7 @@ class SupportDataContract(private val blockCode: BlockCode) {
 
     fun retrieveNoticeView(noticeId: String, response: (contract: ContractResult<NoticeEntity>) -> Unit) {
         APISupport.getNoticeView(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             noticeId = noticeId,
             response = object : ServeResponse<ResNotice> {
                 override fun onSuccess(success: ResNotice) = response(Contract.onSuccess(success = success.noticeEntity))
@@ -47,8 +36,7 @@ class SupportDataContract(private val blockCode: BlockCode) {
 
     fun retrievePopups(response: (contract: ContractResult<MutableList<PopupNoticeEntity>>) -> Unit) {
         APISupport.getPopups(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             response = object : ServeResponse<ResPopupNotice> {
                 override fun onSuccess(success: ResPopupNotice) = response(Contract.onSuccess(success.popupNoticeEntities))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))

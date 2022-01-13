@@ -4,46 +4,46 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.avatye.cashblock.BuildConfig
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.component.domain.entity.setting.*
 
 internal object RemotePreferenceData {
 
     // region { version }
-    private var valueOfRemoteVersion = Preference.version
+    private var _version = Preference.version
     val version: Long
         get() {
-            return valueOfRemoteVersion
+            return _version
         }
 
-    private var valueOfSDKVersion = Preference.sdkVersion
+    private var _sdkVersion = Preference.sdkVersion
     val sdkVersion: Int
         get() {
-            return valueOfSDKVersion
+            return _sdkVersion
         }
 
     fun updateVersion(remoteVersion: Long? = null, sdkVersion: Int? = null) {
         remoteVersion?.let {
-            valueOfRemoteVersion = it
+            _version = it
             Preference.version = it
         }
         sdkVersion?.let {
-            valueOfSDKVersion = it
+            _sdkVersion = it
             Preference.sdkVersion = it
         }
     }
 
     fun needUpdate(version: Long): Boolean {
-        val settingVersion = valueOfRemoteVersion
+        val settingVersion = _version
         return (settingVersion == 0L
                 || settingVersion != version
-                || valueOfSDKVersion != BuildConfig.X_BUILD_SDK_VERSION_CODE)
+                || _sdkVersion != BuildConfig.X_BUILD_SDK_VERSION_CODE)
     }
     // endregion
 
 
     // region { App Config }
-    private var valueOfAppInfo = AppInfoSettingEntity(
+    private var _appInfo = AppInfoSettingEntity(
         appName = Preference.AppConfig.appName,
         storeUrl = Preference.AppConfig.storeUrl,
         pointName = Preference.AppConfig.pointName,
@@ -57,18 +57,18 @@ internal object RemotePreferenceData {
     )
     val appInfo: AppInfoSettingEntity
         get() {
-            return valueOfAppInfo
+            return _appInfo
         }
 
     fun fetchAppInfoSetting(setting: AppInfoSettingEntity) {
         Preference.AppConfig.fetch(setting)
-        valueOfAppInfo = setting
+        _appInfo = setting
     }
     // endregion
 
 
     // region { advertise network }
-    private var valueOfAdvertiseNetwork = AdvertiseNetworkSettingEntity(
+    private var _advertiseNetwork = AdvertiseNetworkSettingEntity(
         igaWorks = AdvertiseNetworkSettingEntity.IGAWorks(
             appKey = Preference.AdvertiseNetworkConfig.IGAWorks.appKey,
             hashKey = Preference.AdvertiseNetworkConfig.IGAWorks.hashKey
@@ -80,51 +80,51 @@ internal object RemotePreferenceData {
     )
     val advertiseNetwork: AdvertiseNetworkSettingEntity
         get() {
-            return valueOfAdvertiseNetwork
+            return _advertiseNetwork
         }
 
     fun fetchAdvertiseNetworkSetting(setting: AdvertiseNetworkSettingEntity) {
         Preference.AdvertiseNetworkConfig.fetch(setting)
-        valueOfAdvertiseNetwork = setting
+        _advertiseNetwork = setting
     }
     // endregion
 
 
     // region { notification }
-    private var valueOfNotification = NotificationSettingEntity(
+    private var _notification = NotificationSettingEntity(
         inducePeriod = Preference.NotificationConfig.inducePeriod,
         induceTicketCount = Preference.NotificationConfig.induceTicketCount
     )
     val notification: NotificationSettingEntity
         get() {
-            return valueOfNotification
+            return _notification
         }
 
     fun fetchNotificationSetting(setting: NotificationSettingEntity) {
-        valueOfNotification = setting
+        _notification = setting
         Preference.NotificationConfig.fetch(setting = setting)
     }
     // endregion
 
 
     // region { mission }
-    private var valueOfMission = MissionSettingEntity(
+    private var _mission = MissionSettingEntity(
         attendanceId = Preference.Mission.attendanceId
     )
     val mission: MissionSettingEntity
         get() {
-            return valueOfMission
+            return _mission
         }
 
     fun fetchMissionSetting(setting: MissionSettingEntity) {
         Preference.Mission.fetch(setting = setting)
-        valueOfMission = setting
+        _mission = setting
     }
     // endregion
 
 
     // region { in app }
-    private var valueOfInAppSetting = InAppSettingEntity(
+    private var _inApp = InAppSettingEntity(
         main = InAppSettingEntity.Main(
             rewardBannerDelay = Preference.InAppConfig.Main.rewardBannerDelay,
             pid = InAppSettingEntity.Main.PlacementID(
@@ -136,18 +136,18 @@ internal object RemotePreferenceData {
     )
     val inApp: InAppSettingEntity
         get() {
-            return valueOfInAppSetting
+            return _inApp
         }
 
     fun fetchInAppSetting(setting: InAppSettingEntity) {
         Preference.InAppConfig.fetch(setting = setting)
-        valueOfInAppSetting = setting
+        _inApp = setting
     }
     // endregion
 
 
     // region { touch ticket }
-    private var valueOfTouchTicketSetting = TouchTicketSettingEntity(
+    private var _touchTicket = TouchTicketSettingEntity(
         period = Preference.TouchTicketConfig.period,
         limitCount = Preference.TouchTicketConfig.limitCount,
         allowNoAd = Preference.TouchTicketConfig.allowNoAd,
@@ -171,18 +171,18 @@ internal object RemotePreferenceData {
     )
     val touchTicket: TouchTicketSettingEntity
         get() {
-            return valueOfTouchTicketSetting
+            return _touchTicket
         }
 
     fun fetchTouchTicketSetting(setting: TouchTicketSettingEntity) {
         Preference.TouchTicketConfig.fetch(setting = setting)
-        valueOfTouchTicketSetting = setting
+        _touchTicket = setting
     }
     // endregion
 
 
     // region { video ticket }
-    private var valueOfVideoTicketSetting = VideoTicketSettingEntity(
+    private var _videoTicket = VideoTicketSettingEntity(
         period = Preference.VideoTicketConfig.period,
         limitCount = Preference.VideoTicketConfig.limitCount,
         pid = VideoTicketSettingEntity.PlacementID(
@@ -197,18 +197,18 @@ internal object RemotePreferenceData {
     )
     val videoTicket: VideoTicketSettingEntity
         get() {
-            return valueOfVideoTicketSetting
+            return _videoTicket
         }
 
     fun fetchVideoTicketSetting(setting: VideoTicketSettingEntity) {
         Preference.VideoTicketConfig.fetch(setting = setting)
-        valueOfVideoTicketSetting = setting
+        _videoTicket = setting
     }
     // endregion
 
 
     // region { ticket box }
-    private var valueOfTicketBoxSetting = TicketBoxSettingEntity(
+    private var _ticketBox = TicketBoxSettingEntity(
         allowNoAd = Preference.TicketBoxConfig.allowNoAd,
         popAD = TicketBoxSettingEntity.PopAD(
             interval = Preference.TicketBoxConfig.PopAD.interval,
@@ -230,20 +230,21 @@ internal object RemotePreferenceData {
     )
     val ticketBox: TicketBoxSettingEntity
         get() {
-            return valueOfTicketBoxSetting
+            return _ticketBox
         }
 
     fun fetchTicketBoxSetting(setting: TicketBoxSettingEntity) {
         Preference.TicketBoxConfig.fetch(setting = setting)
-        valueOfTicketBoxSetting = setting
+        _ticketBox = setting
     }
     // endregion
 
 
+    // region { preference data }
     private object Preference {
         private const val preferenceName = "cash-block:core:remote-setting"
         private val pref: SharedPreferences by lazy {
-            FeatureCore.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+            Core.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
         }
 
         private val VERSION = "version"
@@ -976,5 +977,6 @@ internal object RemotePreferenceData {
             }
         }
     }
+    // endregion
 
 }

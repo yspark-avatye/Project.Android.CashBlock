@@ -7,7 +7,7 @@ import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONArray
 import org.json.JSONObject
 
-class ResMission : ServeSuccess() {
+internal class ResMission : ServeSuccess() {
     var missionEntity = MissionEntity()
         private set
 

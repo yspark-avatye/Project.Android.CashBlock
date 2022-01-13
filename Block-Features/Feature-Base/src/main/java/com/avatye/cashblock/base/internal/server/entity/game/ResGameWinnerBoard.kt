@@ -7,7 +7,7 @@ import com.avatye.cashblock.base.library.miscellaneous.until
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONArray
 
-class ResGameWinnerBoard : ServeSuccess() {
+internal class ResGameWinnerBoard : ServeSuccess() {
     val winnerMessageEntities: MutableList<WinnerMessageEntity> = mutableListOf()
 
     override fun makeBody(responseValue: String) {

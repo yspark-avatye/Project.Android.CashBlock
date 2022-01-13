@@ -1,6 +1,6 @@
 package com.avatye.cashblock.base.internal.server
 
-object APIOfferwall {
+internal object APIOfferwall {
 //    fun getOfferwalls(appId: String, tokenizer: IServeToken, response: ServeResponse<ResOfferwallList>) {
 //        Serve<ResOfferwallList>()
 //            .withTag(tag = tag)

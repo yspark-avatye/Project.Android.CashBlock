@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.data.MissionDataContract
+import com.avatye.cashblock.base.component.contract.api.MissionApiContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.mission.MissionStateEntity
 import com.avatye.cashblock.base.component.domain.model.app.CoreBaseActivity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
@@ -17,8 +17,8 @@ import com.avatye.cashblock.base.component.support.toHtml
 import com.avatye.cashblock.base.component.widget.dialog.DialogLoadingView
 import com.avatye.cashblock.base.component.widget.dialog.DialogMessageView
 import com.avatye.cashblock.base.component.widget.dialog.IDialogView
-import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrItemAttendanceRewardBinding
@@ -69,7 +69,7 @@ class DialogPopupAttendanceView private constructor(
         missionStateList = attendanceList
         vb.attendanceWarningDescription1.text = ownerActivity.getString(R.string.acbsr_string_attendance_dialog_warning_description_1)
         vb.attendanceWarningDescription2.text = ownerActivity.getString(R.string.acbsr_string_attendance_dialog_warning_description_2).toHtml
-        vb.attendanceWarningDescription2.isVisible = RemoteContract.appInfoSetting.allowMoreMenu
+        vb.attendanceWarningDescription2.isVisible = SettingContractor.appInfoSetting.allowMoreMenu
         vb.attendanceClose.setOnClickListener { actionDismiss() }
         vb.attendanceList.post {
             vb.attendanceDummy.isVisible = false
@@ -96,7 +96,7 @@ class DialogPopupAttendanceView private constructor(
     private fun actionDismiss() {
         // CHECK REWARD
         val result = missionStateList?.filter { it.status == 2 }?.size ?: 0
-        if (result > 0 && !RemoteContract.appInfoSetting.allowMoreMenu) {
+        if (result > 0 && !SettingContractor.appInfoSetting.allowMoreMenu) {
             if (ownerActivity.isFinishing) {
                 return
             }
@@ -173,9 +173,9 @@ class DialogPopupAttendanceView private constructor(
 
 
     private fun requestReward(actionValue: Int) {
-        MissionDataContract(blockCode = RouletteConfig.blockCode).let { apiContract ->
+        MissionApiContractor(blockType = RouletteConfig.blockType).let { apiContract ->
             loadingView.show(cancelable = false)
-            apiContract.postAction(missionID = RemoteContract.missionSetting.attendanceId, actionValue = actionValue) {
+            apiContract.postAction(missionID = SettingContractor.missionSetting.attendanceId, actionValue = actionValue) {
                 when (it) {
                     is ContractResult.Success -> {
                         PreferenceData.Mission.Attendance.update(checkDateTime = DateTime())

@@ -13,8 +13,8 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.game.GamePlayEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
@@ -51,7 +51,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
         }
     }
 
-    private val appInfo = RemoteContract.appInfoSetting
+    private val appInfo = SettingContractor.appInfoSetting
     private lateinit var parcel: RoulettePlayParcel
 
     // filter
@@ -176,14 +176,14 @@ internal class RoulettePlayActivity : AppBaseActivity() {
     private fun requestRouletteImage(callback: () -> Unit) {
         val requestListener = object : RequestListener<Drawable> {
             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                logger.e(throwable = e) { "$viewTag -> requestRouletteImage -> bindingRoulette -> onLoadFailed" }
+                logger.e(viewName = viewTag, throwable = e) { "requestRouletteImage -> bindingRoulette -> onLoadFailed" }
                 CoreUtil.showToast(CoreResource.string.acb_common_message_error)
                 leakHandler.postDelayed({ finish() }, 1000L)
                 return false
             }
 
             override fun onResourceReady(r: Drawable?, m: Any?, t: Target<Drawable>?, ds: DataSource?, isFirstResource: Boolean): Boolean {
-                logger.i { "$viewTag -> requestRouletteImage -> bindingRoulette -> onResourceReady" }
+                logger.i(viewName = viewTag) { "requestRouletteImage -> bindingRoulette -> onResourceReady" }
                 vb.roulettePin.isVisible = true
                 vb.rouletteBoardFrame.setBackgroundResource(R.drawable.acbsr_shape_roulette_back_board)
                 callback()
@@ -208,7 +208,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
             possibility = (it >= parcel.useTicketAmount)
         })
         ticketViewModel.syncBalance { _, _ ->
-            logger.i { "$viewTag -> TicketViewModel -> syncBalance" }
+            logger.i(viewName = viewTag) { "TicketViewModel -> syncBalance" }
         }
         // endregion
 
@@ -327,7 +327,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                     loadingView?.dismiss()
                     vb.resultContainer.isVisible = false
                     winnerViewModel.request()
-                    EventBusContract.postWinnerBoardUpdate(blockType = BlockType.ROULETTE)
+                    EventContractor.postWinnerBoardUpdate(blockType = BlockType.ROULETTE)
                     hideKeyboard()
                 }
             }
@@ -340,7 +340,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
             val windowToken = vb.resultMessage.windowToken
             inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
         } catch (e: Exception) {
-            logger.e(throwable = e) { "$viewTag -> hideKeyboard" }
+            logger.e(viewName = viewTag, throwable = e) { "hideKeyboard" }
         }
     }
 
@@ -350,7 +350,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                 ticketViewModel.balance.removeObservers(this)
                 winnerViewModel.contents.removeObservers(this)
             } catch (e: Exception) {
-                logger.e(throwable = e) { "$viewTag -> close" }
+                logger.e(viewName = viewTag, throwable = e) { "close" }
             } finally {
                 finish()
             }

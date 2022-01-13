@@ -5,11 +5,10 @@ import android.app.Application
 import android.content.Context
 import androidx.annotation.Keep
 import com.avatye.cashblock.CashBlockSDK
-import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.block.BlockController
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.CoreContract
-import com.avatye.cashblock.base.component.contract.data.PublisherDataContract
+import com.avatye.cashblock.base.component.contract.business.CoreContractor
+import com.avatye.cashblock.base.component.contract.api.PublisherApiContractor
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.feature.roulette.CashBlockRoulette
@@ -31,20 +30,13 @@ object CashBlockPublisherSDK {
         // valid publisher keys
         checkPublisherKey(context = application, publisherId = publisherId, publisherAppKey = publisherAppKey)
         // publisher app-block key
-        val publisherBlockAppId = PreferenceData.publisherBlockAppId
-        val publisherBlockAppSecret = PreferenceData.publisherBlockAppSecret
+        val publisherBlockAppId = PreferenceData.cashBlockAppId
+        val publisherBlockAppSecret = PreferenceData.cashBlockAppSecret
         if (publisherBlockAppId.isNotEmpty() && publisherBlockAppSecret.isNotEmpty()) {
             if (log) {
                 logger.p { "## CashBlockPublisherSDK { publisherBlockAppId:$publisherBlockAppId, publisherBlockAppSecret:$publisherBlockAppSecret }" }
             }
-            CashBlockSDK.initialize(
-                application = application,
-                blockCode = BlockCode(
-                    blockType = BlockType.ROULETTE,
-                    blockId = publisherBlockAppId,
-                    blockSecret = publisherBlockAppSecret
-                )
-            )
+            CashBlockSDK.initialize(application = application)
         } else {
             if (log) {
                 println("## CashBlockPublisherSDK ## Publisher initialize")
@@ -55,7 +47,7 @@ object CashBlockPublisherSDK {
     @JvmStatic
     fun launch(context: Context, publisherId: String, publisherAppKey: String, aaid: String, listener: ILaunchCallback) {
         // check sdk initialize
-        if (CoreContract.isInitialized) {
+        if (CoreContractor.isInitialized) {
             logger.e { "launch -> 저장된 값으로 초기화 완료 !!" }
             // success
             listener.onSuccess()
@@ -88,7 +80,7 @@ object CashBlockPublisherSDK {
     // region # ROULETTE
     @JvmStatic
     fun startRoulette(activity: Activity, callback: ICompleteCallback) {
-        BlockController.launchBlock(context = activity, blockCode = CoreContract.coreBlockCode) {
+        BlockController.launchBlock(context = activity, blockType = BlockType.PUBLISHER) {
             when (it) {
                 true -> {
                     callback.onSuccess()
@@ -158,31 +150,30 @@ object CashBlockPublisherSDK {
         // basic key value empty
         // communication - request api
         // PublisherDataContract()
-        PublisherDataContract().retrieveInitialize(
+        PublisherApiContractor().retrieveInitialize(
+            blockType = BlockType.PUBLISHER,
             publisherID = publisherId,
             publisherAppKey = publisherAppKey,
-            publisherAppName = CoreContract.appName,
+            publisherAppName = CoreContractor.appName,
             publisherAAID = publisherAAID
         ) {
             when (it) {
                 is ContractResult.Success -> {
                     if (it.contract.isSuccess) {
                         logger.e { "launch -> 저장값 없음 -> 서버 요청 -> 초기화 성공" }
-                        // block code
-                        val blockCode = BlockCode(blockType = BlockType.ROULETTE, blockId = it.contract.appID, blockSecret = it.contract.appSecret)
                         // save key set
                         PreferenceData.update(
-                            publisherBlockAppId = blockCode.blockId,
-                            publisherBlockAppSecret = blockCode.blockSecret,
+                            cashBlockAppId = it.contract.appID,
+                            cashBlockAppSecret = it.contract.appSecret,
                             publisherRetryEndTime = 0L
                         )
                         // entrust to CashRouletteSDK
-                        CashBlockSDK.initialize(application = context as Application, blockCode = blockCode)
+                        CashBlockSDK.initialize(application = context as Application)
                         listener.onSuccess()
                     } else {
                         logger.e { "launch -> 저장값 없음 -> 서버 요청 -> 실패 -> 서버요청 금지 -> ${it.contract.retryHours}시간" }
                         // save retry time(millis)
-                        val retryEndTime = if (CoreContract.allowDeveloper) {
+                        val retryEndTime = if (CoreContractor.allowDeveloper) {
                             // minutes/test
                             DateTime().plusMinutes(it.contract.retryHours).millis
                         } else {

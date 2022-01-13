@@ -7,8 +7,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class TermsParcel(
-    val blockId: String,
-    val blockSecret: String,
     val blockType: BlockType,
     val headerType: HeaderView.HeaderType = HeaderView.HeaderType.POPUP,
     val url: String = ""

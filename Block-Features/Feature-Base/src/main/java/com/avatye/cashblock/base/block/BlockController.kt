@@ -2,11 +2,12 @@ package com.avatye.cashblock.base.block
 
 import android.app.Application
 import android.content.Context
-import com.avatye.cashblock.base.FeatureCore.logger
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.block.BlockType.Companion.connector
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.listener.ILoginListener
 import com.avatye.cashblock.base.component.support.CoreUtil.showToast
 import com.avatye.cashblock.base.internal.controller.LoginController
-import com.avatye.cashblock.base.internal.controller.RemoteSettingSyncController
 
 object BlockController {
     // tag name
@@ -15,53 +16,53 @@ object BlockController {
     /** block module checker */
     internal fun hasBlock(blockType: BlockType): Boolean {
         return kotlin.runCatching { Class.forName(blockType.connector) }.isSuccess
-
-
     }
 
-    fun launchBlock(context: Context, blockCode: BlockCode, callback: (success: Boolean) -> Unit) {
-        makeBlockConnector(referenceName = "launchBlock", blockType = blockCode.blockType)?.let { connector ->
-            logger.i { "$tagName -> launchBlock -> connector($blockCode) -> success -> initialize" }
-            connector.initialize(application = context.applicationContext as Application, blockCode = blockCode)
-            synchronizeBlockSession {
+    fun launchBlock(context: Context, blockType: BlockType, callback: (success: Boolean) -> Unit) {
+        makeBlockConnector(referenceName = "launchBlock", blockType = blockType)?.let { connector ->
+            logger.i { "$tagName -> launchBlock -> connector(${blockType.name}) -> success -> initialize" }
+            connector.initialize(application = context.applicationContext as Application)
+            synchronizeBlockSession(blockType = blockType) {
                 when (it) {
                     true -> {
-                        logger.i { "$tagName -> launchBlock -> connector($blockCode) -> synchronizeBlockSession -> launch" }
-                        connector.launch(context = context, blockCode = blockCode)
+                        logger.i { "$tagName -> launchBlock -> connector(${blockType.name}) -> synchronizeBlockSession -> launch" }
+                        connector.launch(context = context)
                         callback(true)
                     }
                     false -> {
-                        logger.e { "$tagName -> launchBlock -> connector($blockCode) -> synchronizeBlockSession -> false" }
+                        logger.e { "$tagName -> launchBlock -> connector(${blockType.name}) -> synchronizeBlockSession -> false" }
                         callback(false)
                     }
                 }
             }
         } ?: run {
-            logger.e { "$tagName -> launchBlock -> connector($blockCode) is null" }
+            logger.e { "$tagName -> launchBlock -> connector(${blockType.name}) is null" }
             callback(false)
         }
     }
 
-    fun syncBlockSession(callback: (success: Boolean) -> Unit) = synchronizeBlockSession(callback = callback)
+    fun syncBlockSession(blockType: BlockType, callback: (success: Boolean) -> Unit) {
+        synchronizeBlockSession(blockType = blockType, callback = callback)
+    }
 
-    fun createBlockConnector(context: Context, blockCode: BlockCode, callback: (connector: BlockConnector?) -> Unit) {
-        makeBlockConnector(referenceName = "launchBlock", blockType = blockCode.blockType)?.let { connector ->
-            logger.e { "$tagName -> openBlockConnector -> connector($blockCode) -> success -> initialize" }
-            connector.initialize(application = context.applicationContext as Application, blockCode = blockCode)
-            synchronizeBlockSession {
+    fun createBlockConnector(context: Context, blockType: BlockType, callback: (connector: BlockConnector?) -> Unit) {
+        makeBlockConnector(referenceName = "launchBlock", blockType = blockType)?.let { connector ->
+            logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> success -> initialize" }
+            connector.initialize(application = context.applicationContext as Application)
+            synchronizeBlockSession(blockType = blockType) {
                 when (it) {
                     true -> {
-                        logger.i { "$tagName -> openBlockConnector -> connector($blockCode) -> synchronizeBlockSession -> return connector" }
+                        logger.i { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> synchronizeBlockSession -> return connector" }
                         callback(connector)
                     }
                     false -> {
-                        logger.e { "$tagName -> openBlockConnector -> connector($blockCode) -> synchronizeBlockSession -> false" }
+                        logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> synchronizeBlockSession -> false" }
                         callback(null)
                     }
                 }
             }
         } ?: run {
-            logger.e { "$tagName -> openBlockConnector -> connector($blockCode) is null" }
+            logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) is null" }
             callback(null)
         }
     }
@@ -89,12 +90,12 @@ object BlockController {
         return connector
     }
 
-    private fun synchronizeBlockSession(callback: (success: Boolean) -> Unit) {
+    private fun synchronizeBlockSession(blockType: BlockType, callback: (success: Boolean) -> Unit) {
         // 1. remote data sync
-        RemoteSettingSyncController.synchronization {
+        SettingContractor.Controller.synchronization(blockType = blockType) {
             // 2. popup or etc sync
             // 3. sync session
-            LoginController.requestLogin(listener = object : LoginController.ILoginListener {
+            LoginController.requestLogin(blockType = blockType, listener = object : ILoginListener {
                 override fun onSuccess() = callback(true)
 
                 override fun onFailure(reason: String) {

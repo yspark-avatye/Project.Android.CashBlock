@@ -1,8 +1,7 @@
 package com.avatye.cashblock.feature.roulette.presentation.viewmodel.ticket
 
 import androidx.lifecycle.*
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.TouchTicketLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.VideoTicketLiveData
@@ -59,18 +58,12 @@ internal class TicketViewModel(private val lifecycleOwner: LifecycleOwner) : Vie
 
     fun synchronization(complete: () -> Unit = {}) {
         syncBalance { _, _ ->
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> synchronization -> syncBalance -> complete"
-            }
+            logger.i(viewName = tagName) { "synchronization -> syncBalance -> complete" }
             syncTouchTicket { _, _ ->
-                LogHandler.i(moduleName = MODULE_NAME) {
-                    "$tagName -> synchronization -> syncBalance -> syncTouchTicket -> complete"
-                }
+                logger.i(viewName = tagName) { "synchronization -> syncBalance -> syncTouchTicket -> complete" }
                 syncVideoTicket { _, _ ->
                     complete()
-                    LogHandler.i(moduleName = MODULE_NAME) {
-                        "$tagName -> synchronization -> syncBalance -> syncTouchTicket -> syncVideoTicket -> complete"
-                    }
+                    logger.i(viewName = tagName) { "synchronization -> syncBalance -> syncTouchTicket -> syncVideoTicket -> complete" }
                 }
             }
         }

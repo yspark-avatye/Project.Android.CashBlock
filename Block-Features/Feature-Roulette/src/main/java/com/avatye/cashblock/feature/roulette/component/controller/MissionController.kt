@@ -1,7 +1,7 @@
 package com.avatye.cashblock.feature.roulette.component.controller
 
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.data.MissionDataContract
+import com.avatye.cashblock.base.component.contract.api.MissionApiContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.mission.MissionStateEntity
 import com.avatye.cashblock.base.component.domain.model.app.CoreBaseActivity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
@@ -23,8 +23,8 @@ internal object MissionController {
             }
 
             // request
-            val mission = MissionDataContract(blockCode = RouletteConfig.blockCode)
-            mission.retrieveMission(missionId = RemoteContract.missionSetting.attendanceId) {
+            val mission = MissionApiContractor(blockType = RouletteConfig.blockType)
+            mission.retrieveMission(missionId = SettingContractor.missionSetting.attendanceId) {
                 when (it) {
                     is ContractResult.Failure -> callback()
                     is ContractResult.Success -> {
@@ -44,8 +44,8 @@ internal object MissionController {
         }
 
         fun requestList(ownerActivity: CoreBaseActivity, callback: (missionStateList: MutableList<MissionStateEntity>?) -> Unit) {
-            val mission = MissionDataContract(blockCode = RouletteConfig.blockCode)
-            mission.retrieveMission(missionId = RemoteContract.missionSetting.attendanceId) {
+            val mission = MissionApiContractor(blockType = RouletteConfig.blockType)
+            mission.retrieveMission(missionId = SettingContractor.missionSetting.attendanceId) {
                 when (it) {
                     is ContractResult.Failure -> callback(null)
                     is ContractResult.Success -> {

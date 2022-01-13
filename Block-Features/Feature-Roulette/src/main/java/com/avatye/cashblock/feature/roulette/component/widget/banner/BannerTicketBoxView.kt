@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
@@ -23,16 +23,16 @@ internal class BannerTicketBoxView(context: Context, attrs: AttributeSet? = null
     }
 
     fun onResume() {
-        if (RemoteContract.appInfoSetting.allowTicketBox) {
+        if (SettingContractor.appInfoSetting.allowTicketBox) {
             isVisible = TicketBoxController.hasTicketBox
-            EventBusContract.postBoxConditionUpdate(blockType = BlockType.ROULETTE)
+            EventContractor.postBoxConditionUpdate(blockType = BlockType.ROULETTE)
         } else {
             isVisible = false
         }
     }
 
     init {
-        if (RemoteContract.appInfoSetting.allowTicketBox) {
+        if (SettingContractor.appInfoSetting.allowTicketBox) {
             isVisible = TicketBoxController.hasTicketBox
             vb.ticketBoxActionConfirm.setOnClickWithDebounce {
                 ownerActivity?.let {

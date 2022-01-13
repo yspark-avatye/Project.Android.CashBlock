@@ -1,6 +1,6 @@
-package com.avatye.cashblock.base.internal.server.serve
+package com.avatye.cashblock.base.component.domain.entity.app
 
-enum class ServeEnvironment(val value: String) {
+enum class AppEnvironment(val value: String) {
     DEV("dev"),
     TEST("test"),
     STAGE("stage"),
@@ -8,7 +8,7 @@ enum class ServeEnvironment(val value: String) {
     LIVE("live");
 
     companion object {
-        fun from(value: String): ServeEnvironment {
+        fun from(value: String): AppEnvironment {
             return when (value.lowercase()) {
                 "dev" -> DEV
                 "test" -> TEST

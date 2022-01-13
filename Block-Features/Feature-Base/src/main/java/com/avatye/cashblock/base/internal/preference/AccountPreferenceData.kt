@@ -3,42 +3,42 @@ package com.avatye.cashblock.base.internal.preference
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockController
-import com.avatye.cashblock.base.FeatureCore
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 
 internal object AccountPreferenceData {
-    private var valueOfAppUserId = Preference.appUserId
-    private var valueOfSDKUserId = Preference.sdkUserId
-    private var valueOfAccessToken = Preference.accessToken
-    private var valueOfAgeVerifiedType = Preference.ageVerifiedType
+    private var _appUserId = Preference.appUserId
+    private var _sdkUserId = Preference.sdkUserId
+    private var _accessToken = Preference.accessToken
+    private var _ageVerifiedType = Preference.ageVerifiedType
 
     val isValid: Boolean
         get() {
-            return valueOfAppUserId.isNotEmpty()
-                    && valueOfSDKUserId.isNotEmpty()
-                    && valueOfAccessToken.isNotEmpty()
+            return _appUserId.isNotEmpty()
+                    && _sdkUserId.isNotEmpty()
+                    && _accessToken.isNotEmpty()
         }
 
     val appUserId: String
         get() {
-            return valueOfAppUserId
+            return _appUserId
         }
 
     val sdkUserId: String
         get() {
-            return valueOfSDKUserId
+            return _sdkUserId
         }
 
     val accessToken: String
         get() {
-            return valueOfAccessToken
+            return _accessToken
         }
 
     val ageVerified: AgeVerifiedType
         get() {
-            return AgeVerifiedType.from(valueOfAgeVerifiedType)
+            return AgeVerifiedType.from(_ageVerifiedType)
         }
 
     fun needUpdateAppUserId(targetAppUserId: String): Boolean {
@@ -47,19 +47,19 @@ internal object AccountPreferenceData {
 
     fun update(appUserId: String? = null, sdkUserId: String? = null, accessToken: String? = null, ageVerifiedType: AgeVerifiedType? = null) {
         appUserId?.let {
-            valueOfAppUserId = it
+            _appUserId = it
             Preference.appUserId = it
         }
         sdkUserId?.let {
-            valueOfSDKUserId = it
+            _sdkUserId = it
             Preference.sdkUserId = it
         }
         accessToken?.let {
-            valueOfAccessToken = it
+            _accessToken = it
             Preference.accessToken = it
         }
         ageVerifiedType?.let {
-            valueOfAgeVerifiedType = it.value
+            _ageVerifiedType = it.value
             Preference.ageVerifiedType = it.value
         }
     }
@@ -69,7 +69,7 @@ internal object AccountPreferenceData {
         Preference.clear()
         // clear connector session
         if (BlockController.hasBlock(blockType = BlockType.PUBLISHER)) {
-            BlockController.clearSessionBlock(context = FeatureCore.application, blockType = BlockType.PUBLISHER)
+            BlockController.clearSessionBlock(context = Core.application, blockType = BlockType.PUBLISHER)
         }
         // reset
         update(
@@ -84,7 +84,7 @@ internal object AccountPreferenceData {
     private object Preference {
         private const val preferenceName = "cash-block:account:setting"
         private val pref: SharedPreferences by lazy {
-            FeatureCore.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+            Core.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
         }
 
         private val APP_USER_ID = "app-user-id"

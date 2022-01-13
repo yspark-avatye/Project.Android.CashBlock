@@ -1,13 +1,13 @@
 package com.avatye.cashblock.base.internal.server
 
-import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.app.ResPublisherInitialize
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
-object APIPublisher {
+internal object APIPublisher {
     fun getInitialize(
+        blockType: BlockType,
         publisherID: String,
         publisherAppKey: String,
         publisherAppName: String,
@@ -15,7 +15,7 @@ object APIPublisher {
         response: ServeResponse<ResPublisherInitialize>
     ) {
         ServeTask(
-            blockCode = BlockCode(blockType = BlockType.PUBLISHER, blockId = "", blockSecret = ""),
+            blockType = blockType,
             authorization = ServeTask.Authorization.BASIC,
             method = ServeTask.Method.GET,
             requestUrl = "app/initialize",

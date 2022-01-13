@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.avatye.cashblock.base.component.contract.ViewOpenContract
+import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.launch
-import com.avatye.cashblock.feature.offerwall.OfferwallConfig
+import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
@@ -32,9 +32,9 @@ internal class OfferwallMainActivity : AppBaseActivity() {
 
     override fun receiveActionInspection() {
         leakHandler.post {
-            ViewOpenContract.openInspectionView(
+            ViewOpenContractor.openInspectionView(
                 activity = this@OfferwallMainActivity,
-                blockCode = OfferwallConfig.blockCode,
+                blockType = blockType,
                 close = true
             )
         }
@@ -47,7 +47,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
         vb.bannerLinearView.requestBanner()
         // endregion
-        logger.i { "$viewTag -> onCreate" }
+        logger.i(viewName = viewTag) { "onCreate" }
     }
 
     override fun onResume() {

@@ -1,7 +1,6 @@
-package com.avatye.cashblock.base.component.contract.data
+package com.avatye.cashblock.base.component.contract.api
 
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.game.GameEntity
 import com.avatye.cashblock.base.component.domain.entity.game.GamePlayEntity
 import com.avatye.cashblock.base.component.domain.entity.game.WinnerMessageEntity
@@ -13,21 +12,14 @@ import com.avatye.cashblock.base.internal.server.entity.game.ResGameList
 import com.avatye.cashblock.base.internal.server.entity.game.ResGamePlay
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameView
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameWinnerBoard
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
 import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
-class RouletteDataContract(private val blockCode: BlockCode) {
-
-    private val tokenizer = object : IServeToken {
-        override fun makeBasicToken() = blockCode.basicToken
-        override fun makeBearerToken() = AccountContract.accessToken
-    }
+class RouletteApiContractor(private val blockType: BlockType) {
 
     fun retrieveView(gameId: String, response: (contract: ContractResult<GameEntity>) -> Unit) {
         APIGame.getGameView(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             gameId = gameId,
             response = object : ServeResponse<ResGameView> {
                 override fun onSuccess(success: ResGameView) = response(Contract.onSuccess(success.gameEntity))
@@ -37,8 +29,7 @@ class RouletteDataContract(private val blockCode: BlockCode) {
 
     fun retrieveList(response: (contract: ContractResult<MutableList<GameEntity>>) -> Unit) {
         APIGame.getGameList(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             response = object : ServeResponse<ResGameList> {
                 override fun onSuccess(success: ResGameList) = response(Contract.onSuccess(success.gameEntities))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
@@ -47,8 +38,7 @@ class RouletteDataContract(private val blockCode: BlockCode) {
 
     fun postPlay(gameId: String, response: (contract: ContractResult<GamePlayEntity>) -> Unit) {
         APIGame.postGamePlay(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             gameId = gameId,
             response = object : ServeResponse<ResGamePlay> {
                 override fun onSuccess(success: ResGamePlay) = response(Contract.onSuccess(success.gamePlayEntity))
@@ -58,8 +48,7 @@ class RouletteDataContract(private val blockCode: BlockCode) {
 
     fun postWinnerBoard(participateId: String, message: String, response: (contract: ContractResult<Unit>) -> Unit) {
         APIGame.postGameWinBoard(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             participateId = participateId,
             message = message,
             response = object : ServeResponse<ResVoid> {
@@ -70,8 +59,7 @@ class RouletteDataContract(private val blockCode: BlockCode) {
 
     fun retrieveWinnerBoardList(response: (contract: ContractResult<MutableList<WinnerMessageEntity>>) -> Unit) {
         APIGame.getWinnerBoard(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             response = object : ServeResponse<ResGameWinnerBoard> {
                 override fun onSuccess(success: ResGameWinnerBoard) = response(Contract.onSuccess(success.winnerMessageEntities))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))

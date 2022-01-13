@@ -1,16 +1,8 @@
-package com.avatye.cashblock.base.component.contract.data
+package com.avatye.cashblock.base.component.contract.api
 
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
+import com.avatye.cashblock.base.block.BlockType
 
-class OfferwallDataContract(private val blockCode: BlockCode) {
-
-    private val tokenizer = object : IServeToken {
-        override fun makeBasicToken() = blockCode.basicToken
-        override fun makeBearerToken() = AccountContract.accessToken
-    }
-
+class OfferwallApiContractor(private val blockType: BlockType) {
 
     //        fun retrieveList(response: (contract: ContractResult<OfferwallListModel>) -> Unit) {
 //            APIOfferwall.getOfferwalls(tag = tag, response = object : ServeResponse<ResOfferwallList> {

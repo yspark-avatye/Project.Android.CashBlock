@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toLongValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResSettings : ServeSuccess() {
+internal class ResSettings : ServeSuccess() {
     var settings = SettingEntity()
         private set
 

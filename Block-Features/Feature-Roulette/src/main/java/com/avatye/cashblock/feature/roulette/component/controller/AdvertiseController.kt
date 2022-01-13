@@ -2,8 +2,8 @@ package com.avatye.cashblock.feature.roulette.component.controller
 
 import android.app.Activity
 import android.content.Context
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
@@ -30,8 +30,8 @@ internal object AdvertiseController {
         if (networkNo == ADNetworkType.MOBON.value) {
             // check setting
             return when (placementType) {
-                ADPlacementType.TOUCH_TICKET -> RemoteContract.touchTicketSetting.popAD.exclude
-                ADPlacementType.TICKET_BOX -> RemoteContract.ticketBoxSetting.popAD.exclude
+                ADPlacementType.TOUCH_TICKET -> SettingContractor.touchTicketSetting.popAD.exclude
+                ADPlacementType.TICKET_BOX -> SettingContractor.ticketBoxSetting.popAD.exclude
             }
         }
 
@@ -41,15 +41,15 @@ internal object AdvertiseController {
 
     private val verifier = object : IADAgeVerifier {
         override fun isVerified(): Boolean {
-            return AccountContract.ageVerified == AgeVerifiedType.VERIFIED
+            return AccountContractor.ageVerified == AgeVerifiedType.VERIFIED
         }
     }
 
     fun createBannerData(placementType: BannerLinearPlacementType): BannerLinearView.BannerData {
-        val placementAppKey = RemoteContract.advertiseNetworkSetting.igaWorks.appKey
-        val nativePlacementID = RemoteContract.inAppSetting.main.pid.linearNative
+        val placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey
+        val nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative
         val mezzo = BannerLinearView.MediationMezzoData(
-            storeUrl = RemoteContract.appInfoSetting.storeUrl,
+            storeUrl = SettingContractor.appInfoSetting.storeUrl,
             allowBackground = false
         )
 
@@ -57,7 +57,7 @@ internal object AdvertiseController {
             BannerLinearPlacementType.COMMON -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = RemoteContract.inAppSetting.main.pid.linearSSP,
+                    sspPlacementID = SettingContractor.inAppSetting.main.pid.linearSSP,
                     nativePlacementID = nativePlacementID,
                     mezzo = mezzo,
                     verifier = verifier
@@ -66,7 +66,7 @@ internal object AdvertiseController {
             BannerLinearPlacementType.TOUCH_TICKET -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = RemoteContract.touchTicketSetting.pid.linearSSP,
+                    sspPlacementID = SettingContractor.touchTicketSetting.pid.linearSSP,
                     nativePlacementID = nativePlacementID,
                     mezzo = mezzo,
                     verifier = verifier
@@ -75,7 +75,7 @@ internal object AdvertiseController {
             BannerLinearPlacementType.VIDEO_TICKET -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = RemoteContract.videoTicketSetting.pid.linearSSP,
+                    sspPlacementID = SettingContractor.videoTicketSetting.pid.linearSSP,
                     nativePlacementID = nativePlacementID,
                     mezzo = mezzo,
                     verifier = verifier
@@ -84,7 +84,7 @@ internal object AdvertiseController {
             BannerLinearPlacementType.TICKET_BOX -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = RemoteContract.ticketBoxSetting.pid.linearSSP,
+                    sspPlacementID = SettingContractor.ticketBoxSetting.pid.linearSSP,
                     nativePlacementID = nativePlacementID,
                     mezzo = mezzo,
                     verifier = verifier
@@ -94,14 +94,14 @@ internal object AdvertiseController {
     }
 
     fun createADCuratorPopup(context: Context, placementType: ADPlacementType, callback: ICuratorPopupCallback): CuratorPopup {
-        val placementAppKey = RemoteContract.advertiseNetworkSetting.igaWorks.appKey
+        val placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey
         val sspPlacementID = when (placementType) {
-            ADPlacementType.TOUCH_TICKET -> RemoteContract.touchTicketSetting.pid.popupSSP
-            ADPlacementType.TICKET_BOX -> RemoteContract.ticketBoxSetting.pid.popupSSP
+            ADPlacementType.TOUCH_TICKET -> SettingContractor.touchTicketSetting.pid.popupSSP
+            ADPlacementType.TICKET_BOX -> SettingContractor.ticketBoxSetting.pid.popupSSP
         }
         val nativePlacementID = when (placementType) {
-            ADPlacementType.TOUCH_TICKET -> RemoteContract.touchTicketSetting.pid.popupNative
-            ADPlacementType.TICKET_BOX -> RemoteContract.ticketBoxSetting.pid.popupNative
+            ADPlacementType.TOUCH_TICKET -> SettingContractor.touchTicketSetting.pid.popupNative
+            ADPlacementType.TICKET_BOX -> SettingContractor.ticketBoxSetting.pid.popupNative
         }
         return CuratorPopup(
             context = context,
@@ -116,7 +116,7 @@ internal object AdvertiseController {
 
 
     fun createADCuratorQueue(activity: Activity, adQueueType: ADQueueType, callback: ICuratorQueueCallback): CuratorQueue {
-        val placementAppKey = RemoteContract.advertiseNetworkSetting.igaWorks.appKey
+        val placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey
         val sequential: List<CuratorQueueEntity> = when (adQueueType) {
             // touch ticket
             ADQueueType.TOUCH_TICKET_OPEN -> makeQueueTouchTicketOpen()
@@ -138,7 +138,7 @@ internal object AdvertiseController {
         // -> interstitial ssp
         // -> interstitial native
         // -> box banner
-        val pid = RemoteContract.touchTicketSetting.pid
+        val pid = SettingContractor.touchTicketSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL_VIDEO, placementID = pid.openInterstitialVideoSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.openInterstitialSSP),
@@ -151,7 +151,7 @@ internal object AdvertiseController {
     private fun makeQueueTouchTicketClose(): List<CuratorQueueEntity> {
         // interstitial ssp
         // -> interstitial native
-        val pid = RemoteContract.touchTicketSetting.pid
+        val pid = SettingContractor.touchTicketSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.closeInterstitialSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL_NATIVE, placementID = pid.closeInterstitialNative)
@@ -166,7 +166,7 @@ internal object AdvertiseController {
         // -> interstitial ssp
         // -> interstitial native
         // -> box banner
-        val pid = RemoteContract.videoTicketSetting.pid
+        val pid = SettingContractor.videoTicketSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.REWARD_VIDEO, placementID = pid.openRewardVideoSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.openInterstitialSSP),
@@ -179,7 +179,7 @@ internal object AdvertiseController {
     private fun makeQueueVideoTicketClose(): List<CuratorQueueEntity> {
         // interstitial ssp
         // -> interstitial native
-        val pid = RemoteContract.videoTicketSetting.pid
+        val pid = SettingContractor.videoTicketSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.closeInterstitialSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL_NATIVE, placementID = pid.closeInterstitialNative)
@@ -194,7 +194,7 @@ internal object AdvertiseController {
         // -> interstitial ssp
         // -> interstitial native
         // -> box banner
-        val pid = RemoteContract.ticketBoxSetting.pid
+        val pid = SettingContractor.ticketBoxSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL_VIDEO, placementID = pid.openInterstitialVideoSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.openInterstitialSSP),
@@ -207,7 +207,7 @@ internal object AdvertiseController {
     private fun makeQueueTicketBoxClose(): List<CuratorQueueEntity> {
         // interstitial ssp
         // -> interstitial native
-        val pid = RemoteContract.ticketBoxSetting.pid
+        val pid = SettingContractor.ticketBoxSetting.pid
         return listOf(
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL, placementID = pid.closeInterstitialSSP),
             CuratorQueueEntity(loaderType = ADLoaderType.INTERSTITIAL_NATIVE, placementID = pid.closeInterstitialNative)

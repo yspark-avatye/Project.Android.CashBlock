@@ -1,20 +1,22 @@
 package com.avatye.cashblock.base.block
 
 import androidx.annotation.Keep
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.CoreConstants
 
 @Keep
 enum class BlockType(val value: Int) {
-    ROULETTE(1),
-    OFFERWALL(2),
-    PUBLISHER(3);
+    CORE(1),
+    ROULETTE(100),
+    OFFERWALL(101),
+    PUBLISHER(900);
 
     companion object {
         fun from(value: Int): BlockType? {
             return when (value) {
-                1 -> ROULETTE
-                2 -> OFFERWALL
-                3 -> PUBLISHER
+                1 -> CORE
+                100 -> ROULETTE
+                101 -> OFFERWALL
+                900 -> PUBLISHER
                 else -> null
             }
         }
@@ -22,9 +24,10 @@ enum class BlockType(val value: Int) {
         val BlockType.connector: String
             get() {
                 return when (this) {
-                    ROULETTE -> FeatureCore.CASHBLOCK_CONNECT_ROULETTE
-                    OFFERWALL -> FeatureCore.CASHBLOCK_CONNECT_OFFERWALL
-                    PUBLISHER -> FeatureCore.CASHBLOCK_CONNECT_PUBLISHER
+                    CORE -> ""
+                    ROULETTE -> CoreConstants.CASHBLOCK_CONNECT_ROULETTE
+                    OFFERWALL -> CoreConstants.CASHBLOCK_CONNECT_OFFERWALL
+                    PUBLISHER -> CoreConstants.CASHBLOCK_CONNECT_PUBLISHER
                 }
             }
     }

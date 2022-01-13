@@ -1,7 +1,7 @@
 package com.avatye.cashblock.feature.roulette.presentation.viewmodel.ticket
 
 import androidx.lifecycle.*
-import com.avatye.cashblock.base.component.contract.data.TicketDataContract
+import com.avatye.cashblock.base.component.contract.api.TicketApiContractor
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketBalanceEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketRequestEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
@@ -30,8 +30,8 @@ internal class TicketTransactionViewModel(private val ticketType: TicketType) : 
         }
     }
 
-    private val apiContract: TicketDataContract by lazy {
-        TicketDataContract(blockCode = RouletteConfig.blockCode)
+    private val api: TicketApiContractor by lazy {
+        TicketApiContractor(blockType = RouletteConfig.blockType)
     }
 
     // region # local
@@ -45,7 +45,7 @@ internal class TicketTransactionViewModel(private val ticketType: TicketType) : 
     fun requestTransaction() {
         _transactionId = ""
         _transaction.value = Contract.postInProgress()
-        apiContract.postTransaction(ticketType = ticketType) {
+        api.postTransaction(ticketType = ticketType) {
             when (it) {
                 is ContractResult.Success -> {
                     _transactionId = it.contract.transactionId
@@ -66,7 +66,7 @@ internal class TicketTransactionViewModel(private val ticketType: TicketType) : 
     fun requestTicketing() {
         _transactionId?.let { tid ->
             _ticketing.value = Contract.postInProgress()
-            apiContract.postTicketing(ticketType = ticketType, transactionId = tid) {
+            api.postTicketing(ticketType = ticketType, transactionId = tid) {
                 when (it) {
                     is ContractResult.Success -> _ticketing.value = Contract.postComplete(it.contract)
                     is ContractResult.Failure -> _ticketing.value = Contract.postError(it)

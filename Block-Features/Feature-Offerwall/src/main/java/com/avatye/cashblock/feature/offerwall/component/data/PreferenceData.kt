@@ -4,13 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.MODULE_NAME
+import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import org.json.JSONObject
 
 internal object PreferenceData {
     private const val tagName = "PreferenceData@Offerwall"
-    private val blockId: String get() = OfferwallConfig.blockCode.blockId
 
     // region # popup-notice
     object PopupNotice {
@@ -54,7 +53,7 @@ internal object PreferenceData {
 
         // region # popup-notice
         object PopupNotice {
-            private val CLOSE_DATE = "$blockId:popup-notice:close-date"
+            private val CLOSE_DATE = "popup-notice:close-date"
             var popupCloseDate: String
                 get() {
                     return pref.getString(CLOSE_DATE, "") ?: ""

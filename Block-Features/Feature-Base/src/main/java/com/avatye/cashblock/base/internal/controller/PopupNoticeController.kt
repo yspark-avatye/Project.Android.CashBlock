@@ -1,27 +1,27 @@
-package com.avatye.cashblock.base.internal.controller.popupNotice
+package com.avatye.cashblock.base.internal.controller
 
-import com.avatye.cashblock.base.FeatureCore
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.data.SupportDataContract
+import com.avatye.cashblock.base.Core
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.SupportApiContractor
+import com.avatye.cashblock.base.component.domain.entity.base.LandingType
 import com.avatye.cashblock.base.component.domain.entity.support.PopupDisplayType
 import com.avatye.cashblock.base.component.domain.entity.support.PopupNoticeEntity
+import com.avatye.cashblock.base.component.domain.listener.IPopupNoticeDataListener
 import com.avatye.cashblock.base.component.domain.model.app.CoreBaseActivity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
-import com.avatye.cashblock.base.component.domain.entity.base.LandingType
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupNotice
-import com.avatye.cashblock.base.internal.controller.LandingController
 import com.bumptech.glide.Glide
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
-class PopupNoticeController(private val blockCode: BlockCode, private val popupNoticeDataStore: IPopupNoticeDataStore) {
+class PopupNoticeController(private val blockType: BlockType, private val popupNoticeDataListener: IPopupNoticeDataListener) {
 
     private val pattern = "yyyyMMdd"
     private val popupQueues: Queue<PopupNoticeEntity> = LinkedList()
 
     fun synchronization(synchronized: () -> Unit) {
-        SupportDataContract(blockCode = blockCode).let { support ->
+        SupportApiContractor(blockType = blockType).let { support ->
             support.retrievePopups {
                 when (it) {
                     is ContractResult.Failure -> synchronized()
@@ -58,7 +58,7 @@ class PopupNoticeController(private val blockCode: BlockCode, private val popupN
                 override fun onLanding(landingName: String, landingValue: String) {
                     // landing
                     LandingController.requestLanding(
-                        blockCode = blockCode,
+                        blockType = blockType,
                         ownerActivity = ownerActivity,
                         ownerActivityClose = false,
                         landingType = LandingType.from(landingName),
@@ -75,7 +75,7 @@ class PopupNoticeController(private val blockCode: BlockCode, private val popupN
     }
 
     private fun fillPopupQueues(syncItems: MutableList<PopupNoticeEntity>) {
-        if (!FeatureCore.isInitialized) {
+        if (!Core.isInitialized) {
             return
         }
 
@@ -83,10 +83,10 @@ class PopupNoticeController(private val blockCode: BlockCode, private val popupN
             popupQueues.clear()
         }
 
-        val dataContainer = popupNoticeDataStore.getItems()
+        val dataContainer = popupNoticeDataListener.getItems()
         for (item in syncItems) {
             if (!isExists(popupID = item.popupID, mapDataContainer = dataContainer)) {
-                Glide.with(FeatureCore.application).load(item.imageUrl).preload()
+                Glide.with(Core.application).load(item.imageUrl).preload()
                 popupQueues.add(item)
             }
         }
@@ -116,7 +116,7 @@ class PopupNoticeController(private val blockCode: BlockCode, private val popupN
             PopupDisplayType.WEEK -> DateTime().plusDays(7).toString(pattern).toInt()
         }
         // limit 100
-        val collection = popupNoticeDataStore.getItems()
+        val collection = popupNoticeDataListener.getItems()
         if (collection.size < 100) {
             collection[popupID] = expireValue
             saveVerifyItem(collection)
@@ -133,6 +133,6 @@ class PopupNoticeController(private val blockCode: BlockCode, private val popupN
     }
 
     private fun saveVerifyItem(entries: Map<String, Int>) {
-        popupNoticeDataStore.setItems(data = entries)
+        popupNoticeDataListener.setItems(data = entries)
     }
 }

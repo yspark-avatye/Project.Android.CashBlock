@@ -7,12 +7,12 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.widget.AppCompatImageView
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.AnimatorEventCallback
 import com.avatye.cashblock.base.component.support.toPX
-import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.TouchTicketLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.VideoTicketLiveData
@@ -58,21 +58,21 @@ internal object TicketController {
 
         val allowNoAd: Boolean
             get() {
-                return RemoteContract.touchTicketSetting.allowNoAd
+                return SettingContractor.touchTicketSetting.allowNoAd
             }
 
         val popupExposeCount: Int
             get() {
-                val interval = RemoteContract.touchTicketSetting.popAD.interval
+                val interval = SettingContractor.touchTicketSetting.popAD.interval
                 return interval - intervalRange[Random.nextInt(intervalRange.size - 1)]
             }
 
 
         fun popupPosition(allowExcludeADNetwork: Boolean): Int {
             val position = if (allowExcludeADNetwork) {
-                ticketHeight * RemoteContract.touchTicketSetting.popAD.excludePosition
+                ticketHeight * SettingContractor.touchTicketSetting.popAD.excludePosition
             } else {
-                ticketHeight * RemoteContract.touchTicketSetting.popAD.position
+                ticketHeight * SettingContractor.touchTicketSetting.popAD.position
             }
             return position.toPX.toInt()
         }
@@ -171,9 +171,12 @@ internal object TicketController {
 
 
         private fun checkLogin(callback: (success: Boolean) -> Unit) {
-            when (AccountContract.isLogin) {
+            when (AccountContractor.isLogin) {
                 true -> callback(true)
-                false -> AccountContract.login(callback)
+                false -> AccountContractor.login(
+                    blockType = RouletteConfig.blockType,
+                    callback = callback
+                )
             }
         }
 

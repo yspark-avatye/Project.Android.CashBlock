@@ -1,7 +1,6 @@
-package com.avatye.cashblock.base.component.contract.data
+package com.avatye.cashblock.base.component.contract.api
 
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxType
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
@@ -10,21 +9,14 @@ import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.internal.server.APIBox
 import com.avatye.cashblock.base.internal.server.entity.box.ResBoxAvailable
 import com.avatye.cashblock.base.internal.server.entity.box.ResBoxUse
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
 import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
-class BoxDataContract(private val blockCode: BlockCode) {
-
-    private val tokenizer = object : IServeToken {
-        override fun makeBasicToken() = blockCode.basicToken
-        override fun makeBearerToken() = AccountContract.accessToken
-    }
+class BoxApiContractor(private val blockType: BlockType) {
 
     fun retrieveAvailable(boxType: BoxType, response: (contract: ContractResult<BoxAvailableEntity>) -> Unit) {
         APIBox.getTicketBoxAvailable(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             boxType = boxType,
             response = object : ServeResponse<ResBoxAvailable> {
                 override fun onSuccess(success: ResBoxAvailable) = response(Contract.onSuccess(success.boxAvailable))
@@ -34,8 +26,7 @@ class BoxDataContract(private val blockCode: BlockCode) {
 
     fun postUse(boxType: BoxType, response: (contract: ContractResult<BoxUseEntity>) -> Unit) {
         APIBox.postUseBox(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             boxType = boxType,
             response = object : ServeResponse<ResBoxUse> {
                 override fun onSuccess(success: ResBoxUse) = response(Contract.onSuccess(success.boxUse))

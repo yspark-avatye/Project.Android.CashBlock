@@ -12,15 +12,15 @@ import android.os.IBinder
 import android.os.Looper
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.avatye.cashblock.base.component.contract.CoreContract
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.CoreContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.entity.base.LandingType
 import com.avatye.cashblock.base.component.support.isScreenOn
+import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
-import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
@@ -39,40 +39,40 @@ internal class SDKNotificationService : Service() {
 
         val channelId: String
             get() {
-                return "${RouletteConfig.blockCode.blockId}:${CoreContract.appPackageName}"
+                return "${CoreContractor.appId}:${CoreContractor.appPackageName}"
             }
     }
 
     private var isRegisteredReceiver: Boolean = false
 
     override fun onCreate() {
-        logger.i { "$NAME -> onCreate" }
+        logger.i(viewName = NAME) { "onCreate" }
         super.onCreate()
     }
 
     override fun onDestroy() {
-        logger.i { "$NAME -> onDestroy" }
+        logger.i(viewName = NAME) { "onDestroy" }
         unregisterBroadcastReceiver()
         super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        logger.i { "$NAME -> onBind" }
+        logger.i(viewName = NAME) { "onBind" }
         return null
     }
 
     override fun onRebind(intent: Intent?) {
-        logger.i { "$NAME -> onRebind" }
+        logger.i(viewName = NAME) { "onRebind" }
         super.onRebind(intent)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        logger.i { "$NAME -> onUnbind" }
+        logger.i(viewName = NAME) { "onUnbind" }
         return super.onUnbind(intent)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        logger.i { "$NAME -> onStartCommand" }
+        logger.i(viewName = NAME) { "onStartCommand" }
         intent?.let {
             registerBroadcastReceiver()
             registerNotification()
@@ -81,7 +81,7 @@ internal class SDKNotificationService : Service() {
     }
 
     private fun registerNotification() {
-        logger.i { "$NAME -> registerNotification" }
+        logger.i(viewName = NAME) { "registerNotification" }
         startForeground(notificationId, makeNotificationBuilder().build())
     }
 
@@ -93,7 +93,7 @@ internal class SDKNotificationService : Service() {
     }
 
     private fun unregisterNotification() {
-        logger.i { "$NAME -> unregisterNotification" }
+        logger.i(viewName = NAME) { "unregisterNotification" }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             stopForeground(true)
         } else {
@@ -102,9 +102,9 @@ internal class SDKNotificationService : Service() {
     }
 
     private fun registerBroadcastReceiver() {
-        logger.i { "$NAME -> registerBroadcastReceiver" }
+        logger.i(viewName = NAME) { "registerBroadcastReceiver" }
         if (!isRegisteredReceiver) {
-            registerReceiver(actionReceiver, EventBusContract.makeWatcherFilter().apply {
+            registerReceiver(actionReceiver, EventContractor.makeWatcherFilter().apply {
                 addAction(Intent.ACTION_TIME_TICK)
                 addAction(Intent.ACTION_SCREEN_ON)
                 addAction(Intent.ACTION_SCREEN_OFF)
@@ -188,7 +188,7 @@ internal class SDKNotificationService : Service() {
             return if (RouletteConfig.notificationServiceConfig.title.isNotEmpty()) {
                 RouletteConfig.notificationServiceConfig.title
             } else {
-                RemoteContract.appInfoSetting.appName
+                SettingContractor.appInfoSetting.appName
             }
         }
 
@@ -197,7 +197,7 @@ internal class SDKNotificationService : Service() {
             return if (RouletteConfig.notificationServiceConfig.text.isNotEmpty()) {
                 RouletteConfig.notificationServiceConfig.text
             } else {
-                RemoteContract.appInfoSetting.rouletteName
+                SettingContractor.appInfoSetting.rouletteName
             }
         }
 
@@ -206,7 +206,7 @@ internal class SDKNotificationService : Service() {
             return if (RouletteConfig.notificationServiceConfig.channelName.isNotEmpty()) {
                 RouletteConfig.notificationServiceConfig.channelName
             } else {
-                "${RemoteContract.appInfoSetting.appName} 알림창 상태바".trim()
+                "${SettingContractor.appInfoSetting.appName} 알림창 상태바".trim()
             }
         }
 
@@ -280,14 +280,14 @@ internal class SDKNotificationService : Service() {
 
     private val onExecuteHandler: Handler = Handler(Looper.getMainLooper())
     private val onExecuteRunnable: Runnable = Runnable {
-        logger.i { "$NAME -> onExecuteRunnable" }
+        logger.i(viewName = NAME) { "onExecuteRunnable" }
         updateNotification()
     }
 
     private fun requestUpdateHandler() {
         onExecuteHandler.removeCallbacks(onExecuteRunnable)
         onExecuteHandler.postDelayed(onExecuteRunnable, 1500)
-        logger.i { "$NAME -> onExecuteHandler -> postDelayed" }
+        logger.i(viewName = NAME) { "onExecuteHandler -> postDelayed" }
     }
 
     // region { check screen status }
@@ -309,23 +309,23 @@ internal class SDKNotificationService : Service() {
                             }
                         }
                     }
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, screen: $isScreenOn, syncTicketCondition: $isScreenOn }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, screen: $isScreenOn, syncTicketCondition: $isScreenOn }" }
                 }
                 Intent.ACTION_SCREEN_ON -> {
                     isScreenOn = true
                     NotificationController.SDK.requestNotificationLog(eventParamValue = "avatye")
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, screen: $isScreenOn }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, screen: $isScreenOn }" }
                 }
                 Intent.ACTION_SCREEN_OFF -> {
                     isScreenOn = false
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, screen: $isScreenOn }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, screen: $isScreenOn }" }
                 }
                 ActionType.FORBIDDEN.actionName -> {
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, action: unregisterNotification() }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, action: unregisterNotification() }" }
                     unregisterNotification()
                 }
                 ActionType.APP_LAUNCH_MAIN.actionName -> {
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, action: createNotificationPendingIntent() }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, action: createNotificationPendingIntent() }" }
                     context?.let {
                         NotificationController.createNotificationPendingIntent(
                             context = context,
@@ -338,21 +338,21 @@ internal class SDKNotificationService : Service() {
                 ActionType.TOUCH_TICKET_CONDITION_UPDATE.actionName,
                 ActionType.VIDEO_TICKET_CONDITION_UPDATE.actionName,
                 ActionType.BOX_CONDITION_UPDATE.actionName -> {
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, action: requestUpdateHandler() }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, action: requestUpdateHandler() }" }
                     requestUpdateHandler()
                 }
                 else -> {
-                    logger.i { "$NAME -> BroadcastReceiver { actionName: $actionName, action: nope }" }
+                    logger.i(viewName = NAME) { "BroadcastReceiver { actionName: $actionName, action: nope }" }
                 }
             }
         }
     }
 
     private fun syncTicketCondition() {
-        logger.i { "$NAME -> syncTicketCondition { isSyncable: $isSyncable }" }
+        logger.i(viewName = NAME) { "syncTicketCondition { isSyncable: $isSyncable }" }
         if (isSyncable) {
             val frequencyTime = DateTime().millis - syncTime
-            logger.i { "$NAME -> syncTicketCondition { frequencyTime: $frequencyTime, syncFrequency: $syncFrequency, syncTimeOver: ${frequencyTime >= syncFrequency} }" }
+            logger.i(viewName = NAME) { "syncTicketCondition { frequencyTime: $frequencyTime, syncFrequency: $syncFrequency, syncTimeOver: ${frequencyTime >= syncFrequency} }" }
             if (frequencyTime >= syncFrequency) {
                 isSyncable = false
                 TicketController.Session.syncTicketCondition {

@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResBannerBalance : ServeSuccess() {
+internal class ResBannerBalance : ServeSuccess() {
     var bannerBalanceEntity = BannerBalanceEntity()
         private set
 

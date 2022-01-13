@@ -2,9 +2,9 @@ package com.avatye.cashblock.feature.roulette.component.livedata
 
 import androidx.lifecycle.MutableLiveData
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.data.TicketDataContract
+import com.avatye.cashblock.base.component.contract.api.TicketApiContractor
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
@@ -13,7 +13,7 @@ import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 // 사용처가 추가되면 Core 모듈로 이동 시키자
 internal object TicketBalanceLiveData : MutableLiveData<Int>() {
     private const val tagName = "TicketBalanceLiveData"
-    private val apiContract = TicketDataContract(RouletteConfig.blockCode)
+    private val apiContract = TicketApiContractor(blockType = RouletteConfig.blockType)
 
     var balance: Int = PreferenceData.Ticket.balance
         private set(value) {
@@ -22,7 +22,7 @@ internal object TicketBalanceLiveData : MutableLiveData<Int>() {
                 PreferenceData.Ticket.update(balance = value)
                 postValue(value)
                 // send broadcast event
-                EventBusContract.postTicketBalanceUpdate(blockType = BlockType.ROULETTE)
+                EventContractor.postTicketBalanceUpdate(blockType = BlockType.ROULETTE)
             }
         }
 
@@ -31,7 +31,7 @@ internal object TicketBalanceLiveData : MutableLiveData<Int>() {
     }
 
     fun synchronization(callback: (success: Boolean, syncValue: Int) -> Unit) {
-        if (!AccountContract.isLogin) {
+        if (!AccountContractor.isLogin) {
             callback(false, -1)
             return
         }

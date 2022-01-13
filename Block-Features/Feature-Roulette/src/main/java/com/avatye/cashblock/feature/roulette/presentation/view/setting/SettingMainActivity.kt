@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.ViewOpenContract
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.mission.MissionStateEntity
 import com.avatye.cashblock.base.component.support.ChannelTalkUtil
@@ -17,7 +17,6 @@ import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.feature.roulette.BuildConfig
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.component.controller.MissionController
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
@@ -65,28 +64,27 @@ internal class SettingMainActivity : AppBaseActivity() {
         // header
         vb.headerView.actionClose { finish() }
         // notification
-        vb.configNotificationContainer.isVisible = RemoteContract.appInfoSetting.allowTicketBox
+        vb.configNotificationContainer.isVisible = SettingContractor.appInfoSetting.allowTicketBox
         vb.configNotificationStatus.isChecked = NotificationController.SDK.allowNotification
         vb.configNotificationStatus.setOnCheckedChangeListener { buttonView, isChecked ->
             onCheckedChangeNotification(button = buttonView, isChecked = isChecked)
         }
         // notice
         vb.configNotice.setOnClickListener {
-            ViewOpenContract.openNoticeList(
+            ViewOpenContractor.openNoticeList(
                 activity = this@SettingMainActivity,
-                blockCode = RouletteConfig.blockCode
+                blockType = RouletteConfig.blockType
             )
         }
         // cs
         vb.configCsInquire.setOnClickListener {
             ChannelTalkUtil.open(
                 activity = this@SettingMainActivity,
-                blockCode = RouletteConfig.blockCode,
-                blockName = MODULE_NAME,
+                blockType = RouletteConfig.blockType,
                 fallback = {
                     MessageDialogHelper.requestSuggestion(
                         activity = this@SettingMainActivity,
-                        blockCode = RouletteConfig.blockCode
+                        blockType = RouletteConfig.blockType
                     )
                 }
             )
@@ -95,14 +93,14 @@ internal class SettingMainActivity : AppBaseActivity() {
         vb.configAlliance.setOnClickListener {
             MessageDialogHelper.requestAlliance(
                 activity = this@SettingMainActivity,
-                blockCode = RouletteConfig.blockCode
+                blockType = RouletteConfig.blockType
             )
         }
         // terms
         vb.configTerms.setOnClickListener {
-            ViewOpenContract.openTermsView(
+            ViewOpenContractor.openTermsView(
                 activity = this@SettingMainActivity,
-                blockCode = RouletteConfig.blockCode,
+                blockType = RouletteConfig.blockType,
                 headerType = HeaderView.HeaderType.POPUP,
                 close = false
             )
@@ -138,7 +136,7 @@ internal class SettingMainActivity : AppBaseActivity() {
             if (NotificationController.Host.useHostNotification) {
                 PreferenceData.Notification.update(allow = isChecked)
                 NotificationController.Host.setNotificationEnabled(context = this@SettingMainActivity)
-                EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
+                EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             } else {
                 NotificationController.SDK.activationNotification(activity = this@SettingMainActivity, callback = {
                     button?.isChecked = it
@@ -148,7 +146,7 @@ internal class SettingMainActivity : AppBaseActivity() {
             if (NotificationController.Host.useHostNotification) {
                 PreferenceData.Notification.update(allow = isChecked)
                 NotificationController.SDK.stopNotificationService(context = this@SettingMainActivity)
-                EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
+                EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             } else {
                 NotificationController.SDK.deactivationNotification(activity = this@SettingMainActivity)
                 button?.isChecked = false

@@ -5,27 +5,28 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import androidx.core.widget.doOnTextChanged
-import com.avatye.cashblock.base.FeatureCore
 import com.avatye.cashblock.R
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.UserApiContractor
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.CoreUtil
-import com.avatye.cashblock.base.component.support.takeIfNullOrEmpty
-import com.avatye.cashblock.databinding.AcbCommonWidgetDialogAgeVerifyBinding
-import com.avatye.cashblock.base.internal.preference.AccountPreferenceData
-import com.avatye.cashblock.base.component.contract.data.UserDataContract
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
+import com.avatye.cashblock.base.component.support.takeIfNullOrEmpty
+import com.avatye.cashblock.base.internal.preference.AccountPreferenceData
+import com.avatye.cashblock.databinding.AcbCommonWidgetDialogAgeVerifyBinding
 import org.joda.time.DateTime
 import java.text.SimpleDateFormat
 
 class DialogPopupAgeVerifyView private constructor(
+    private val blockType: BlockType,
     private val ownerActivity: Activity,
     private val actionCallback: IDialogAction
 ) : IDialogView {
 
     companion object {
-        fun create(ownerActivity: Activity, callback: IDialogAction): DialogPopupAgeVerifyView {
-            return DialogPopupAgeVerifyView(ownerActivity = ownerActivity, actionCallback = callback)
+        fun create(blockType: BlockType, ownerActivity: Activity, callback: IDialogAction): DialogPopupAgeVerifyView {
+            return DialogPopupAgeVerifyView(blockType = blockType, ownerActivity = ownerActivity, actionCallback = callback)
         }
     }
 
@@ -93,7 +94,7 @@ class DialogPopupAgeVerifyView private constructor(
 
     private fun requestVerifyAge(birthDate: String, callback: (success: Boolean) -> Unit) {
         loading.show(cancelable = false)
-        UserDataContract(FeatureCore.coreBlockCode).let { user ->
+        UserApiContractor(blockType = blockType).let { user ->
             user.postVerifyAge(birthDate = birthDate) {
                 when (it) {
                     is ContractResult.Success -> {

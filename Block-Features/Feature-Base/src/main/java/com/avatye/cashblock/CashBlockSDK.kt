@@ -2,32 +2,31 @@ package com.avatye.cashblock
 
 import android.app.Application
 import androidx.annotation.Keep
-import com.avatye.cashblock.base.FeatureCore
-import com.avatye.cashblock.base.block.BlockCode
+import com.avatye.cashblock.base.Core
 
 @Keep
 object CashBlockSDK {
     @JvmStatic
     fun initialize(application: Application) {
-        FeatureCore.initialize(application = application)
+        Core.initialize(application = application)
     }
 
-    fun initialize(application: Application, blockCode: BlockCode) {
-        FeatureCore.initialize(application = application, blockCode = blockCode)
+    fun initialize(application: Application, appId: String, appSecret: String) {
+        Core.initialize(application = application, appId = appId, appSecret = appSecret)
     }
 
     @JvmStatic
     fun setAppUserId(appUserId: String) {
-        FeatureCore.setAppUserId(appUserId = appUserId)
+        Core.setAppUserId(appUserId = appUserId)
     }
 
     @JvmStatic
     fun getAppUserId(): String {
-        return FeatureCore.getAppUserId()
+        return Core.getAppUserId()
     }
 
     @JvmStatic
     fun setCustomData(customData: String?) {
-        FeatureCore.appCustomData = customData
+        Core.appCustomData = customData
     }
 }

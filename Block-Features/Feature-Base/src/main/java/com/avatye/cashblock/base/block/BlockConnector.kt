@@ -11,8 +11,8 @@ abstract class BlockConnector {
     abstract val blockName: String
     abstract val blockVersion: Int
     abstract val blockVersionName: String
-    abstract fun initialize(application: Application, blockCode: BlockCode)
+    abstract fun initialize(application: Application)
     abstract fun clearSession(context: Context)
-    abstract fun launch(context: Context, blockCode: BlockCode? = null)
+    abstract fun launch(context: Context)
     abstract fun landing(ownerActivity: Activity, ownerActivityClose: Boolean = false, landingType: LandingType, landingValue: String? = null)
 }

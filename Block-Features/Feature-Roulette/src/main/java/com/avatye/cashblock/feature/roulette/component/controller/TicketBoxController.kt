@@ -6,21 +6,19 @@ import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.widget.AppCompatImageView
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.AnimatorEventCallback
 import com.avatye.cashblock.base.component.support.toPX
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.model.listener.ITicketBoxCount
 import org.joda.time.DateTime
 import kotlin.random.Random
 
 internal object TicketBoxController {
-
-
 
     const val piecesCount = 10
     const val popupCloseDelay = 1.1 * 1000
@@ -43,7 +41,7 @@ internal object TicketBoxController {
 
     val allowNoAd: Boolean
         get() {
-            return RemoteContract.ticketBoxSetting.allowNoAd
+            return SettingContractor.ticketBoxSetting.allowNoAd
         }
 
     val hasTicketBox: Boolean
@@ -53,15 +51,15 @@ internal object TicketBoxController {
 
     val popupExposeCount: Int
         get() {
-            val interval = RemoteContract.ticketBoxSetting.popAD.interval
+            val interval = SettingContractor.ticketBoxSetting.popAD.interval
             return interval - intervalRange[Random.nextInt(intervalRange.size - 1)]
         }
 
     fun popupPosition(allowExcludeADNetwork: Boolean): Int {
         val position = if (allowExcludeADNetwork) {
-            boxHeight * RemoteContract.ticketBoxSetting.popAD.excludePosition
+            boxHeight * SettingContractor.ticketBoxSetting.popAD.excludePosition
         } else {
-            boxHeight * RemoteContract.ticketBoxSetting.popAD.position
+            boxHeight * SettingContractor.ticketBoxSetting.popAD.position
         }
         return position.toPX.toInt()
     }
@@ -116,18 +114,19 @@ internal object TicketBoxController {
                 if (success) {
                     listener.callback(condition = if (hasTicketBox) 1 else 0)
                 } else {
-                    LogHandler.e(moduleName = MODULE_NAME) {
-                        "TicketBoxManager -> AccountTicket -> login failed"
-                    }
+                    logger.i(viewName = "TicketBoxController") { "TicketBoxManager -> AccountTicket -> login failed" }
                     listener.callback(condition = -1)
                 }
             }
         }
 
         private fun checkLogin(callback: (success: Boolean) -> Unit) {
-            when (AccountContract.isLogin) {
+            when (AccountContractor.isLogin) {
                 true -> callback(true)
-                false -> AccountContract.login(callback)
+                false -> AccountContractor.login(
+                    blockType = RouletteConfig.blockType,
+                    callback = callback
+                )
             }
         }
     }

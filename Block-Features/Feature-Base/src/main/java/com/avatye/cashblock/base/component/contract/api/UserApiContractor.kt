@@ -1,29 +1,19 @@
-package com.avatye.cashblock.base.component.contract.data
+package com.avatye.cashblock.base.component.contract.api
 
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.user.LoginEntity
 import com.avatye.cashblock.base.component.domain.model.contract.Contract
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.internal.server.APIUser
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.user.ResLogin
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
 import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
-class UserDataContract(private val blockCode: BlockCode) {
-    private val appId = blockCode.blockId
-
-    private val tokenizer = object : IServeToken {
-        override fun makeBasicToken() = blockCode.basicToken
-        override fun makeBearerToken() = AccountContract.accessToken
-    }
-
+class UserApiContractor(private val blockType: BlockType) {
     fun postLogin(appUserId: String, response: (contract: ContractResult<LoginEntity>) -> Unit) {
         APIUser.putLogin(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             appUserId = appUserId,
             response = object : ServeResponse<ResLogin> {
                 override fun onSuccess(success: ResLogin) = response(Contract.onSuccess(success.loginEntity))
@@ -33,8 +23,7 @@ class UserDataContract(private val blockCode: BlockCode) {
 
     fun postVerifyAge(birthDate: String, response: (contract: ContractResult<Unit>) -> Unit) {
         APIUser.putVerifyAge(
-            blockCode = blockCode,
-            tokenizer = tokenizer,
+            blockType = blockType,
             birthDate = birthDate,
             response = object : ServeResponse<ResVoid> {
                 override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(Unit))

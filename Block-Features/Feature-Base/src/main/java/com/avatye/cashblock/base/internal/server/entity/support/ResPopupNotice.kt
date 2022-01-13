@@ -8,7 +8,7 @@ import com.avatye.cashblock.base.library.miscellaneous.until
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONArray
 
-class ResPopupNotice : ServeSuccess() {
+internal class ResPopupNotice : ServeSuccess() {
     val popupNoticeEntities: MutableList<PopupNoticeEntity> = mutableListOf()
 
     override fun makeBody(responseValue: String) {

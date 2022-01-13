@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
+import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
 import com.avatye.cashblock.base.component.support.toHtml
 import com.avatye.cashblock.base.component.widget.dialog.IDialogView
@@ -74,7 +74,7 @@ internal class DialogPopupTicketBoxView private constructor(private val ownerAct
     private fun viewIntegrationNotificationStatus() {
         // click -> on
         vb.notificationStatusOn.setOnClickWithDebounce {
-            EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
+            EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             if (!NotificationController.SDK.allowNotification) {
                 PreferenceData.Notification.update(allow = true)
                 updateNotificationView()
@@ -87,7 +87,7 @@ internal class DialogPopupTicketBoxView private constructor(private val ownerAct
         }
         // click -> off
         vb.notificationStatusOff.setOnClickWithDebounce {
-            EventBusContract.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
+            EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
             if (NotificationController.SDK.allowNotification) {
                 PreferenceData.Notification.update(allow = false)
                 NotificationController.SDK.stopNotificationService(context = ownerActivity)

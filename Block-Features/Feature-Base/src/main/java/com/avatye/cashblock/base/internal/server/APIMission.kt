@@ -1,17 +1,15 @@
 package com.avatye.cashblock.base.internal.server
 
-import com.avatye.cashblock.base.block.BlockCode
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.mission.ResMission
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
-object APIMission {
-    fun getUser(blockCode: BlockCode, tokenizer: IServeToken, missionId: String, response: ServeResponse<ResMission>) {
+internal object APIMission {
+    fun getUser(blockType: BlockType, missionId: String, response: ServeResponse<ResMission>) {
         ServeTask(
-            blockCode = blockCode,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
-            tokenizer = tokenizer,
             method = ServeTask.Method.GET,
             requestUrl = "mission/user",
             acceptVersion = "1.0.0",
@@ -21,11 +19,10 @@ object APIMission {
         ).execute()
     }
 
-    fun postAction(blockCode: BlockCode, tokenizer: IServeToken, missionId: String, actionValue: Int, response: ServeResponse<ResMission>) {
+    fun postAction(blockType: BlockType, missionId: String, actionValue: Int, response: ServeResponse<ResMission>) {
         ServeTask(
-            blockCode = blockCode,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
-            tokenizer = tokenizer,
             method = ServeTask.Method.POST,
             requestUrl = "mission/action",
             acceptVersion = "1.0.0",

@@ -1,13 +1,11 @@
-package com.avatye.cashblock.base.internal.controller
+package com.avatye.cashblock.base.component.contract.business
 
 import com.avatye.cashblock.R
-import com.avatye.cashblock.base.internal.preference.SettingPreferenceData
 import com.avatye.cashblock.base.component.support.CoreUtil
+import com.avatye.cashblock.base.internal.preference.SettingPreferenceData
 
-internal object CoreController {
 
-    private const val tagName = "CoreManager"
-
+object PolicyContractor {
     fun notifyUseAAID() {
         if (SettingPreferenceData.needNotifyUseAAID) {
             SettingPreferenceData.update(needNotifyUseAAID = false)

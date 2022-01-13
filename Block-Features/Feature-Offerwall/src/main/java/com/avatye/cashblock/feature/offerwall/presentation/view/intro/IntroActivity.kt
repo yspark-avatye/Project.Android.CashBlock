@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.CoreConstants
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityIntroBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
@@ -13,7 +13,6 @@ import com.avatye.cashblock.feature.offerwall.presentation.view.main.OfferwallMa
 
 
 internal class IntroActivity : AppBaseActivity() {
-
     companion object {
         /** this activity start */
         fun open(context: Context, source: Int = 0) {
@@ -34,7 +33,7 @@ internal class IntroActivity : AppBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentViewWith(
             view = vb.root,
-            logKey = FeatureCore.CASHBLOCK_LOG_OFFERWALL_INTRO,
+            logKey = CoreConstants.CASHBLOCK_LOG_OFFERWALL_INTRO,
             logParam = hashMapOf("source" to (extraParcel<IntroViewParcel>(IntroViewParcel.NAME)?.source ?: 0))
         )
 

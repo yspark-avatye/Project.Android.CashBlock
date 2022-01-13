@@ -11,7 +11,7 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
+import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
@@ -25,6 +25,7 @@ import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
@@ -161,19 +162,19 @@ internal class TicketBoxActivity : AppBaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         try {
-            logger.i { "$viewTag -> onDestroy" }
+            logger.i(viewName = viewTag) { "onDestroy" }
             advertisingLoadAnimation?.stop()
             openADCurator?.release()
             closeADCurator?.release()
             vb.ticketBoxLoadingImage.clearAnimation()
             vb.bannerLinearView.onDestroy()
         } catch (e: Exception) {
-            logger.e(throwable = e) { "$viewTag -> onDestroy" }
+            logger.e(viewName = viewTag, throwable = e) { "onDestroy" }
         }
     }
 
     override fun onNewIntent(intent: Intent?) {
-        logger.i { "$viewTag -> onNewIntent" }
+        logger.i(viewName = viewTag) { "onNewIntent" }
         super.onNewIntent(intent)
     }
 
@@ -279,6 +280,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         }
         // check -> age verification
         DialogPopupAgeVerifyView.create(
+            blockType = RouletteConfig.blockType,
             ownerActivity = this@TicketBoxActivity,
             callback = object : DialogPopupAgeVerifyView.IDialogAction {
                 override fun onClose() = finish()
@@ -304,7 +306,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     .toHtml
             }
             // notification update
-            EventBusContract.postTicketBoxUpdate(blockType = BlockType.ROULETTE)
+            EventContractor.postTicketBoxUpdate(blockType = BlockType.ROULETTE)
             // status
             leakHandler.postDelayed({
                 currentStatus = TicketBoxStatus.COMPLETE
@@ -328,23 +330,23 @@ internal class TicketBoxActivity : AppBaseActivity() {
             adQueueType = ADQueueType.TICKET_BOX_OPEN,
             callback = object : ICuratorQueueCallback {
                 override fun onLoaded(loader: ADLoaderBase) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
                     requestPopupAdvertise(openADLoader = loader)
                 }
 
                 override fun onOpened() {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onOpened" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onOpened" }
                     advertisingLoadAnimationPlay = false
                 }
 
                 override fun onComplete(success: Boolean) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onComplete" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onComplete" }
                     advertisingLoadAnimationPlay = false
                     actionBoxPiecesLoad()
                 }
 
                 override fun ondFailed(isBlocked: Boolean) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> ondFailed { allowNoAd: ${TicketBoxController.allowNoAd}, isBlocked: $isBlocked }" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> ondFailed { allowNoAd: ${TicketBoxController.allowNoAd}, isBlocked: $isBlocked }" }
                     advertisingLoadAnimationPlay = false
                     when (TicketBoxController.allowNoAd) {
                         true -> requestPopupAdvertise()
@@ -356,7 +358,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 }
 
                 override fun onNeedAgeVerification() {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onNeedAgeVerification" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onNeedAgeVerification" }
                     leakHandler.postDelayed({
                         advertisingLoadAnimationPlay = false
                         requestPopupAdvertise()
@@ -370,8 +372,11 @@ internal class TicketBoxActivity : AppBaseActivity() {
     private fun requestPopupAdvertise(openADLoader: ADLoaderBase? = null) {
         val popupCallback = object : ICuratorPopupCallback {
             override fun oSuccess(adView: View, network: ADNetworkType) {
-                logger.i { "$viewTag -> #POPUP -> CuratorPopup -> oSuccess" }
-                this@TicketBoxActivity.isExcludeADNetwork = isExcludeADNetwork
+                logger.i(viewName = viewTag) { "#POPUP -> CuratorPopup -> oSuccess" }
+                this@TicketBoxActivity.isExcludeADNetwork = AdvertiseController.allowExcludeADNetwork(
+                    placementType = ADPlacementType.TICKET_BOX,
+                    networkNo = network.value
+                )
                 advertisingLoadAnimationPlay = false
                 vb.ticketBoxAdContainer.isVisible = false
                 vb.ticketBoxAdContent.removeAllViews()
@@ -380,9 +385,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
             }
 
             override fun onFailure(isBlocked: Boolean) {
-                logger.i {
-                    "$viewTag -> #POPUP -> PopupADCoordinator -> onFailure { allowNoAd: ${TicketBoxController.allowNoAd}, isBlocked: $isBlocked } "
-                }
+                logger.i(viewName = viewTag) { "#POPUP -> PopupADCoordinator -> onFailure { allowNoAd: ${TicketBoxController.allowNoAd}, isBlocked: $isBlocked }" }
                 // animation
                 advertisingLoadAnimationPlay = false
                 // ALLOW-NO-AD
@@ -400,7 +403,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
             }
 
             override fun onNeedAgeVerification() {
-                logger.i { "$viewTag -> #POPUP -> PopupADCoordinator -> onNeedAgeVerification" }
+                logger.i(viewName = viewTag) { "#POPUP -> PopupADCoordinator -> onNeedAgeVerification" }
                 advertisingLoadAnimationPlay = false
                 vb.ticketBoxAdContainer.isVisible = false
                 vb.ticketBoxAdContent.removeAllViews()
@@ -427,7 +430,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         if (currentCollectCount < piecesCount) {
             currentCollectCount++
             TicketBoxController.animateCollect(vb.ticketBoxAcquirePieces, currentCollectCount)
-            logger.i { "$viewTag -> actionTicketCollect { currentCollectCount:$currentCollectCount, popupExposeCount: $popupExposeCount }" }
+            logger.i(viewName = viewTag) { "actionTicketCollect { currentCollectCount:$currentCollectCount, popupExposeCount: $popupExposeCount }" }
             if (!isPopupExposed && currentCollectCount >= popupExposeCount) {
                 leakHandler.post { showAdPopup() }
             }
@@ -448,7 +451,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 }
                 vb.ticketBoxAdClosePosition.isVisible = isExcludeADNetwork
             } catch (e: Exception) {
-                logger.e(throwable = e) { "$viewTag -> showPopupAD" }
+                logger.e(viewName = viewTag, throwable = e) { "showPopupAD" }
             } finally {
                 popupExposeTime = DateTime.now().millis
                 vb.ticketBoxAdContainer.isVisible = true
@@ -479,7 +482,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
     private fun close(withLaunch: Boolean = false) {
         if (!isBoxOpened) {
             if (withLaunch) {
-                EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
+                EventContractor.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
             }
             finish()
             return
@@ -502,7 +505,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun onComplete(success: Boolean) {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
+                        EventContractor.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }
@@ -510,7 +513,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun ondFailed(isBlocked: Boolean) {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
+                        EventContractor.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }
@@ -518,7 +521,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
                 override fun onNeedAgeVerification() {
                     loadingView?.dismiss()
                     if (withLaunch) {
-                        EventBusContract.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
+                        EventContractor.postAppLaunchMainActivity(blockType = BlockType.ROULETTE)
                     }
                     finish()
                 }

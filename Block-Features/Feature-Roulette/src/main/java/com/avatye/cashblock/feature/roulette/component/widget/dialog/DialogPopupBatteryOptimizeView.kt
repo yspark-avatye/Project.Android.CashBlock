@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.ViewOpenContract
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.support.DeviceUtil
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
 import com.avatye.cashblock.base.component.support.toHtml
@@ -38,12 +38,12 @@ internal class DialogPopupBatteryOptimizeView private constructor(
             }
         }
         vb.dialogBatteryOptimizeMessage.text = activity.getString(R.string.acbsr_string_battery_optimize_text)
-            .format(RemoteContract.appInfoSetting.appName)
+            .format(SettingContractor.appInfoSetting.appName)
             .toHtml
         vb.dialogBatteryOptimizeDetail.setOnClickListener {
-            ViewOpenContract.openNoticeView(
+            ViewOpenContractor.openNoticeView(
                 activity = activity,
-                blockCode = RouletteConfig.blockCode,
+                blockType = RouletteConfig.blockType,
                 noticeID = "31bc94fe53c34f41be75e3d577e4abf5"
             )
         }

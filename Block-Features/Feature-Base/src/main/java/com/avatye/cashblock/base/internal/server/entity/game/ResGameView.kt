@@ -9,7 +9,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResGameView : ServeSuccess() {
+internal class ResGameView : ServeSuccess() {
     var gameEntity = GameEntity()
         private set
 

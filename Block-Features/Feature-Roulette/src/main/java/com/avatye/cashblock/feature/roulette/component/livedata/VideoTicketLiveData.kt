@@ -2,14 +2,13 @@ package com.avatye.cashblock.feature.roulette.component.livedata
 
 import androidx.lifecycle.MutableLiveData
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.data.TicketDataContract
+import com.avatye.cashblock.base.component.contract.api.TicketApiContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
 import com.avatye.cashblock.feature.roulette.RouletteConfig
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import org.joda.time.DateTime
 
@@ -18,7 +17,7 @@ internal object VideoTicketLiveData : MutableLiveData<Int>() {
     private const val tagName = "VideoTicket@LiveData"
     private const val FREQUENCY: Long = (10 * 60 * 1000) //10min
 
-    private val apiContract = TicketDataContract(blockCode = RouletteConfig.blockCode)
+    private val apiContract = TicketApiContractor(blockType = RouletteConfig.blockType)
 
     var receivableCount: Int = PreferenceData.Ticket.videoReceivableCount
         private set(value) {
@@ -27,11 +26,11 @@ internal object VideoTicketLiveData : MutableLiveData<Int>() {
                 PreferenceData.Ticket.update(videoReceivableCount = value)
                 VideoTicketLiveData.postValue(value)
                 // send broadcast event
-                EventBusContract.postVideoTicketConditionUpdate(blockType = BlockType.ROULETTE)
+                EventContractor.postVideoTicketConditionUpdate(blockType = BlockType.ROULETTE)
             }
         }
 
-    var limitCount: Int = RemoteContract.videoTicketSetting.limitCount
+    var limitCount: Int = SettingContractor.videoTicketSetting.limitCount
         private set(value) {
             if (field != value) {
                 field = value
@@ -42,13 +41,13 @@ internal object VideoTicketLiveData : MutableLiveData<Int>() {
         apiContract.retrieveCondition(ticketType = TicketType.VIDEO) {
             when (it) {
                 is ContractResult.Success -> {
-                    LogHandler.i(moduleName = MODULE_NAME) { "$tagName -> synchronization -> TicketType.VIDEO { success:${it.contract} }" }
+                    logger.i(viewName = tagName) { "synchronization -> TicketType.VIDEO { success: ${it.contract} }" }
                     limitCount = it.contract.limitCount
                     receivableCount = it.contract.receivableCount
                     callback(true, it.contract.receivableCount)
                 }
                 is ContractResult.Failure -> {
-                    LogHandler.i(moduleName = MODULE_NAME) { "$tagName -> synchronization -> TicketType.VIDEO $it" }
+                    logger.i(viewName = tagName) { "synchronization -> TicketType.VIDEO { failure: $it }" }
                     receivableCount = -1
                     callback(false, -1)
                 }

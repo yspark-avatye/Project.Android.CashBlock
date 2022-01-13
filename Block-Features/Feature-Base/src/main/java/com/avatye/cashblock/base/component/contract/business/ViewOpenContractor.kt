@@ -1,8 +1,8 @@
-package com.avatye.cashblock.base.component.contract
+package com.avatye.cashblock.base.component.contract.business
 
 import android.app.Activity
-import com.avatye.cashblock.base.FeatureCore
-import com.avatye.cashblock.base.block.BlockCode
+import com.avatye.cashblock.base.Core
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.support.takeIfNullOrEmpty
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.base.presentation.parcel.InspectionParcel
@@ -13,18 +13,16 @@ import com.avatye.cashblock.base.presentation.view.notice.NoticeListActivity
 import com.avatye.cashblock.base.presentation.view.notice.NoticeViewActivity
 import com.avatye.cashblock.base.presentation.view.terms.TermsViewActivity
 
-object ViewOpenContract {
+object ViewOpenContractor {
     fun openNoticeList(
         activity: Activity,
-        blockCode: BlockCode,
+        blockType: BlockType,
         headerType: HeaderView.HeaderType? = null
     ) {
         NoticeListActivity.open(
             activity = activity,
             parcel = NoticeParcel(
-                blockId = blockCode.blockId,
-                blockSecret = blockCode.blockSecret,
-                blockType = blockCode.blockType,
+                blockType = blockType,
                 headerType = headerType ?: HeaderView.HeaderType.POPUP
             ),
             close = false
@@ -33,16 +31,14 @@ object ViewOpenContract {
 
     fun openNoticeView(
         activity: Activity,
-        blockCode: BlockCode,
+        blockType: BlockType,
         headerType: HeaderView.HeaderType? = null,
         noticeID: String
     ) {
         NoticeViewActivity.open(
             activity = activity,
             parcel = NoticeParcel(
-                blockId = blockCode.blockId,
-                blockSecret = blockCode.blockSecret,
-                blockType = blockCode.blockType,
+                blockType = blockType,
                 headerType = headerType ?: HeaderView.HeaderType.POPUP,
                 noticeId = noticeID
             ),
@@ -52,7 +48,7 @@ object ViewOpenContract {
 
     fun openTermsView(
         activity: Activity,
-        blockCode: BlockCode,
+        blockType: BlockType,
         headerType: HeaderView.HeaderType? = null,
         url: String? = null,
         close: Boolean = false
@@ -60,11 +56,9 @@ object ViewOpenContract {
         TermsViewActivity.open(
             activity = activity,
             parcel = TermsParcel(
-                blockId = blockCode.blockId,
-                blockSecret = blockCode.blockSecret,
-                blockType = blockCode.blockType,
+                blockType = blockType,
                 headerType = headerType ?: HeaderView.HeaderType.POPUP,
-                url = url.takeIfNullOrEmpty { "https://avatye.com/policy/terms/cashroulette?appID=${blockCode.blockId}" }
+                url = url.takeIfNullOrEmpty { "https://avatye.com/policy/terms/cashroulette?appID=${Core.appId}" }
             ),
             close = close
         )
@@ -72,21 +66,19 @@ object ViewOpenContract {
 
     fun openInspectionView(
         activity: Activity,
-        blockCode: BlockCode,
+        blockType: BlockType,
         close: Boolean = true
     ) {
         // make parcel
         val parcel = InspectionParcel(
-            blockType = blockCode.blockType,
-            blockId = blockCode.blockId,
-            blockSecret = blockCode.blockSecret,
-            startDateTime = FeatureCore.appInspection?.fromDateTime,
-            endDateTime = FeatureCore.appInspection?.toDateTime,
-            message = FeatureCore.appInspection?.message ?: "",
-            link = FeatureCore.appInspection?.link ?: ""
+            blockType = blockType,
+            startDateTime = Core.appInspection?.fromDateTime,
+            endDateTime = Core.appInspection?.toDateTime,
+            message = Core.appInspection?.message ?: "",
+            link = Core.appInspection?.link ?: ""
         )
         // clear
-        FeatureCore.appInspection = null
+        Core.appInspection = null
         // show activity
         InspectionActivity.open(activity = activity, parcel = parcel, close = close)
     }
