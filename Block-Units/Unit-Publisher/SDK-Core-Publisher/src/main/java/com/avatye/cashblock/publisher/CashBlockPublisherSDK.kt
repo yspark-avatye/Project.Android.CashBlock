@@ -7,8 +7,10 @@ import androidx.annotation.Keep
 import com.avatye.cashblock.CashBlockSDK
 import com.avatye.cashblock.base.block.BlockController
 import com.avatye.cashblock.base.block.BlockType
-import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.api.PublisherApiContractor
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.CoreContractor
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.feature.roulette.CashBlockRoulette
@@ -67,10 +69,10 @@ object CashBlockPublisherSDK {
 
     // region # base
     @JvmStatic
-    fun getAppUserId(): String = CashBlockSDK.getAppUserId()
+    fun getUserProfile(): Profile = AccountContractor.userProfile
 
     @JvmStatic
-    fun setAppUserId(appUserId: String) = CashBlockSDK.setAppUserId(appUserId = appUserId)
+    fun setUserProfile(profile: Profile) = AccountContractor.setUserProfile(profile = profile)
 
     @JvmStatic
     fun setCustomData(customData: String?) = CashBlockSDK.setCustomData(customData = customData)

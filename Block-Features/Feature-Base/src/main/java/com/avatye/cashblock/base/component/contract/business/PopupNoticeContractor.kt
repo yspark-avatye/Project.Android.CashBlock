@@ -1,4 +1,4 @@
-package com.avatye.cashblock.base.internal.controller
+package com.avatye.cashblock.base.component.contract.business
 
 import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
@@ -10,12 +10,13 @@ import com.avatye.cashblock.base.component.domain.listener.IPopupNoticeDataListe
 import com.avatye.cashblock.base.component.domain.model.app.CoreBaseActivity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupNotice
+import com.avatye.cashblock.base.internal.controller.LandingController
 import com.bumptech.glide.Glide
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
-class PopupNoticeController(private val blockType: BlockType, private val popupNoticeDataListener: IPopupNoticeDataListener) {
+class PopupNoticeContractor(private val blockType: BlockType, private val popupNoticeDataListener: IPopupNoticeDataListener) {
 
     private val pattern = "yyyyMMdd"
     private val popupQueues: Queue<PopupNoticeEntity> = LinkedList()

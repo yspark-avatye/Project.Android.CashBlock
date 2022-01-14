@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
+import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
@@ -15,10 +17,15 @@ import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
 internal class OfferwallMainActivity : AppBaseActivity() {
 
     companion object {
-        fun open(activity: Activity, close: Boolean = false) {
+        fun open(
+            activity: Activity,
+            serviceType: ServiceType,
+            close: Boolean = false
+        ) {
             activity.launch(
                 intent = Intent(activity, OfferwallMainActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    putExtra(ServiceNameParcel.NAME, ServiceNameParcel(serviceType = serviceType))
                 },
                 transition = ActivityTransitionType.NONE.value,
                 close = close
@@ -42,12 +49,12 @@ internal class OfferwallMainActivity : AppBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logger.i(viewName = viewTag) { "onCreate { serviceType: ${serviceType.name} }" }
         setContentViewWith(vb.root)
         // region { banner }
         vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
         vb.bannerLinearView.requestBanner()
         // endregion
-        logger.i(viewName = viewTag) { "onCreate" }
     }
 
     override fun onResume() {

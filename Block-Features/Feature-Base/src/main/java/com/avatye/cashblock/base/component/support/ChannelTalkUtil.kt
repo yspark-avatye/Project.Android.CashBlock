@@ -34,7 +34,7 @@ object ChannelTalkUtil {
             }
 
             val bootSetting: BootConfig? = BootConfig.create("48f56d3b-754b-41b2-9f0e-cd6d398a0cd1").apply {
-                this.memberId = AccountContractor.sdkUserID
+                this.memberId = AccountContractor.sdkUserId
                 setProfile(channelIOProfile)
             }
 

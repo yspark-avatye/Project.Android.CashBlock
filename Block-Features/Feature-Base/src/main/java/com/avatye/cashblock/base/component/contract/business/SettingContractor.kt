@@ -7,6 +7,7 @@ import com.avatye.cashblock.base.component.domain.entity.setting.*
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.internal.preference.RemotePreferenceData
 import com.avatye.cashblock.base.library.miscellaneous.*
+import org.joda.time.DateTime
 import org.json.JSONObject
 
 object SettingContractor {
@@ -50,12 +51,21 @@ object SettingContractor {
                 return RemotePreferenceData.version > 0L
             }
 
+        //  sync-time
+        private var syncTime: Long = 0L
+
         // fetch
         fun synchronization(blockType: BlockType, synchronized: (success: Boolean) -> Unit) {
+            if (syncTime >= DateTime().millis) {
+                synchronized(true)
+            }
+            // synchronization
             CoreApiContractor(blockType = blockType).let { core ->
                 core.retrieveAppSettings { res ->
                     when (res) {
                         is ContractResult.Success -> {
+                            // synctime
+                            syncTime = DateTime().plusMinutes(1).millis
                             if (RemotePreferenceData.needUpdate(version = res.contract.updateDateTime)) {
                                 try {
                                     res.contract.settings?.let { settings ->

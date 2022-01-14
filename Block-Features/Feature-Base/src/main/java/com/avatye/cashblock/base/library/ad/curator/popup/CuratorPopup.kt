@@ -2,8 +2,7 @@ package com.avatye.cashblock.base.library.ad.curator.popup
 
 import android.content.Context
 import android.view.View
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.popup.loader.IPopupADCallback
@@ -35,21 +34,17 @@ class CuratorPopup(
     }
 
     fun release() {
-        try {
+        kotlin.runCatching {
             // log
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> release -> success"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "release -> success" }
             // ssp
             sspLoader?.release()
             sspLoader = null
             // ssp - native
             nativeLoader?.release()
             nativeLoader = null
-        } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release"
-            }
+        }.onFailure {
+            logger.e(viewName = tagName, throwable = it) { "release" }
         }
     }
 
@@ -91,16 +86,12 @@ class CuratorPopup(
     // region { IPopupADCallback - SSP }
     inner class CallbackSSPAD : IPopupADCallback {
         override fun onLoadSuccess(view: View, currentNetwork: Int) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> SSP -> onLoadSuccess"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "SSP -> onLoadSuccess" }
             callback.oSuccess(adView = view, network = ADNetworkType.from(currentNetwork))
         }
 
         override fun onLoadFailed(isBlocked: Boolean) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> SSP -> onLoadFailed { isBlocked: $isBlocked, placementID: $sspPlacementID } "
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "SSP -> onLoadFailed { isBlocked: $isBlocked, placementID: $sspPlacementID } " }
             if (isBlocked) {
                 callback.onFailure(isBlocked = true)
             } else {
@@ -113,16 +104,12 @@ class CuratorPopup(
     // region { IPopupADCallback - Native }
     inner class CallbackNativeAD : IPopupADCallback {
         override fun onLoadSuccess(view: View, currentNetwork: Int) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> Native -> onLoadSuccess"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "Native -> onLoadSuccess" }
             callback.oSuccess(adView = view, network = ADNetworkType.from(currentNetwork))
         }
 
         override fun onLoadFailed(isBlocked: Boolean) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> Native -> onLoadFailed { isBlocked: $isBlocked, placementID: $nativePlacementID }"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "Native -> onLoadFailed { isBlocked: $isBlocked, placementID: $nativePlacementID }" }
             callback.onFailure(isBlocked = isBlocked)
         }
     }

@@ -148,16 +148,13 @@ class LogHandler(private val moduleName: String) {
         private fun makeLog(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String): String {
             val builder = StringBuilder()
             throwable?.let {
-                builder.appendLine("")
                 builder.appendLine("[Module: $moduleName] =>")
                 viewName?.let {
                     builder.appendLine("Trace => [$it] => [${trace()}]")
                 } ?: run {
                     builder.appendLine("Trace => [${trace()}]")
                 }
-                builder.appendLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 builder.appendLine("StackTrace => [${getStackTraceString(it)}]")
-                builder.appendLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             } ?: run {
                 builder.appendLine("[Module: $moduleName] =>")
                 viewName?.let {

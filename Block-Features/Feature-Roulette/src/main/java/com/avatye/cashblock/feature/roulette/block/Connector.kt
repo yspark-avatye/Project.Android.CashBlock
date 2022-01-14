@@ -16,13 +16,9 @@ internal class Connector : BlockConnector() {
     override val blockVersion: Int = BuildConfig.X_BUILD_SDK_VERSION_CODE
     override val blockVersionName: String = BuildConfig.X_BUILD_SDK_VERSION_NAME
 
-    override fun initialize(application: Application) {
-        logger.i { "$blockName -> Connector::initialize" }
-    }
-
-    override fun launch(context: Context) {
+    override fun connect(context: Context) {
         logger.i { "$blockName -> Connector::launch()" }
-        CashBlockRoulette.openFromConnector(context = context)
+        //
     }
 
     override fun clearSession(context: Context) {

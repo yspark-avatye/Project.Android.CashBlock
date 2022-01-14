@@ -132,7 +132,6 @@ internal class RallyTask(private val context: Context, private val request: Rall
     // region { Network Trace }
     private fun rallyTaskTracer(responseSuccess: RallyQueueResult? = null, responseFailure: RallyFailure? = null) {
         val logBuilder = StringBuilder()
-        logBuilder.appendLine("****************************************************************************************************")
         logBuilder.appendLine("RelayTask =>")
         logBuilder.appendLine("{")
         logBuilder.appendLine("\trequest {")
@@ -157,7 +156,6 @@ internal class RallyTask(private val context: Context, private val request: Rall
         }
         logBuilder.appendLine("\t}")
         logBuilder.appendLine("}")
-        logBuilder.appendLine("****************************************************************************************************")
         LogHandler.i(moduleName = MODULE_NAME) {
             logBuilder.toString()
         }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.avatye.cashblock.feature.offerwall.CashBlockOfferwall
+import com.avatye.cashblock.feature.offerwall.component.controller.EntryController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoWidgetButtonOfferwallBinding
 
 class ButtonOfferwall(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
@@ -28,9 +28,7 @@ class ButtonOfferwall(context: Context, attrs: AttributeSet? = null) : FrameLayo
         }
     }
 
-    private fun startAction() {
-        CashBlockOfferwall.open(context = context)
-    }
+    private fun startAction() = EntryController.open(context = context)
 
     fun onResume() {
 

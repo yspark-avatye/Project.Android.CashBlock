@@ -6,8 +6,8 @@ import androidx.annotation.Keep
 import com.avatye.cashblock.base.block.BlockController
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
+import com.avatye.cashblock.base.component.contract.business.PopupNoticeContractor
 import com.avatye.cashblock.base.component.domain.listener.IPopupNoticeDataListener
-import com.avatye.cashblock.base.internal.controller.PopupNoticeController
 import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.model.entity.notification.NotificationServiceConfig
@@ -31,8 +31,8 @@ internal object RouletteConfig {
 
     var notificationServiceConfig: NotificationServiceConfig = NotificationServiceConfig()
 
-    val popupNoticeController: PopupNoticeController by lazy {
-        PopupNoticeController(blockType = blockType, popupNoticeDataListener = object : IPopupNoticeDataListener {
+    val popupNoticeController: PopupNoticeContractor by lazy {
+        PopupNoticeContractor(blockType = blockType, popupNoticeDataListener = object : IPopupNoticeDataListener {
             override fun getItems(): LinkedHashMap<String, Int> {
                 return PreferenceData.PopupNotice.popupCloseDate
             }
@@ -43,29 +43,4 @@ internal object RouletteConfig {
         })
     }
     // endregion
-
-
-    fun openFromConnector(context: Context) {
-        if (CoreContractor.isInitialized) {
-            logger.i(viewName = "Config") { "## CashBlock -> Roulette -> openFromConnector(${blockType.name})" }
-            IntroActivity.open(context = context)
-        } else {
-            logger.i(viewName = "Config") { "## CashBlock -> Roulette { Core Context is not initialized, please check your Application Class }" }
-        }
-    }
-
-    fun open(context: Context) {
-        if (CoreContractor.isInitialized) {
-            BlockController.syncBlockSession(blockType = blockType) {
-                if (it) {
-                    logger.i(viewName = "Config") { "## CashBlock -> Roulette -> syncBlockSession -> open -> success" }
-                    IntroActivity.open(context = context)
-                } else {
-                    logger.i(viewName = "Config") { "## CashBlock -> Roulette { syncBlockSession failed }" }
-                }
-            }
-        } else {
-            logger.i(viewName = "Config") { "## CashBlock -> Roulette { Core Context is not initialized, please check your Application Class }" }
-        }
-    }
 }

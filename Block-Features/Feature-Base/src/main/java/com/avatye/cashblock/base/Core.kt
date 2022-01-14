@@ -2,10 +2,11 @@ package com.avatye.cashblock.base
 
 import android.app.Application
 import androidx.annotation.Keep
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.domain.entity.app.AppEnvironment
 import com.avatye.cashblock.base.component.domain.entity.app.AppInspection
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 import com.avatye.cashblock.base.component.support.*
-import com.avatye.cashblock.base.internal.controller.LoginController
 import com.avatye.cashblock.base.library.LogHandler
 
 internal const val MODULE_NAME = "Core@Block"
@@ -24,27 +25,30 @@ object CoreConstants {
     internal const val CASHBLOCK_CONNECT_OFFERWALL = "com.avatye.cashblock.feature.offerwall.block.Connector"
     internal const val CASHBLOCK_CONNECT_PUBLISHER = "com.avatye.cashblock.publisher.Connector"
 
-    // log
-    const val CASHBLOCK_LOG_ROULETTE_INTRO = "view:roulette:intro"
-    const val CASHBLOCK_LOG_OFFERWALL_INTRO = "view:offerwall:intro"
+    // log - roulette
+    const val CASHBLOCK_LOG_ROULETTE_ENTER = "view:roulette:enter"
+    const val CASHBLOCK_LOG_ROULETTE_OFFERWALL_ENTER = "view:roulette-offerwall:enter"
+
+    // log - offerwall
+    const val CASHBLOCK_LOG_OFFERWALL_ENTER = "view:offerwall:enter"
 }
 
 @Keep
 internal object Core {
     // logger
-    internal val logger: LogHandler = LogHandler(moduleName = MODULE_NAME)
+    val logger: LogHandler = LogHandler(moduleName = MODULE_NAME)
 
     // region # core base config
-    internal lateinit var application: Application
+    lateinit var application: Application
         private set
 
-    internal lateinit var appId: String
+    lateinit var appId: String
         private set
 
-    internal lateinit var appSecret: String
+    lateinit var appSecret: String
         private set
 
-    internal val isInitialized: Boolean
+    val isInitialized: Boolean
         get() {
             return Core::application.isInitialized
                     && Core::appId.isInitialized
@@ -52,9 +56,8 @@ internal object Core {
         }
     // endregion
 
-
     // region # environment
-    internal val allowLog: Boolean by lazy {
+    val allowLog: Boolean by lazy {
         if (Core::application.isInitialized) {
             val logFlag = application.metaDataValue(CoreConstants.CASHBLOCK_CONFIG_LOG) ?: "false"
             logFlag.equals(other = "true", ignoreCase = true)
@@ -63,7 +66,7 @@ internal object Core {
         }
     }
 
-    internal val allowDeveloper: Boolean by lazy {
+    val allowDeveloper: Boolean by lazy {
         if (Core::application.isInitialized) {
             val flag = application.metaDataValue(CoreConstants.CASHBLOCK_CONFIG_DEVELOPER) ?: "false"
             flag.equals(other = "true", ignoreCase = true)
@@ -72,7 +75,7 @@ internal object Core {
         }
     }
 
-    internal val appEnvironment: AppEnvironment by lazy {
+    val appEnvironment: AppEnvironment by lazy {
         if (Core::application.isInitialized) {
             AppEnvironment.from(value = application.metaDataValue(CoreConstants.CASHBLOCK_CONFIG_ENVIRONMENT) ?: "live")
         } else {
@@ -81,28 +84,26 @@ internal object Core {
     }
     // endregion
 
-
     // region # config
-    internal val appVersionCode: String by lazy {
+    val appVersionCode: String by lazy {
         if (Core::application.isInitialized) application.hostAppVersionCode else ""
     }
 
-    internal val appVersionName: String by lazy {
+    val appVersionName: String by lazy {
         if (Core::application.isInitialized) application.hostAppVersionName else ""
     }
 
-    internal val appName: String by lazy {
+    val appName: String by lazy {
         if (Core::application.isInitialized) application.hostAppName else ""
     }
 
-    internal val appPackageName: String by lazy {
+    val appPackageName: String by lazy {
         if (Core::application.isInitialized) application.hostPackageName else ""
     }
     // endregion
 
-
     // region # core server config
-    internal var appInspection: AppInspection? = null
+    var appInspection: AppInspection? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -110,13 +111,11 @@ internal object Core {
         }
     // endregion
 
-
     // region # postback custom data
-    internal var appCustomData: String? = null
+    var appCustomData: String? = null
     // endregion
 
-
-    internal fun initialize(application: Application) {
+    fun initialize(application: Application) {
         this.application = application
         // app-id
         this.application.metaDataValue(CoreConstants.CASHBLOCK_APP_ID).let {
@@ -136,8 +135,7 @@ internal object Core {
         ChannelTalkUtil.init(application = application)
     }
 
-
-    internal fun initialize(application: Application, appId: String, appSecret: String) {
+    fun initialize(application: Application, appId: String, appSecret: String) {
         this.application = application
         this.appId = appId
         this.appSecret = appSecret
@@ -145,9 +143,7 @@ internal object Core {
         ChannelTalkUtil.init(application = application)
     }
 
+    fun setUserProfile(profile: Profile) = AccountContractor.setUserProfile(profile = profile)
 
-    internal fun setAppUserId(appUserId: String) = LoginController.setLoginUserId(appUserId = appUserId)
-
-
-    internal fun getAppUserId() = LoginController.getLoginUserId()
+    fun getUserProfile() = AccountContractor.userProfile
 }

@@ -4,10 +4,9 @@ import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.base.library.ad.curator.Curator
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
+import com.avatye.cashblock.base.library.ad.curator.Curator
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderType
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.IADLoaderCallback
@@ -66,13 +65,13 @@ internal class InterstitialVideoADLoader(
                 it.loadAd()
                 leakHandler.postDelayed({
                     if (!isEvent) {
-                        LogHandler.e(moduleName = MODULE_NAME) { "$tagName -> requestAD -> fail { timeOver: 15sec, networkName: $networkName }" }
+                        logger.e(viewName = tagName) { "requestAD -> fail { timeOver: 15sec, networkName: $networkName }" }
                         isEventSend = true
                         callback.ondFailed(isBlocked = false)
                     }
                 }, 15000)
             } ?: run {
-                LogHandler.e(moduleName = MODULE_NAME) { "$tagName -> requestAD -> fail { loader: null, networkName: $networkName }" }
+                logger.e(viewName = tagName) { "requestAD -> fail { loader: null, networkName: $networkName }" }
                 OnInterstitialVideoAdOpenFalied()
             }
         }
@@ -96,15 +95,13 @@ internal class InterstitialVideoADLoader(
     }
 
     override fun release() {
-        try {
+        kotlin.runCatching {
             sspInterstitialVideoAD?.setEventCallbackListener(null)
             sspInterstitialVideoAD?.destroy()
             sspInterstitialVideoAD = null
             weakContext.clear()
-        } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release { networkName: $networkName }"
-            }
+        }.onFailure {
+            logger.e(viewName = tagName, throwable = it) { "release { networkName: $networkName }" }
         }
     }
 
@@ -112,9 +109,7 @@ internal class InterstitialVideoADLoader(
     override fun OnInterstitialVideoAdLoaded() {
         isEvent = true
         if (!isEventSend) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> OnInterstitialVideoAdLoaded { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "OnInterstitialVideoAdLoaded { networkName: $networkName }" }
             callback.onLoaded()
         }
     }
@@ -122,8 +117,8 @@ internal class InterstitialVideoADLoader(
     override fun OnInterstitialVideoAdLoadFailed(sspErrorCode: SSPErrorCode?) {
         isEvent = true
         if (!isEventSend) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> OnInterstitialVideoAdLoadFailed { pid:$placementID, code:${sspErrorCode?.errorCode}, message:${sspErrorCode?.errorMessage}, networkName: $networkName }"
+            logger.i(viewName = tagName) {
+                "OnInterstitialVideoAdLoadFailed { pid:$placementID, code:${sspErrorCode?.errorCode}, message:${sspErrorCode?.errorMessage}, networkName: $networkName }"
             }
             callback.ondFailed(isBlocked = Curator.isBlocked(sspErrorCode))
         }
@@ -133,9 +128,7 @@ internal class InterstitialVideoADLoader(
         isEvent = true
         // callback
         if (!isEventSend) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> OnInterstitialVideoAdOpened { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "OnInterstitialVideoAdOpened { networkName: $networkName }" }
             callback.onOpened()
         }
     }
@@ -143,9 +136,7 @@ internal class InterstitialVideoADLoader(
     override fun OnInterstitialVideoAdOpenFalied() {
         isEvent = true
         if (!isEventSend) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> OnInterstitialVideoAdOpenFalied { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "OnInterstitialVideoAdOpenFalied { networkName: $networkName }" }
             callback.ondFailed(isBlocked = false)
         }
     }
@@ -153,9 +144,7 @@ internal class InterstitialVideoADLoader(
     override fun OnInterstitialVideoAdClosed() {
         isEvent = true
         if (!isEventSend) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> OnInterstitialVideoAdClosed { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "OnInterstitialVideoAdClosed { networkName: $networkName }" }
             callback.onClosed(isCompleted = true)
         }
     }

@@ -3,6 +3,8 @@ package com.avatye.cashblock
 import android.app.Application
 import androidx.annotation.Keep
 import com.avatye.cashblock.base.Core
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 
 @Keep
 object CashBlockSDK {
@@ -16,14 +18,10 @@ object CashBlockSDK {
     }
 
     @JvmStatic
-    fun setAppUserId(appUserId: String) {
-        Core.setAppUserId(appUserId = appUserId)
-    }
+    fun setUserProfile(profile: Profile) = AccountContractor.setUserProfile(profile = profile)
 
     @JvmStatic
-    fun getAppUserId(): String {
-        return Core.getAppUserId()
-    }
+    fun getUserProfile() = AccountContractor.userProfile
 
     @JvmStatic
     fun setCustomData(customData: String?) {

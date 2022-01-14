@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.avatye.cashblock.CashBlockSDK
 import com.avatye.cashblock.app.partner.databinding.ActivityMainBinding
+import com.avatye.cashblock.base.component.domain.entity.user.GenderType
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 import com.avatye.cashblock.feature.roulette.CashBlockRoulette
 import com.avatye.cashblock.feature.roulette.component.model.listener.ITicketCount
 
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun viewAppUserID() {
-        val appUserID = CashBlockSDK.getAppUserId()
+        val appUserID = CashBlockSDK.getUserProfile().userId
         if (appUserID.isNotEmpty()) {
             vb.wrapAuth.visibility = View.GONE
             vb.wrapProfile.visibility = View.VISIBLE
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAppUserID() {
         val appUserID = vb.userId.text.toString()
-        CashBlockSDK.setAppUserId(appUserID)
+        CashBlockSDK.setUserProfile(profile = Profile(userId = appUserID, birthYear = 2000, gender = GenderType.MALE))
         viewAppUserID()
     }
 }

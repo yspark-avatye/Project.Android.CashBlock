@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.annotation.Keep
 import com.avatye.cashblock.base.component.domain.entity.base.LandingType
+import com.avatye.cashblock.feature.roulette.component.controller.EntryController
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
@@ -16,14 +17,12 @@ import com.avatye.cashblock.feature.roulette.component.model.listener.IUpdateNot
 @Keep
 object CashBlockRoulette {
 
-    internal fun openFromConnector(context: Context) {
-        RouletteConfig.openFromConnector(context = context)
-    }
+    internal fun connect(context: Context) = EntryController.connect(context = context)
+
 
     @JvmStatic
-    fun open(context: Context) {
-        RouletteConfig.open(context = context)
-    }
+    fun open(context: Context) = EntryController.open(context = context)
+
 
     /**
      * 티켓 정보를 반환합니다.
@@ -35,6 +34,7 @@ object CashBlockRoulette {
         TicketController.Session.checkTicketCondition(listener = listener)
     }
 
+
     /**
      * 티켓박스 정보를 반환합니다.
      * condition: 받을 수 있는 티켓박스 수
@@ -44,6 +44,7 @@ object CashBlockRoulette {
     fun checkTicketBoxCondition(listener: ITicketBoxCount) {
         TicketBoxController.Session.checkTicketBoxCondition(listener = listener)
     }
+
 
     /**
      * 티켓박스 사용자의 알림창 상태바 상태값을 설정합니다.

@@ -196,7 +196,7 @@ object MessageDialogHelper {
                 .plus(Uri.encode("\nApp-Version: ${Core.appVersionName}"))
                 .plus(Uri.encode("\nApp-BlockName: ${blockType.name}"))
                 // sdk
-                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserID}"))
+                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserId}"))
                 .plus(Uri.encode("\nSDK-Version: ${BuildConfig.X_BUILD_SDK_VERSION_NAME}"))
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse(suggestionText)
@@ -224,7 +224,7 @@ object MessageDialogHelper {
                 .plus(Uri.encode("\nApp-Version: ${Core.appVersionName}"))
                 .plus(Uri.encode("\nApp-BlockName: ${blockType.name}"))
                 // sdk
-                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserID}"))
+                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserId}"))
                 .plus(Uri.encode("\nSDK-Version: ${BuildConfig.X_BUILD_SDK_VERSION_NAME}"))
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse(suggestionText)

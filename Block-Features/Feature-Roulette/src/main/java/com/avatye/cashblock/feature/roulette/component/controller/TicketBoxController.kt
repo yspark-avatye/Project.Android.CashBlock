@@ -8,6 +8,7 @@ import android.view.animation.OvershootInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.listener.ILoginListener
 import com.avatye.cashblock.base.component.support.AnimatorEventCallback
 import com.avatye.cashblock.base.component.support.toPX
 import com.avatye.cashblock.feature.roulette.R
@@ -121,12 +122,13 @@ internal object TicketBoxController {
         }
 
         private fun checkLogin(callback: (success: Boolean) -> Unit) {
-            when (AccountContractor.isLogin) {
-                true -> callback(true)
-                false -> AccountContractor.login(
-                    blockType = RouletteConfig.blockType,
-                    callback = callback
-                )
+            if (AccountContractor.isLogin) {
+                callback(true)
+            } else {
+                AccountContractor.login(blockType = RouletteConfig.blockType, listener = object : ILoginListener {
+                    override fun onSuccess() = callback(true)
+                    override fun onFailure(reason: String) = callback(false)
+                })
             }
         }
     }

@@ -7,23 +7,34 @@ import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockController
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
+import com.avatye.cashblock.base.component.domain.entity.user.GenderType
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 
 internal object AccountPreferenceData {
+    // region # profile
     private var _appUserId = Preference.appUserId
+    private var _appUserBirthYear = Preference.appUserBirthYear
+    private var _appUserGender = Preference.appUserGender
+    // endregion
+
     private var _sdkUserId = Preference.sdkUserId
     private var _accessToken = Preference.accessToken
     private var _ageVerifiedType = Preference.ageVerifiedType
 
     val isValid: Boolean
         get() {
-            return _appUserId.isNotEmpty()
+            return profile.isValid()
                     && _sdkUserId.isNotEmpty()
                     && _accessToken.isNotEmpty()
         }
 
-    val appUserId: String
+    val profile: Profile
         get() {
-            return _appUserId
+            return Profile(
+                userId = _appUserId,
+                gender = _appUserGender,
+                birthYear = _appUserBirthYear
+            )
         }
 
     val sdkUserId: String
@@ -41,14 +52,20 @@ internal object AccountPreferenceData {
             return AgeVerifiedType.from(_ageVerifiedType)
         }
 
-    fun needUpdateAppUserId(targetAppUserId: String): Boolean {
-        return !targetAppUserId.equals(other = appUserId, ignoreCase = false)
+    fun needUpdateAppUserProfile(profile: Profile): Boolean {
+        return this.profile != profile
     }
 
-    fun update(appUserId: String? = null, sdkUserId: String? = null, accessToken: String? = null, ageVerifiedType: AgeVerifiedType? = null) {
-        appUserId?.let {
-            _appUserId = it
-            Preference.appUserId = it
+    fun update(profile: Profile? = null, sdkUserId: String? = null, accessToken: String? = null, ageVerifiedType: AgeVerifiedType? = null) {
+        profile?.let {
+            // cache
+            _appUserId = it.userId
+            _appUserGender = it.gender
+            _appUserBirthYear = it.birthYear
+            // date
+            Preference.appUserId = it.userId
+            Preference.appUserGender = it.gender
+            Preference.appUserBirthYear = it.birthYear
         }
         sdkUserId?.let {
             _sdkUserId = it
@@ -64,7 +81,18 @@ internal object AccountPreferenceData {
         }
     }
 
-    fun clearSession(appUserId: String? = null, sdkUserId: String? = null, accessToken: String? = null, ageVerifiedType: AgeVerifiedType? = null) {
+    fun clearProfile() {
+        // cache
+        _appUserId = ""
+        _appUserGender = GenderType.MALE
+        _appUserBirthYear = 0
+        // data
+        Preference.appUserId = _appUserId
+        Preference.appUserGender = _appUserGender
+        Preference.appUserBirthYear = _appUserBirthYear
+    }
+
+    fun clearSession(profile: Profile? = null, sdkUserId: String? = null, accessToken: String? = null, ageVerifiedType: AgeVerifiedType? = null) {
         // clear core session
         Preference.clear()
         // clear connector session
@@ -73,7 +101,7 @@ internal object AccountPreferenceData {
         }
         // reset
         update(
-            appUserId = appUserId,
+            profile = profile,
             sdkUserId = sdkUserId,
             accessToken = accessToken,
             ageVerifiedType = ageVerifiedType
@@ -94,6 +122,24 @@ internal object AccountPreferenceData {
             }
             set(value) {
                 pref.edit { putString(APP_USER_ID, value) }
+            }
+
+        private val APP_USER_GENDER = "app-user-gender"
+        var appUserGender: GenderType
+            get() {
+                return GenderType.from(pref.getString(APP_USER_GENDER, "M") ?: "M") ?: GenderType.MALE
+            }
+            set(value) {
+                pref.edit { putString(APP_USER_GENDER, value.value) }
+            }
+
+        private val APP_USER_BIRTH_YEAR = "app-user-birth-year"
+        var appUserBirthYear: Int
+            get() {
+                return pref.getInt(APP_USER_BIRTH_YEAR, 0)
+            }
+            set(value) {
+                pref.edit { putInt(APP_USER_BIRTH_YEAR, value) }
             }
 
         private val SDK_USER_ID = "sdk-user-id"
@@ -126,6 +172,8 @@ internal object AccountPreferenceData {
         fun clear() {
             arrayOf(
                 APP_USER_ID,
+                APP_USER_GENDER,
+                APP_USER_BIRTH_YEAR,
                 SDK_USER_ID,
                 ACCESS_TOKEN,
                 AGE_VERIFIED

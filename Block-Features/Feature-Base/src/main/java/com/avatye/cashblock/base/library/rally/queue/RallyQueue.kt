@@ -2,7 +2,7 @@ package com.avatye.cashblock.base.library.rally.queue
 
 import com.android.volley.Response
 
-data class RallyQueue(
+internal data class RallyQueue(
     val reqTag: String? = null,
     val reqMethod: Int,
     val reqUrl: String,

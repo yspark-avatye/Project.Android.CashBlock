@@ -1,61 +1,56 @@
 package com.avatye.cashblock.base.component.contract.business
 
+import com.avatye.cashblock.R
 import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.UserApiContractor
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
+import com.avatye.cashblock.base.component.domain.entity.user.Profile
 import com.avatye.cashblock.base.component.domain.listener.ILoginListener
-import com.avatye.cashblock.base.internal.controller.LoginController
+import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.internal.preference.AccountPreferenceData
 
 object AccountContractor {
 
     private const val tagName = "AccountContractor"
 
-    // region { Account Setting }
-    val isLogin: Boolean
-        get() = Core.isInitialized && AccountPreferenceData.isValid
+    val isLogin: Boolean get() = Controller.isLogin
 
-    val appUserID: String
-        get() = AccountPreferenceData.appUserId
+    val userProfile: Profile get() = Controller.userProfile
 
-    val sdkUserID: String
-        get() = AccountPreferenceData.sdkUserId
+    val sdkUserId: String get() = Controller.sdkUserId
 
-    val ageVerified: AgeVerifiedType
-        get() {
-            return when (SettingContractor.appInfoSetting.allowAgeVerification) {
-                true -> AccountPreferenceData.ageVerified
-                false -> AgeVerifiedType.VERIFIED
-            }
-        }
+    val ageVerified: AgeVerifiedType get() = Controller.ageVerified
 
-    fun login(blockType: BlockType, callback: (success: Boolean) -> Unit) {
-        LoginController.requestLogin(blockType = blockType, listener = object : ILoginListener {
-            override fun onSuccess() = callback(true)
-            override fun onFailure(reason: String) = callback(false)
-        })
-    }
-    // endregion
+    fun setUserProfile(profile: Profile) = Controller.setUserProfile(profile = profile)
 
-    // login controller
+    fun login(blockType: BlockType, listener: ILoginListener) = Controller.requestLogin(blockType = blockType, listener = listener)
+
+    fun logout() = Controller.requestLogout()
+
     private object Controller {
-        /*
-        // region { account fields }
-        fun setLoginUserId(appUserId: String) {
+        val isLogin get() = Core.isInitialized && AccountPreferenceData.isValid
+        val userProfile get() = AccountPreferenceData.profile
+        val sdkUserId get() = AccountPreferenceData.sdkUserId
+        val ageVerified: AgeVerifiedType
+            get() {
+                return when (SettingContractor.appInfoSetting.allowAgeVerification) {
+                    true -> AccountPreferenceData.ageVerified
+                    false -> AgeVerifiedType.VERIFIED
+                }
+            }
+
+        fun setUserProfile(profile: Profile) {
             if (isLogin) {
-                if (AccountPreferenceData.needUpdateAppUserId(targetAppUserId = appUserId)) {
-                    AccountPreferenceData.clearSession(appUserId = appUserId)
+                if (AccountPreferenceData.needUpdateAppUserProfile(profile = profile)) {
+                    AccountPreferenceData.clearSession(profile = profile)
                 }
             } else {
-                AccountPreferenceData.update(appUserId = appUserId)
+                AccountPreferenceData.update(profile = profile)
             }
         }
 
-        fun getLoginUserId() = AccountPreferenceData.appUserId
-        // endregion
-
-        // region { login - logout }
-        internal fun requestLogin(blockType: BlockType, listener: ILoginListener) {
+        fun requestLogin(blockType: BlockType, listener: ILoginListener) {
             // valid init
             if (!Core.isInitialized) {
                 listener.onFailure(reason = Core.application.getString(R.string.acb_common_message_error))
@@ -63,21 +58,22 @@ object AccountContractor {
             }
 
             // valid appUserID
-            val loginAppUserID = AccountPreferenceData.appUserId
-            if (loginAppUserID.isEmpty()) {
+            val loginProfile = AccountPreferenceData.profile
+            if (!loginProfile.isValid()) {
+                AccountPreferenceData.clearProfile()
                 listener.onFailure(reason = Core.application.getString(R.string.acb_common_message_profile_not_set))
                 return
             }
 
             // send 'onSuccess' callback when already login
-            if (LoginController.isLogin) {
+            if (isLogin) {
                 listener.onSuccess()
                 return
             }
 
             UserApiContractor(blockType = blockType).let { contract ->
                 // login -> response
-                contract.postLogin(appUserId = loginAppUserID) {
+                contract.postLogin(profile = loginProfile) {
                     when (it) {
                         is ContractResult.Success -> {
                             Core.logger.i(viewName = tagName) { "requestLogin -> onSuccess -> ${it.contract}" }
@@ -97,7 +93,7 @@ object AccountContractor {
                             }
                         }
                         is ContractResult.Failure -> {
-                            Core.logger.e(viewName = LoginController.tagName) { "requestLogin -> onFailure -> $it" }
+                            Core.logger.e(viewName = tagName) { "requestLogin -> onFailure -> $it" }
                             listener.onFailure(reason = it.message)
                         }
                     }
@@ -105,10 +101,8 @@ object AccountContractor {
             }
         }
 
-        internal fun requestLogout() {
+        fun requestLogout() {
             AccountPreferenceData.clearSession()
         }
-        // endregion
-         */
     }
 }

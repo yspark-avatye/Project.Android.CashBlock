@@ -2,11 +2,10 @@ package com.avatye.cashblock.base.library.ad.curator.popup.loader
 
 import android.content.Context
 import android.view.LayoutInflater
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativePopupBinding
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.Curator
+import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativePopupBinding
 import com.igaworks.ssp.SSPErrorCode
 import com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd
 import com.igaworks.ssp.part.nativead.binder.AdPopcornSSPViewBinder
@@ -59,9 +58,7 @@ internal class PopupADNativeLoader(
     fun requestAD() {
         initialize {
             sspNativeAD?.loadAd() ?: run {
-                LogHandler.i(moduleName = MODULE_NAME) {
-                    "$tagName -> requestAD -> fail { loader: null, networkName: $networkName }"
-                }
+                logger.i(viewName = PopupADLoader.tagName) { "requestAD -> fail { loader: null, networkName: $networkName }" }
                 callback.onLoadFailed(isBlocked = false)
             }
         }
@@ -76,49 +73,39 @@ internal class PopupADNativeLoader(
     }
 
     fun release() {
-        try {
+        kotlin.runCatching {
             sspNativeAD?.setNativeAdEventCallbackListener(null)
             sspNativeAD?.removeAllViews()
             sspNativeAD?.destroy()
             sspNativeAD = null
             weakContext.clear()
-        } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release"
-            }
+        }.onFailure {
+            logger.e(viewName = tagName, throwable = it) { "release" }
         }
     }
 
     // region { INativeAdEventCallbackListener }
     override fun onNativeAdLoadSuccess() {
         sspNativeAD?.let {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> success { networkName: $networkName }"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "onNativeAdLoadSuccess -> success { networkName: $networkName }" }
             callback.onLoadSuccess(view = it, currentNetwork = sspNativeAD?.currentNetwork ?: 0)
         } ?: run {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> fail { loader: null, networkName: $networkName }"
-            }
+            logger.i(viewName = PopupADLoader.tagName) { "onNativeAdLoadSuccess -> fail { loader: null, networkName: $networkName }" }
             callback.onLoadFailed(isBlocked = false)
         }
     }
 
     override fun onImpression() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onImpression { networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "onImpression { networkName: $networkName }" }
     }
 
     override fun onClicked() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onClicked { networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "onClicked { networkName: $networkName }" }
     }
 
     override fun onNativeAdLoadFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onNativeAdLoadFailed { pid: ${placementID}, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
+        logger.i(viewName = PopupADLoader.tagName) {
+            "onNativeAdLoadFailed { pid: ${placementID}, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
         }
         callback.onLoadFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }

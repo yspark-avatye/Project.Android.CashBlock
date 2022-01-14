@@ -10,7 +10,6 @@ import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.model.parcel.EventBusParcel
-import com.avatye.cashblock.base.internal.controller.LoginController
 import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import java.util.*
 import kotlin.collections.HashSet
@@ -42,7 +41,7 @@ object EventContractor {
         if (Core.isInitialized) {
             ServeTask.cancelToAllQueue(Core.application)
             requestBroadcast(blockType = blockType, actionType = ActionType.UNAUTHORIZED) {
-                LoginController.requestLogout()
+                AccountContractor.logout()
                 logger.i(viewName = tagName) { "postUnauthorized -> requestBroadcast -> callback -> clearSession()" }
             }
         }

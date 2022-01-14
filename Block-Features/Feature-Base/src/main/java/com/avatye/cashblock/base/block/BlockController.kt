@@ -1,13 +1,12 @@
 package com.avatye.cashblock.base.block
 
-import android.app.Application
 import android.content.Context
 import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.block.BlockType.Companion.connector
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.listener.ILoginListener
 import com.avatye.cashblock.base.component.support.CoreUtil.showToast
-import com.avatye.cashblock.base.internal.controller.LoginController
 
 object BlockController {
     // tag name
@@ -20,23 +19,18 @@ object BlockController {
 
     fun launchBlock(context: Context, blockType: BlockType, callback: (success: Boolean) -> Unit) {
         makeBlockConnector(referenceName = "launchBlock", blockType = blockType)?.let { connector ->
-            logger.i { "$tagName -> launchBlock -> connector(${blockType.name}) -> success -> initialize" }
-            connector.initialize(application = context.applicationContext as Application)
             synchronizeBlockSession(blockType = blockType) {
+                logger.i(viewName = tagName) { "launchBlock -> connector(${blockType.name}) -> synchronizeBlockSession -> launch { success: $it }" }
                 when (it) {
                     true -> {
-                        logger.i { "$tagName -> launchBlock -> connector(${blockType.name}) -> synchronizeBlockSession -> launch" }
-                        connector.launch(context = context)
+                        connector.connect(context = context)
                         callback(true)
                     }
-                    false -> {
-                        logger.e { "$tagName -> launchBlock -> connector(${blockType.name}) -> synchronizeBlockSession -> false" }
-                        callback(false)
-                    }
+                    false -> callback(false)
                 }
             }
         } ?: run {
-            logger.e { "$tagName -> launchBlock -> connector(${blockType.name}) is null" }
+            logger.i(viewName = tagName) { "launchBlock -> connector(${blockType.name}) { connector is null }" }
             callback(false)
         }
     }
@@ -47,22 +41,15 @@ object BlockController {
 
     fun createBlockConnector(context: Context, blockType: BlockType, callback: (connector: BlockConnector?) -> Unit) {
         makeBlockConnector(referenceName = "launchBlock", blockType = blockType)?.let { connector ->
-            logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> success -> initialize" }
-            connector.initialize(application = context.applicationContext as Application)
             synchronizeBlockSession(blockType = blockType) {
+                logger.i(viewName = tagName) { "openBlockConnector -> connector(${blockType.name}) -> synchronizeBlockSession { success: $it }" }
                 when (it) {
-                    true -> {
-                        logger.i { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> synchronizeBlockSession -> return connector" }
-                        callback(connector)
-                    }
-                    false -> {
-                        logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) -> synchronizeBlockSession -> false" }
-                        callback(null)
-                    }
+                    true -> callback(connector)
+                    false -> callback(null)
                 }
             }
         } ?: run {
-            logger.e { "$tagName -> openBlockConnector -> connector(${blockType.name}) is null" }
+            logger.i(viewName = tagName) { "openBlockConnector -> connector(${blockType.name}) { connector is null }" }
             callback(null)
         }
     }
@@ -80,11 +67,11 @@ object BlockController {
                 Class.forName(blockType.connector).let { cls ->
                     cls.getConstructor().newInstance().let {
                         connector = (it as BlockConnector)
-                        logger.i { "$tagName -> makeBlockConnector -> success { functionName: $referenceName, connector: $blockType }" }
+                        logger.i(viewName = tagName) { "makeBlockConnector -> success { functionName: $referenceName, connector: $blockType }" }
                     }
                 }
             } catch (e: Exception) {
-                logger.i(throwable = e) { "$tagName -> makeBlockConnector -> error { functionName: $referenceName, connector: $blockType }" }
+                logger.i(viewName = tagName) { "makeBlockConnector -> error { functionName: $referenceName, connector: $blockType }" }
             }
         }
         return connector
@@ -95,7 +82,7 @@ object BlockController {
         SettingContractor.Controller.synchronization(blockType = blockType) {
             // 2. popup or etc sync
             // 3. sync session
-            LoginController.requestLogin(blockType = blockType, listener = object : ILoginListener {
+            AccountContractor.login(blockType = blockType, listener = object : ILoginListener {
                 override fun onSuccess() = callback(true)
 
                 override fun onFailure(reason: String) {
