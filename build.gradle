@@ -24,9 +24,14 @@ buildscript {
     ext.config_version_sdk_min = 21
     ext.app_version_code = 1
     ext.app_version_name = "22.1.1"
+    // maven publishing
+    ext.maven_group_id = 'org.bitbucket.avatye'
+    ext.maven_artifact_id = 'sdk-cash-block'
+    //
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
         maven { url = uri("https://storage.googleapis.com/r8-releases/raw") }
     }
     dependencies {

@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'maven-publish'
 }
 
 android {
@@ -57,4 +58,17 @@ dependencies {
     implementation "com.facebook.android:audience-network-sdk:$dependency_version_ads_fan"
     implementation "com.google.android.gms:play-services-ads:$dependency_version_ads_admob"
     // endregion
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = "$maven_group_id"
+                artifactId = "${maven_artifact_id}-core"
+                version = "$app_version_name"
+            }
+        }
+    }
 }
