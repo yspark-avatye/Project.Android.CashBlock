@@ -60,7 +60,12 @@ class LogHandler(private val moduleName: String) {
 
     companion object {
         private val TAG: String = "CASHBLOCK"
-        val allowLog: Boolean get() = Core.allowLog
+        private val VANILLA: String = "cashblock.vanilla"
+
+        val allowLog: Boolean
+            get() {
+                return Core.allowLog
+            }
 
         fun p(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -75,72 +80,67 @@ class LogHandler(private val moduleName: String) {
 
         fun i(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.i(
-                    TAG, makeLog(
-                        throwable = throwable,
-                        moduleName = moduleName,
-                        viewName = viewName,
-                        trace = trace
-                    )
-                )
+                Log.i(TAG, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.INFO)
+                if (hasVanilla) {
+                    Log.i(VANILLA, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+                }
             }
         }
 
         fun d(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.d(
-                    TAG, makeLog(
-                        throwable = throwable,
-                        moduleName = moduleName,
-                        viewName = viewName,
-                        trace = trace
-                    )
-                )
+                Log.d(TAG, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.DEBUG)
+                if (hasVanilla) {
+                    Log.d(VANILLA, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+                }
             }
         }
 
         fun v(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.v(
-                    TAG, makeLog(
-                        throwable = throwable,
-                        moduleName = moduleName,
-                        viewName = viewName,
-                        trace = trace
-                    )
-                )
+                Log.v(TAG, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.VERBOSE)
+                if (hasVanilla) {
+                    Log.v(VANILLA, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+                }
             }
         }
 
         fun w(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.w(
-                    TAG, makeLog(
-                        throwable = throwable,
-                        moduleName = moduleName,
-                        viewName = viewName,
-                        trace = trace
-                    )
-                )
+                Log.w(TAG, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.WARN)
+                if (hasVanilla) {
+                    Log.w(VANILLA, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+                }
             }
         }
 
         fun e(throwable: Throwable? = null, moduleName: String, viewName: String? = null, trace: () -> String) {
             if (allowLog) {
-                Log.e(
-                    TAG, makeLog(
-                        throwable = throwable,
-                        moduleName = moduleName,
-                        viewName = viewName,
-                        trace = trace
-                    )
-                )
+                Log.e(TAG, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.ERROR)
+                if (hasVanilla) {
+                    Log.e(VANILLA, makeLog(throwable = throwable, moduleName = moduleName, viewName = viewName, trace = trace))
+                }
             }
         }
 
         fun e(throwable: Throwable? = null, moduleName: String, viewName: String? = null) {
             if (allowLog) {
                 Log.e(TAG, makeLog(throwable, moduleName, viewName = viewName) { "" })
+            } else {
+                val hasVanilla = Log.isLoggable(VANILLA, Log.ERROR)
+                if (hasVanilla) {
+                    Log.e(VANILLA, makeLog(throwable, moduleName, viewName = viewName) { "" })
+                }
             }
         }
 

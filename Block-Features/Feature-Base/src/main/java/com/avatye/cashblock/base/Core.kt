@@ -36,7 +36,7 @@ object CoreConstants {
 @Keep
 internal object Core {
     // logger
-    val logger: LogHandler = LogHandler(moduleName = MODULE_NAME)
+    val logger: LogHandler by lazy { LogHandler(moduleName = MODULE_NAME) }
 
     // region # core base config
     lateinit var application: Application
