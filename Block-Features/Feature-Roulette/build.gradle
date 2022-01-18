@@ -55,7 +55,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = "$maven_group_id"
-                artifactId = "${maven_artifact_id}-roulette"
+                artifactId = "roulette"
                 version = "$app_version_name"
             }
         }

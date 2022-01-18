@@ -45,7 +45,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = "$maven_group_id"
-                artifactId = "${maven_artifact_id}-publisher"
+                artifactId = "publisher"
                 version = "$app_version_name"
             }
         }

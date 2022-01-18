@@ -54,7 +54,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = "$maven_group_id"
-                artifactId = "${maven_artifact_id}-offerwall"
+                artifactId = "offerwall"
                 version = "$app_version_name"
             }
         }
