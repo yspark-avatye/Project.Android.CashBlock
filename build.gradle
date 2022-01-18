@@ -23,7 +23,7 @@ buildscript {
     ext.config_version_sdk_target = 30
     ext.config_version_sdk_min = 21
     ext.app_version_code = 1
-    ext.app_version_name = "22.0.1"
+    ext.app_version_name = "22.0.2"
     // maven publishing
     ext.maven_group_id = 'org.bitbucket.avatye'
     ext.maven_artifact_id = 'sdk-cash-block'
@@ -40,7 +40,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$dependency_version_kotlin"
     }
 }
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
