@@ -1,14 +1,14 @@
 package com.avatye.cashblock.base.internal.controller
 
 import android.app.Activity
-import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.block.BlockController
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.LandingType
 
 internal object LandingController {
 
     fun requestLanding(
-        blockCode: BlockCode,
+        blockType: BlockType,
         ownerActivity: Activity,
         ownerActivityClose: Boolean = false,
         landingType: LandingType,
@@ -43,7 +43,7 @@ internal object LandingController {
             LandingType.ROULETTE_TOUCH_TICKET,
             LandingType.ROULETTE_VIDEO_TICKET -> {
                 landingBlock(
-                    blockCode = blockCode,
+                    blockType = blockType,
                     ownerActivity = ownerActivity,
                     ownerActivityClose = ownerActivityClose,
                     landingType = landingType,
@@ -54,7 +54,7 @@ internal object LandingController {
             // offerwall
             LandingType.OFFERWALL_MAIN_LIST -> {
                 landingBlock(
-                    blockCode = blockCode,
+                    blockType = blockType,
                     ownerActivity = ownerActivity,
                     ownerActivityClose = ownerActivityClose,
                     landingType = landingType,
@@ -75,14 +75,14 @@ internal object LandingController {
 
 
     private fun landingBlock(
-        blockCode: BlockCode,
+        blockType: BlockType,
         ownerActivity: Activity,
         ownerActivityClose: Boolean = false,
         landingType: LandingType,
         landingValue: String? = null,
         fallback: () -> Unit
     ) {
-        BlockController.createBlockConnector(context = ownerActivity, blockCode = blockCode) {
+        BlockController.createBlockConnector(context = ownerActivity, blockType = blockType) {
             it?.landing(
                 ownerActivity = ownerActivity,
                 ownerActivityClose = ownerActivityClose,

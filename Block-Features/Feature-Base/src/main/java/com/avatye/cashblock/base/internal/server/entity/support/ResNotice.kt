@@ -8,7 +8,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResNotice : ServeSuccess() {
+internal class ResNotice : ServeSuccess() {
     var noticeEntity = NoticeEntity()
         private set
 

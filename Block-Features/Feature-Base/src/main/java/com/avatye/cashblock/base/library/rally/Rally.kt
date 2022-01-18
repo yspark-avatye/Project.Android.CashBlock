@@ -3,14 +3,13 @@ package com.avatye.cashblock.base.library.rally
 import android.content.Context
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.miscellaneous.SingletonContextHolder
 import com.avatye.cashblock.base.library.rally.queue.RallyRequestQueue
 import com.avatye.cashblock.base.library.rally.request.RallyRequest
 import com.avatye.cashblock.base.library.rally.response.RallyResponse
 
-class Rally private constructor(private val context: Context) {
+internal class Rally private constructor(private val context: Context) {
 
     companion object : SingletonContextHolder<Rally>(::Rally) {
         fun addToRequest(context: Context, request: RallyRequest, response: RallyResponse) {
@@ -34,23 +33,17 @@ class Rally private constructor(private val context: Context) {
 
     private fun addToRequestQueue(request: RallyRequestQueue) {
         requestQueue.add(request)
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "Rally -> addToRequestQueue { requestTag: ${request.tag} }"
-        }
+        logger.i(viewName = "Rally") { "addToRequestQueue { requestTag: ${request.tag} }" }
     }
 
     private fun cancelToRequestQueue(tag: String) {
         requestQueue.cancelAll(tag)
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "Rally -> cancelToRequestQueue { tag: $tag }"
-        }
+        logger.i(viewName = "Rally") { "cancelToRequestQueue { tag: $tag }" }
     }
 
     private fun cancelToRequestAllQueue() {
         requestQueue.cancelAll { req ->
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "Rally -> cancelToRequestAllQueue { tag: ${req.tag} }"
-            }
+            logger.i(viewName = "Rally") { "cancelToRequestAllQueue { tag: ${req.tag} }" }
             true
         }
     }

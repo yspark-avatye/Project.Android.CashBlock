@@ -6,7 +6,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import java.io.UnsupportedEncodingException
 
-class RallyRequestQueue(private val queue: RallyQueue) : Request<RallyQueueResult>(
+internal class RallyRequestQueue(private val queue: RallyQueue) : Request<RallyQueueResult>(
     queue.reqMethod,
     queue.reqUrl,
     queue.errorListener

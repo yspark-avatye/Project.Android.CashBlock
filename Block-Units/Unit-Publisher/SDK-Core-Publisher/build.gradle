@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
 android {
@@ -36,4 +37,17 @@ android {
 dependencies {
     implementation "androidx.core:core-ktx:$dependency_version_ktx"
     api project(':Block-Features:Feature-Roulette')
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = "$maven_group_id"
+                artifactId = "${maven_artifact_id}-publisher"
+                version = "$app_version_name"
+            }
+        }
+    }
 }

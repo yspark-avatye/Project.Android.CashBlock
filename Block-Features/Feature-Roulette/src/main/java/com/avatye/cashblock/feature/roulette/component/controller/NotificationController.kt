@@ -10,12 +10,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.data.CoreDataContract
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.CoreApiContractor
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActionType
 import com.avatye.cashblock.base.component.domain.entity.base.LandingType
+import com.avatye.cashblock.base.component.domain.model.parcel.EventBusParcel
+import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.isScreenOn
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
@@ -114,7 +117,7 @@ internal object NotificationController {
 
         // region { check Notification when system booting }
         fun checkAndStartNotification(context: Context, callback: (success: Boolean) -> Unit = {}) {
-            if (!RemoteContract.appInfoSetting.allowTicketBox || !AccountContract.isLogin) {
+            if (!SettingContractor.appInfoSetting.allowTicketBox || !AccountContractor.isLogin) {
                 callback(false)
                 return
             }
@@ -169,14 +172,14 @@ internal object NotificationController {
             // 2. check popup first
             if (PreferenceData.First.isFirstNotificationInducePopup) {
                 // first == true & acquire >= 5
-                val checkTicketAcquireCount = PreferenceData.Ticket.acquireTotalCount >= RemoteContract.notificationSetting.induceTicketCount
+                val checkTicketAcquireCount = PreferenceData.Ticket.acquireTotalCount >= SettingContractor.notificationSetting.induceTicketCount
                 if (checkTicketAcquireCount) {
                     PreferenceData.First.update(isFirstNotificationInducePopup = false)
                     DialogController.showNotificationPopup(activity = ownerActivity)
                 }
             } else {
                 // first == false && check popup time
-                val checkPopupTime = (DateTime().millis - PreferenceData.Notification.popupCheckTime) > (RemoteContract.notificationSetting.inducePeriod * 1000)
+                val checkPopupTime = (DateTime().millis - PreferenceData.Notification.popupCheckTime) > (SettingContractor.notificationSetting.inducePeriod * 1000)
                 if (checkPopupTime) {
                     DialogController.showNotificationPopup(activity = ownerActivity)
                 }
@@ -188,7 +191,7 @@ internal object NotificationController {
         internal fun requestNotificationLog(eventParamValue: String) {
             val currentTIme = DateTime().toString("yyyyMMdd")
             if (currentTIme != PreferenceData.Notification.syncLogDate) {
-                CoreDataContract(blockCode = RouletteConfig.blockCode).let {
+                CoreApiContractor(blockType = RouletteConfig.blockType).let {
                     it.postEventLog(eventKey = "view:notification-bar", eventParam = hashMapOf("source" to eventParamValue))
                     PreferenceData.Notification.update(syncLogDate = currentTIme)
                 }
@@ -239,7 +242,7 @@ internal object NotificationController {
 
         // region { Host Notification enabled }
         internal fun setNotificationEnabled(context: Context, callback: (isRunningNotification: Boolean) -> Unit = {}) {
-            if (!RemoteContract.appInfoSetting.allowTicketBox || !useHostNotification) {
+            if (!SettingContractor.appInfoSetting.allowTicketBox || !useHostNotification) {
                 return
             }
             when (PreferenceData.Notification.allowHost) {
@@ -262,7 +265,7 @@ internal object NotificationController {
 
 
         fun checkAndStartNotification(context: Context, callback: (success: Boolean) -> Unit = {}) {
-            if (!RemoteContract.appInfoSetting.allowTicketBox || !AccountContract.isLogin) {
+            if (!SettingContractor.appInfoSetting.allowTicketBox || !AccountContractor.isLogin) {
                 callback(false)
                 return
             }
@@ -283,7 +286,7 @@ internal object NotificationController {
                         if (allowHostApp) {
                             PreferenceData.Notification.update(allow = true)
                             setNotificationEnabled(context = activity) {
-                                EventBusContract.postNotificationStatusUpdate()
+                                EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
                             }
                         } else {
                             if (enabled) {
@@ -315,14 +318,14 @@ internal object NotificationController {
             // 2. check popup first
             if (PreferenceData.First.isFirstNotificationInducePopup) {
                 // first == true & acquire >= 5
-                val checkTicketAcquireCount = PreferenceData.Ticket.acquireTotalCount >= RemoteContract.notificationSetting.induceTicketCount
+                val checkTicketAcquireCount = PreferenceData.Ticket.acquireTotalCount >= SettingContractor.notificationSetting.induceTicketCount
                 if (checkTicketAcquireCount) {
                     PreferenceData.First.update(isFirstNotificationInducePopup = false)
                     showNotificationPopup(activity = ownerActivity)
                 }
             } else {
                 // first == false && check popup time
-                val checkPopupTime = (DateTime().millis - PreferenceData.Notification.popupCheckTime) > (RemoteContract.notificationSetting.inducePeriod * 1000)
+                val checkPopupTime = (DateTime().millis - PreferenceData.Notification.popupCheckTime) > (SettingContractor.notificationSetting.inducePeriod * 1000)
                 if (checkPopupTime) {
                     showNotificationPopup(activity = ownerActivity)
                 }
@@ -338,7 +341,7 @@ internal object NotificationController {
                     if (allowHostApp) {
                         PreferenceData.Notification.update(allow = true, popupCheckTime = DateTime().millis)
                         setNotificationEnabled(context = activity) {
-                            EventBusContract.postNotificationStatusUpdate()
+                            EventContractor.postNotificationStatusUpdate(blockType = BlockType.ROULETTE)
                         }
                     } else {
                         if (enabled) {
@@ -367,7 +370,7 @@ internal object NotificationController {
             }
             HostAppActionReceiver.updateListener = listener
             if (!isRegisteredReceiver) {
-                context.registerReceiver(HostAppActionReceiver, EventBusContract.makeWatcherFilter().apply {
+                context.registerReceiver(HostAppActionReceiver, EventContractor.makeWatcherFilter().apply {
                     addAction(Intent.ACTION_TIME_TICK)
                     addAction(Intent.ACTION_SCREEN_ON)
                     addAction(Intent.ACTION_SCREEN_OFF)
@@ -397,6 +400,7 @@ internal object NotificationController {
             lateinit var updateListener: IUpdateNotification
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                val parel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
                 when (val actionName = intent?.action) {
                     Intent.ACTION_TIME_TICK -> {
                         if (PreferenceData.Notification.allow) {

@@ -1,18 +1,17 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.support.ResNotice
 import com.avatye.cashblock.base.internal.server.entity.support.ResNoticeList
 import com.avatye.cashblock.base.internal.server.entity.support.ResPopupNotice
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
-object APISupport {
-    fun getNoticeList(appId: String, tokenizer: IServeToken, offset: Int = 0, limit: Int = 50, response: ServeResponse<ResNoticeList>) {
+internal object APISupport {
+    fun getNoticeList(blockType: BlockType, offset: Int = 0, limit: Int = 50, response: ServeResponse<ResNoticeList>) {
         ServeTask(
-            appId = appId,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BASIC,
-            tokenizer = tokenizer,
             method = ServeTask.Method.GET,
             requestUrl = "support/notices",
             acceptVersion = "1.0.0",
@@ -25,11 +24,10 @@ object APISupport {
         ).execute()
     }
 
-    fun getNoticeView(appId: String, tokenizer: IServeToken, noticeId: String, response: ServeResponse<ResNotice>) {
+    fun getNoticeView(blockType: BlockType, noticeId: String, response: ServeResponse<ResNotice>) {
         ServeTask(
-            appId = appId,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BASIC,
-            tokenizer = tokenizer,
             method = ServeTask.Method.GET,
             requestUrl = "support/notice",
             acceptVersion = "1.0.0",
@@ -39,11 +37,10 @@ object APISupport {
         ).execute()
     }
 
-    fun getPopups(appId: String, tokenizer: IServeToken, response: ServeResponse<ResPopupNotice>) {
+    fun getPopups(blockType: BlockType, response: ServeResponse<ResPopupNotice>) {
         ServeTask(
-            appId = appId,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BASIC,
-            tokenizer = tokenizer,
             method = ServeTask.Method.GET,
             requestUrl = "support/popups",
             acceptVersion = "1.0.0",

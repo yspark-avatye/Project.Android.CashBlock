@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avatye.cashblock.R
-import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.support.NoticeEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
@@ -76,9 +75,7 @@ internal class NoticeListActivity : AppBaseActivity() {
         val p = extraParcel<NoticeParcel>(NoticeParcel.NAME)
         if (p != null) {
             parcel = p
-            viewModel = NoticeListViewModel(
-                blockCode = BlockCode(blockType = parcel.blockType, blockId = parcel.blockId, blockSecret = parcel.blockSecret)
-            )
+            viewModel = NoticeListViewModel(blockType = p.blockType)
         } else {
             CoreUtil.showToast(R.string.acb_common_message_error)
             finish()
@@ -189,13 +186,7 @@ internal class NoticeListActivity : AppBaseActivity() {
                 itemView.setOnClickListener {
                     NoticeViewActivity.open(
                         activity = this@NoticeListActivity,
-                        parcel = NoticeParcel(
-                            blockId = parcel.blockId,
-                            blockSecret = parcel.blockSecret,
-                            blockType = parcel.blockType,
-                            headerType = HeaderView.HeaderType.SUB,
-                            noticeId = entity.noticeID
-                        )
+                        parcel = NoticeParcel(blockType = parcel.blockType, headerType = HeaderView.HeaderType.SUB, noticeId = entity.noticeID)
                     )
                 }
                 ib.listItemNoticeTitle.text = entity.subject

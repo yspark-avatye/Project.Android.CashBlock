@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.CoreConstants
+import com.avatye.cashblock.base.component.domain.entity.base.EntrySourceType
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
@@ -24,11 +25,14 @@ internal class IntroActivity : AppBaseActivity() {
 
     companion object {
         /** this activity start */
-        fun open(context: Context, source: Int = 0) {
+        fun open(
+            context: Context,
+            entrySource: EntrySourceType = EntrySourceType.DIRECT
+        ) {
             context.startActivity(
                 Intent(context, IntroActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    putExtra(IntroViewParcel.NAME, IntroViewParcel(source = source))
+                    putExtra(IntroViewParcel.NAME, IntroViewParcel(source = entrySource.value))
                 }
             )
         }
@@ -103,7 +107,7 @@ internal class IntroActivity : AppBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentViewWith(
             view = vb.root,
-            logKey = FeatureCore.CASHBLOCK_LOG_ROULETTE_INTRO,
+            logKey = CoreConstants.CASHBLOCK_LOG_ROULETTE_ENTER,
             logParam = hashMapOf("source" to (extraParcel<IntroViewParcel>(IntroViewParcel.NAME)?.source ?: 0))
         )
         // init view
@@ -122,7 +126,7 @@ internal class IntroActivity : AppBaseActivity() {
         vb.introViewPager.adapter = IntroPagerAdapter(supportFragmentManager)
         vb.introViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                logger.i { "$viewTag -> actionIntro -> onPageSelected -> position:$position" }
+                logger.i(viewName = viewTag) { "actionIntro -> onPageSelected -> position:$position" }
                 pagerIndex = position
             }
         })

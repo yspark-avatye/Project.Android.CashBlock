@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.avatye.cashblock.R
-import com.avatye.cashblock.base.block.BlockCode
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.CoreUtil
@@ -59,7 +58,7 @@ internal class NoticeViewActivity : AppBaseActivity() {
             vb.headerView.actionBack { finish() }
             // view-model
             val viewModel = NoticeViewViewModel.create(
-                blockCode = BlockCode(blockType = blockCode.blockType, blockId = parcel.blockId, blockSecret = parcel.blockSecret),
+                blockType = parcel.blockType,
                 viewModelStoreOwner = this@NoticeViewActivity
             )
             // view-model -> observe

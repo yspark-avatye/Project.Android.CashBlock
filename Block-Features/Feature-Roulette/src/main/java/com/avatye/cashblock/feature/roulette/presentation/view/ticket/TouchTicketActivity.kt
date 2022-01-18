@@ -10,12 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.isVisible
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketBalanceEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketRequestEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
-import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
@@ -24,8 +24,9 @@ import com.avatye.cashblock.base.library.ad.curator.popup.ICuratorPopupCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
-import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADPlacementType
@@ -52,8 +53,8 @@ internal class TouchTicketActivity : AppBaseActivity() {
         }
     }
 
-    private val appInfoSetting = RemoteContract.appInfoSetting
-    private val touchTicketSetting = RemoteContract.touchTicketSetting
+    private val appInfoSetting = SettingContractor.appInfoSetting
+    private val touchTicketSetting = SettingContractor.touchTicketSetting
 
     // view-binding
     private val vb: AcbsrActivityTouchTicketBinding by lazy {
@@ -180,7 +181,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
             vb.touchTicketLoadingImage.clearAnimation()
             vb.bannerLinearView.onDestroy()
         } catch (e: Exception) {
-            logger.e(throwable = e) { "$viewTag -> onDestroy" }
+            logger.e(viewName = viewTag, throwable = e) { "onDestroy" }
         }
     }
 
@@ -292,6 +293,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
                 loadingView?.dismiss()
                 if (model.result.needAgeVerification) {
                     DialogPopupAgeVerifyView.create(
+                        blockType = RouletteConfig.blockType,
                         ownerActivity = this@TouchTicketActivity,
                         callback = object : DialogPopupAgeVerifyView.IDialogAction {
                             override fun onClose() = finish()
@@ -334,23 +336,23 @@ internal class TouchTicketActivity : AppBaseActivity() {
             adQueueType = ADQueueType.TOUCH_TICKET_OPEN,
             callback = object : ICuratorQueueCallback {
                 override fun onLoaded(loader: ADLoaderBase) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
                     requestPopupAdvertise(openADLoader = loader)
                 }
 
                 override fun onOpened() {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onOpened" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onOpened" }
                     loadingAnimation?.stop()
                 }
 
                 override fun onComplete(success: Boolean) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onComplete" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onComplete" }
                     loadingAnimation?.stop()
                     actionTicketPiecesLoad()
                 }
 
                 override fun ondFailed(isBlocked: Boolean) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> ondFailed { allowNoAd: ${TicketController.TouchTicketAcquire.allowNoAd}, isBlocked: $isBlocked }" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> ondFailed { allowNoAd: ${TicketController.TouchTicketAcquire.allowNoAd}, isBlocked: $isBlocked }" }
                     loadingAnimation?.stop()
                     when (TicketController.TouchTicketAcquire.allowNoAd) {
                         true -> requestPopupAdvertise()
@@ -362,7 +364,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
                 }
 
                 override fun onNeedAgeVerification() {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onNeedAgeVerification" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onNeedAgeVerification" }
                     leakHandler.postDelayed({
                         loadingAnimation?.stop()
                         requestPopupAdvertise()
@@ -376,7 +378,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
         loadingAnimation?.start()
         val curatorPopupCallback = object : ICuratorPopupCallback {
             override fun oSuccess(adView: View, network: ADNetworkType) {
-                logger.i { "$viewTag -> CuratorPopup -> oSuccess" }
+                logger.i(viewName = viewTag) { "CuratorPopup -> oSuccess" }
                 loadingAnimation?.stop()
                 this@TouchTicketActivity.isExcludeADNetwork = AdvertiseController.allowExcludeADNetwork(ADPlacementType.TOUCH_TICKET, network.value)
                 vb.touchTicketAdContainer.isVisible = false
@@ -390,7 +392,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
             }
 
             override fun onFailure(isBlocked: Boolean) {
-                logger.i { "$viewTag -> #POPUP -> PopupADCoordinator -> onFailure { allowNoAd: ${TicketController.TouchTicketAcquire.allowNoAd}, isBlocked: $isBlocked }" }
+                logger.i(viewName = viewTag) { "#POPUP -> PopupADCoordinator -> onFailure { allowNoAd: ${TicketController.TouchTicketAcquire.allowNoAd}, isBlocked: $isBlocked }" }
                 loadingAnimation?.stop()
                 when (TicketController.TouchTicketAcquire.allowNoAd) {
                     true -> {
@@ -406,7 +408,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
             }
 
             override fun onNeedAgeVerification() {
-                logger.i { "$viewTag -> #POPUP -> PopupADCoordinator -> onNeedAgeVerification" }
+                logger.i(viewName = viewTag) { "#POPUP -> PopupADCoordinator -> onNeedAgeVerification" }
                 loadingAnimation?.stop()
                 vb.touchTicketAdContainer.isVisible = false
                 vb.touchTicketAdContent.removeAllViews()
@@ -427,7 +429,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
         if (currentCollectCount < piecesCount) {
             currentCollectCount++
             TicketController.TouchTicketAcquire.animateCollect(vb.touchTicketAcquirePieces, currentCollectCount)
-            logger.i { "$viewTag -> actionTicketCollect { currentCollectCount:$currentCollectCount, popupExposeCount: $popupExposeCount }" }
+            logger.i(viewName = viewTag) { "actionTicketCollect { currentCollectCount:$currentCollectCount, popupExposeCount: $popupExposeCount }" }
             if (!isPopupExposed && currentCollectCount >= popupExposeCount) {
                 leakHandler.post { showAdPopup() }
             }
@@ -448,7 +450,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
                 }
                 vb.touchTicketAdClosePosition.isVisible = isExcludeADNetwork
             } catch (e: Exception) {
-                logger.e(throwable = e) { "$viewTag -> showAdPopup()" }
+                logger.e(viewName = viewTag, throwable = e) { "showAdPopup()" }
             } finally {
                 popupExposeTime = DateTime.now().millis
                 vb.touchTicketAdContainer.isVisible = true

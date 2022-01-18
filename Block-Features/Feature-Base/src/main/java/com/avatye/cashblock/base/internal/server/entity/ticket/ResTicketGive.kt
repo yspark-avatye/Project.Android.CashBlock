@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResTicketGive : ServeSuccess() {
+internal class ResTicketGive : ServeSuccess() {
     var ticketBalanceEntity = TicketBalanceEntity()
         private set
 

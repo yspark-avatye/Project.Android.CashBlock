@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.avatye.cashblock.base.component.contract.PolicyContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
-import com.avatye.cashblock.base.component.contract.ViewOpenContract
+import com.avatye.cashblock.base.component.contract.business.PolicyContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.game.GameEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
@@ -18,9 +18,7 @@ import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.decor.GridDividerItemDecoration
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
-import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.feature.roulette.BuildConfig
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
@@ -46,9 +44,6 @@ internal class RouletteMainActivity : AppBaseActivity() {
 
     companion object {
         fun open(activity: Activity, close: Boolean = false) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "RouletteMainActivity -> open"
-            }
             activity.launch(
                 intent = Intent(activity, RouletteMainActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -59,9 +54,9 @@ internal class RouletteMainActivity : AppBaseActivity() {
         }
     }
 
-    private val appInfo = RemoteContract.appInfoSetting
-    private val touchTicketInfo = RemoteContract.touchTicketSetting
-    private val videoTicketInfo = RemoteContract.videoTicketSetting
+    private val appInfo = SettingContractor.appInfoSetting
+    private val touchTicketInfo = SettingContractor.touchTicketSetting
+    private val videoTicketInfo = SettingContractor.videoTicketSetting
 
     private val ticketViewModel: TicketViewModel by lazy {
         TicketViewModel.create(viewModelStoreOwner = this, lifecycleOwner = this)
@@ -75,6 +70,16 @@ internal class RouletteMainActivity : AppBaseActivity() {
 
     private val vb: AcbsrActivityRouletteMainBinding by lazy {
         AcbsrActivityRouletteMainBinding.inflate(LayoutInflater.from(this))
+    }
+
+    override fun receiveActionInspection() {
+        leakHandler.post {
+            ViewOpenContractor.openInspectionView(
+                activity = this@RouletteMainActivity,
+                blockType = RouletteConfig.blockType,
+                close = true
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,9 +134,9 @@ internal class RouletteMainActivity : AppBaseActivity() {
 
         // region { footer }
         vb.footerServiceTerm.setOnClickListener {
-            ViewOpenContract.openTermsView(
+            ViewOpenContractor.openTermsView(
                 activity = this,
-                blockCode = RouletteConfig.blockCode,
+                blockType = RouletteConfig.blockType,
                 headerType = HeaderView.HeaderType.POPUP,
                 close = false
             )
@@ -146,7 +151,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         // endregion
 
         // policy
-        PolicyContract.notifyUseAAID()
+        PolicyContractor.notifyUseAAID()
     }
 
     private fun observeRouletteListViewModel() {
@@ -255,10 +260,10 @@ internal class RouletteMainActivity : AppBaseActivity() {
     private fun popupPolling() {
         if (!isShowingDialogView) {
             RouletteConfig.popupNoticeController.requestPopups(ownerActivity = this@RouletteMainActivity) {
-                logger.i { "$viewTag -> popupPolling -> requestPopups -> complete" }
+                logger.i(viewName = viewTag) { "popupPolling -> requestPopups -> complete" }
                 MissionController.Attendance.sync(ownerActivity = this@RouletteMainActivity) {
-                    logger.i { "$viewTag -> popupPolling -> mission -> attendance -> complete" }
-                    if (RemoteContract.appInfoSetting.allowTicketBox) {
+                    logger.i(viewName = viewTag) { "popupPolling -> mission -> attendance -> complete" }
+                    if (SettingContractor.appInfoSetting.allowTicketBox) {
                         // notification -> induce popup
                         // -> battery optimize popup
                         when (NotificationController.Host.useHostNotification) {
@@ -275,7 +280,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         vb.bannerRewardPointContainer.isVisible = vb.bannerRewardView.hasReward
         vb.bannerRewardView.rewardCallback = object : BannerLinearRewardView.RewardCallback {
             override fun onReward(hasReward: Boolean) {
-                logger.i { "$viewTag -> initViewRewardBanner -> onReward { hasReward: $hasReward }" }
+                logger.i(viewName = viewTag) { "initViewRewardBanner -> onReward { hasReward: $hasReward }" }
                 val visible = vb.bannerRewardView.isVisible && hasReward
                 if (visible) {
                     with(vb.bannerRewardPoint) {
@@ -290,7 +295,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
             }
 
             override fun onAdFail() {
-                logger.i { "$viewTag -> initViewRewardBanner -> onAdFail" }
+                logger.i(viewName = viewTag) { "initViewRewardBanner -> onAdFail" }
                 vb.bannerRewardView.isVisible = false
                 vb.bannerRewardPointContainer.isVisible = false
             }

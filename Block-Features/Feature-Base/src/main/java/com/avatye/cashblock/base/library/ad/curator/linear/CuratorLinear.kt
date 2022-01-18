@@ -2,8 +2,7 @@ package com.avatye.cashblock.base.library.ad.curator.linear
 
 import android.content.Context
 import android.view.View
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.ILinearADCallback
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADLoader
@@ -34,21 +33,17 @@ class CuratorLinear(
     }
 
     fun release() {
-        try {
+        kotlin.runCatching {
             // log
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> release -> success"
-            }
+            logger.i(viewName = tagName) { "release -> success" }
             // ssp
             sspLoader?.release()
             sspLoader = null
             // native
             nativeLoader?.release()
             nativeLoader = null
-        } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release"
-            }
+        }.onFailure {
+            logger.e(viewName = tagName, throwable = it) { "release" }
         }
     }
 
@@ -90,16 +85,12 @@ class CuratorLinear(
     // region { ILinearADCallback - SSP }
     private inner class CallbackSSPAD : ILinearADCallback {
         override fun onLoadSuccess(view: View) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> SSP -> onLoadSuccess"
-            }
+            logger.i(viewName = tagName) { "SSP -> onLoadSuccess" }
             callback.oSuccess(view)
         }
 
         override fun onLoadFailed(isBlocked: Boolean) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> SSP -> onLoadFailed { isBlocked: $isBlocked, placementID: $sspPlacementID }"
-            }
+            logger.i(viewName = tagName) { "SSP -> onLoadFailed { isBlocked: $isBlocked, placementID: $sspPlacementID }" }
             if (isBlocked) {
                 callback.onFailure(isBlocked = isBlocked)
             } else {
@@ -112,16 +103,12 @@ class CuratorLinear(
     // region { ILinearADCallback - Native }
     private inner class CallbackNativeAD : ILinearADCallback {
         override fun onLoadSuccess(view: View) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> Native -> onLoadSuccess"
-            }
+            logger.i(viewName = tagName) { "Native -> onLoadSuccess" }
             callback.oSuccess(view)
         }
 
         override fun onLoadFailed(isBlocked: Boolean) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> Native -> onLoadFailed { isBlocked: $isBlocked, placementID: $nativePlacementID }"
-            }
+            logger.i(viewName = tagName) { "Native -> onLoadFailed { isBlocked: $isBlocked, placementID: $nativePlacementID }" }
             callback.onFailure(isBlocked = isBlocked)
         }
     }

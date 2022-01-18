@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.R
 import com.avatye.cashblock.base.library.LogHandler
@@ -49,9 +49,9 @@ object CoreUtil {
 
     // region # toast
     fun showToast(message: String, isShowLong: Boolean = false) {
-        Toast(FeatureCore.application).let {
+        Toast(Core.application).let {
             it.duration = if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
-            it.view = LayoutInflater.from(FeatureCore.application).inflate(R.layout.acb_common_widget_toast, null).apply {
+            it.view = LayoutInflater.from(Core.application).inflate(R.layout.acb_common_widget_toast, null).apply {
                 findViewById<TextView>(R.id.toast_text).text = message
             }
             it.show()
@@ -59,9 +59,9 @@ object CoreUtil {
     }
 
     fun showToast(@StringRes message: Int, isShowLong: Boolean = false) {
-        Toast(FeatureCore.application).let {
+        Toast(Core.application).let {
             it.duration = if (isShowLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
-            it.view = LayoutInflater.from(FeatureCore.application).inflate(R.layout.acb_common_widget_toast, null).apply {
+            it.view = LayoutInflater.from(Core.application).inflate(R.layout.acb_common_widget_toast, null).apply {
                 findViewById<TextView>(R.id.toast_text).setText(message)
             }
             it.show()

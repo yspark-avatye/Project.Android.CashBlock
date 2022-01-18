@@ -1,17 +1,31 @@
 package com.avatye.cashblock.feature.offerwall.presentation
 
-import com.avatye.cashblock.base.block.BlockCode
+import android.os.Bundle
+import com.avatye.cashblock.R
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.model.app.CoreBaseActivity
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
+import com.avatye.cashblock.base.component.support.CoreUtil
+import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
-import com.avatye.cashblock.feature.offerwall.MODULE_NAME
 
 internal abstract class AppBaseActivity : CoreBaseActivity() {
-    protected val logger: LogHandler = LogHandler(MODULE_NAME)
 
-    override val blockCode: BlockCode
-        get() = OfferwallConfig.blockCode
+    override val blockType: BlockType = OfferwallConfig.blockType
 
-    override val blockName: String
-        get() = MODULE_NAME
+    private val _serviceType: ServiceType? by lazy {
+        extraParcel<ServiceNameParcel>(ServiceNameParcel.NAME)?.serviceType
+    }
+
+    protected val serviceType: ServiceType get() = _serviceType!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (_serviceType == null) {
+            CoreUtil.showToast(R.string.acb_common_message_error)
+            finish()
+        }
+    }
+
 }

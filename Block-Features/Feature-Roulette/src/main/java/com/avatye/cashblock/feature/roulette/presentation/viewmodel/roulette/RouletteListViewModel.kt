@@ -1,7 +1,7 @@
 package com.avatye.cashblock.feature.roulette.presentation.viewmodel.roulette
 
 import androidx.lifecycle.*
-import com.avatye.cashblock.base.component.contract.data.RouletteDataContract
+import com.avatye.cashblock.base.component.contract.api.RouletteApiContractor
 import com.avatye.cashblock.base.component.domain.entity.game.GameEntity
 import com.avatye.cashblock.base.component.domain.model.contract.Contract
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
@@ -15,8 +15,8 @@ internal class RouletteListViewModel : ViewModel() {
         }
     }
 
-    private val apiContract: RouletteDataContract by lazy {
-        RouletteDataContract(blockCode = RouletteConfig.blockCode)
+    private val api: RouletteApiContractor by lazy {
+        RouletteApiContractor(blockType = RouletteConfig.blockType)
     }
 
     // region { view model data }
@@ -26,7 +26,7 @@ internal class RouletteListViewModel : ViewModel() {
 
     fun request() {
         _result.value = Contract.postInProgress()
-        apiContract.retrieveList {
+        api.retrieveList {
             when (it) {
                 is ContractResult.Success -> _result.value = Contract.postComplete(it.contract)
                 is ContractResult.Failure -> _result.value = Contract.postError(it)

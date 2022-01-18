@@ -1,8 +1,9 @@
 package com.avatye.cashblock.unit.roulette.viewmodel.box
 
 import androidx.lifecycle.*
-import com.avatye.cashblock.base.component.contract.EventBusContract
-import com.avatye.cashblock.base.component.contract.data.BoxDataContract
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.api.BoxApiContractor
+import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxType
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
@@ -20,8 +21,8 @@ internal class TicketBoxViewModel : ViewModel() {
     }
 
     private val tagName = "TicketBoxViewModel"
-    private val apiContract: BoxDataContract by lazy {
-        BoxDataContract(blockCode = RouletteConfig.blockCode)
+    private val api: BoxApiContractor by lazy {
+        BoxApiContractor(blockType = RouletteConfig.blockType)
     }
 
     // region { view model data: available }
@@ -30,7 +31,7 @@ internal class TicketBoxViewModel : ViewModel() {
 
     fun requestBoxAvailable() {
         _boxAvailable.value = Contract.postInProgress()
-        apiContract.retrieveAvailable(boxType = BoxType.TICKET_BOX) {
+        api.retrieveAvailable(boxType = BoxType.TICKET_BOX) {
             when (it) {
                 is ContractResult.Failure -> _boxAvailable.value = Contract.postError(it)
                 is ContractResult.Success -> {
@@ -50,13 +51,13 @@ internal class TicketBoxViewModel : ViewModel() {
 
     fun requestBoxUse() {
         _boxUse.value = Contract.postInProgress()
-        apiContract.postUse(boxType = BoxType.TICKET_BOX) {
+        api.postUse(boxType = BoxType.TICKET_BOX) {
             when (it) {
                 is ContractResult.Failure -> _boxUse.value = Contract.postError(it)
                 is ContractResult.Success -> {
                     _boxUse.value = Contract.postComplete(it.contract)
                     TicketBoxController.updateComplete(isComplete = true)
-                    EventBusContract.postTicketBoxUpdate()
+                    EventContractor.postTicketBoxUpdate(blockType = BlockType.ROULETTE)
                 }
             }
         }

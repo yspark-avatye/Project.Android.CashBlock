@@ -2,7 +2,7 @@ package com.avatye.cashblock.base.library.rally.request
 
 import java.util.*
 
-data class RallyRequest(
+internal data class RallyRequest(
     val reqTag: String,
     val reqMethod: Int,
     val reqUrl: String,

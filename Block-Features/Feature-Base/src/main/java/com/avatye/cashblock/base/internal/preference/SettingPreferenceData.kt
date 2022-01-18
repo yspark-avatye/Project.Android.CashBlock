@@ -3,27 +3,27 @@ package com.avatye.cashblock.base.internal.preference
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
 
 internal object SettingPreferenceData {
 
-    private var valueOfNeedNotifyUserAAID = Preference.needNotifyUseAAID
+    private var _needNotifyUseAAID = Preference.needNotifyUseAAID
     val needNotifyUseAAID: Boolean
         get() {
-            return valueOfNeedNotifyUserAAID
+            return _needNotifyUseAAID
         }
 
 
-    private var valueOfPopupNoticeCloseDate = Preference.popupNoticeCloseDate
+    private var _popupNoticeCloseDate = Preference.popupNoticeCloseDate
     val popupNoticeCloseDate: String
         get() {
-            return valueOfPopupNoticeCloseDate
+            return _popupNoticeCloseDate
         }
 
-    private var valueOfDeviceAAID = Preference.deviceAAID
+    private var _deviceAAID = Preference.deviceAAID
     val deviceAAID: String
         get() {
-            return valueOfDeviceAAID
+            return _deviceAAID
         }
 
     fun update(
@@ -32,15 +32,15 @@ internal object SettingPreferenceData {
         deviceAAID: String? = null
     ) {
         needNotifyUseAAID?.let {
-            valueOfNeedNotifyUserAAID = it
+            _needNotifyUseAAID = it
             Preference.needNotifyUseAAID = it
         }
         popupNoticeCloseDate?.let {
-            valueOfPopupNoticeCloseDate = it
+            _popupNoticeCloseDate = it
             Preference.popupNoticeCloseDate = it
         }
         deviceAAID?.let {
-            valueOfDeviceAAID = it
+            _deviceAAID = it
             Preference.deviceAAID = it
         }
     }
@@ -49,7 +49,7 @@ internal object SettingPreferenceData {
     private object Preference {
         private const val preferenceName = "cash-block:core:setting"
         private val pref: SharedPreferences by lazy {
-            FeatureCore.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+            Core.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
         }
 
         private const val NEED_NOTIFY_USE_AAID = "need-notify-use-aaid"

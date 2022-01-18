@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResBoxUse : ServeSuccess() {
+internal class ResBoxUse : ServeSuccess() {
     var boxUse = BoxUseEntity()
         private set
 

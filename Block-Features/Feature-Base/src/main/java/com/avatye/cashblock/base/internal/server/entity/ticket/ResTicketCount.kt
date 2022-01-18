@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResTicketCount : ServeSuccess() {
+internal class ResTicketCount : ServeSuccess() {
     var ticketCountEntity = TicketCountEntity()
         private set
 

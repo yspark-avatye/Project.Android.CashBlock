@@ -7,8 +7,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class NoticeParcel(
-    val blockId: String,
-    val blockSecret: String,
     val blockType: BlockType,
     val headerType: HeaderView.HeaderType,
     val noticeId: String? = null
@@ -16,10 +14,4 @@ internal data class NoticeParcel(
     companion object {
         const val NAME = "parcel:notice"
     }
-
-    val isValid: Boolean
-        get() {
-            return blockId.isNotEmpty()
-                    && blockSecret.isNotEmpty()
-        }
 }

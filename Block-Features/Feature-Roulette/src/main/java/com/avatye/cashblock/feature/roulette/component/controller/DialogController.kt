@@ -1,6 +1,6 @@
 package com.avatye.cashblock.feature.roulette.component.controller
 
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.DeviceUtil
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.feature.roulette.R
@@ -46,7 +46,7 @@ internal object DialogController {
 
     internal fun showNotificationSettingDialog(activity: AppBaseActivity) {
         val settingMessage = activity.getString(R.string.acbsr_string_notification_need_system_setting)
-            .format(RemoteContract.appInfoSetting.appName)
+            .format(SettingContractor.appInfoSetting.appName)
         val messageDialog = MessageDialogHelper.determine(
             activity = activity,
             message = settingMessage,

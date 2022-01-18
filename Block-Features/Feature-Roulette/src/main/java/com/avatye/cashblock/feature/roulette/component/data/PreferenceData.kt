@@ -15,23 +15,23 @@ internal object PreferenceData {
 
     // region # ticket
     object Ticket {
-        private var Balance = Preference.Ticket.balance
-        val balance: Int get() = Balance
+        private var _balance = Preference.Ticket.balance
+        val balance: Int get() = _balance
 
-        private var TouchReceivableCount = Preference.Ticket.touchReceivableCount
-        val touchReceivableCount: Int get() = TouchReceivableCount
+        private var _touchReceivableCount = Preference.Ticket.touchReceivableCount
+        val touchReceivableCount: Int get() = _touchReceivableCount
 
-        private var TouchReceivableSyncTime = Preference.Ticket.touchReceivableSyncTime
-        val touchReceivableSyncTime: Long get() = TouchReceivableSyncTime
+        private var _touchReceivableSyncTime = Preference.Ticket.touchReceivableSyncTime
+        val touchReceivableSyncTime: Long get() = _touchReceivableSyncTime
 
-        private var VideoReceivableCount = Preference.Ticket.videoReceivableCount
-        val videoReceivableCount: Int get() = VideoReceivableCount
+        private var _videoReceivableCount = Preference.Ticket.videoReceivableCount
+        val videoReceivableCount: Int get() = _videoReceivableCount
 
-        private var VideoReceivableSyncTime = Preference.Ticket.videoReceivableSyncTime
-        val videoReceivableSyncTime: Long get() = VideoReceivableSyncTime
+        private var _videoReceivableSyncTime = Preference.Ticket.videoReceivableSyncTime
+        val videoReceivableSyncTime: Long get() = _videoReceivableSyncTime
 
-        private var AcquireTotalCount = Preference.Ticket.acquireTotalCount
-        val acquireTotalCount: Int get() = AcquireTotalCount
+        private var _acquireTotalCount = Preference.Ticket.acquireTotalCount
+        val acquireTotalCount: Int get() = _acquireTotalCount
 
         fun clear() {
             Preference.Ticket.clear()
@@ -54,27 +54,27 @@ internal object PreferenceData {
             acquireTotalCount: Int? = null
         ) {
             balance?.let {
-                Balance = it
+                _balance = it
                 Preference.Ticket.balance = it
             }
             touchReceivableCount?.let {
-                TouchReceivableCount = it
+                _touchReceivableCount = it
                 Preference.Ticket.touchReceivableCount = it
             }
             touchReceivableSyncTime?.let {
-                TouchReceivableSyncTime = it
+                _touchReceivableSyncTime = it
                 Preference.Ticket.touchReceivableSyncTime = it
             }
             videoReceivableCount?.let {
-                VideoReceivableCount = it
+                _videoReceivableCount = it
                 Preference.Ticket.videoReceivableCount = it
             }
             videoReceivableSyncTime?.let {
-                VideoReceivableSyncTime = it
+                _videoReceivableSyncTime = it
                 Preference.Ticket.videoReceivableSyncTime = it
             }
             acquireTotalCount?.let {
-                AcquireTotalCount = it
+                _acquireTotalCount = it
                 Preference.Ticket.acquireTotalCount = it
             }
         }
@@ -84,17 +84,17 @@ internal object PreferenceData {
 
     // region # banner reward
     object BannerReward {
-        private var Frequency = Preference.BannerReward.frequency
-        val frequency: Long get() = Frequency
+        private var _frequency = Preference.BannerReward.frequency
+        val frequency: Long get() = _frequency
 
-        private var Rewardable = Preference.BannerReward.rewardable
-        val rewardable: Boolean get() = Rewardable
+        private var _rewardable = Preference.BannerReward.rewardable
+        val rewardable: Boolean get() = _rewardable
 
-        private var Amount = Preference.BannerReward.amount
-        val amount: Int get() = Amount
+        private var _amount = Preference.BannerReward.amount
+        val amount: Int get() = _amount
 
-        private var TransactionId = Preference.BannerReward.transactionId
-        val transactionId: String get() = TransactionId
+        private var _transactionId = Preference.BannerReward.transactionId
+        val transactionId: String get() = _transactionId
 
         fun clear() {
             Preference.BannerReward.clear()
@@ -108,19 +108,19 @@ internal object PreferenceData {
 
         fun update(frequency: Long? = null, rewardable: Boolean? = null, amount: Int? = null, transactionId: String? = null) {
             frequency?.let {
-                Frequency = it
+                _frequency = it
                 Preference.BannerReward.frequency = it
             }
             rewardable?.let {
-                Rewardable = it
+                _rewardable = it
                 Preference.BannerReward.rewardable = it
             }
             amount?.let {
-                Amount = it
+                _amount = it
                 Preference.BannerReward.amount = it
             }
             transactionId?.let {
-                TransactionId = it
+                _transactionId = it
                 Preference.BannerReward.transactionId = it
             }
         }
@@ -130,20 +130,20 @@ internal object PreferenceData {
 
     // region # notification
     object Notification {
-        private var Allow = Preference.Notification.allow
-        val allow: Boolean get() = Allow
+        private var _allow = Preference.Notification.allow
+        val allow: Boolean get() = _allow
 
-        private var AllowHost = Preference.Notification.allowHost
-        val allowHost: Boolean get() = AllowHost
+        private var _allowHost = Preference.Notification.allowHost
+        val allowHost: Boolean get() = _allowHost
 
-        private var PopupCheckTime = Preference.Notification.popupCheckTime
-        val popupCheckTime: Long get() = PopupCheckTime
+        private var _popupCheckTime = Preference.Notification.popupCheckTime
+        val popupCheckTime: Long get() = _popupCheckTime
 
-        private var BatteryOptimizeDialogCheckDate = Preference.Notification.batteryOptimizeDialogCheckDate
-        val batteryOptimizeDialogCheckDate: Int get() = BatteryOptimizeDialogCheckDate
+        private var _batteryOptimizeDialogCheckDate = Preference.Notification.batteryOptimizeDialogCheckDate
+        val batteryOptimizeDialogCheckDate: Int get() = _batteryOptimizeDialogCheckDate
 
-        private var SyncLogDate = Preference.Notification.syncLogDate
-        val syncLogDate: String get() = SyncLogDate
+        private var _syncLogDate = Preference.Notification.syncLogDate
+        val syncLogDate: String get() = _syncLogDate
 
         fun clear() {
             Preference.Notification.clear()
@@ -157,23 +157,23 @@ internal object PreferenceData {
 
         fun update(allow: Boolean? = null, allowHost: Boolean? = null, popupCheckTime: Long? = null, batteryOptimizeDialogCheckDate: Int? = null, syncLogDate: String? = null) {
             allow?.let {
-                Allow = it
+                _allow = it
                 Preference.Notification.allow = it
             }
             allowHost?.let {
-                AllowHost = it
+                _allowHost = it
                 Preference.Notification.allowHost = it
             }
             popupCheckTime?.let {
-                PopupCheckTime = it
+                _popupCheckTime = it
                 Preference.Notification.popupCheckTime = it
             }
             batteryOptimizeDialogCheckDate?.let {
-                BatteryOptimizeDialogCheckDate = it
+                _batteryOptimizeDialogCheckDate = it
                 Preference.Notification.batteryOptimizeDialogCheckDate = it
             }
             syncLogDate?.let {
-                SyncLogDate = it
+                _syncLogDate = it
                 Preference.Notification.syncLogDate = it
             }
         }
@@ -184,19 +184,19 @@ internal object PreferenceData {
     // region # mission - attendance
     object Mission {
         object Attendance {
-            private var CheckDate = Preference.Mission.checkDate
-            private var ShowDate = Preference.Mission.showDate
-            private var Complete = Preference.Mission.complete
+            private var _checkDate = Preference.Mission.checkDate
+            private var _showDate = Preference.Mission.showDate
+            private var _complete = Preference.Mission.complete
 
             val needShowDialog: Boolean
                 get() {
-                    return ShowDate != DateTime().toString("yyyyMMdd")
+                    return _showDate != DateTime().toString("yyyyMMdd")
                 }
 
             val needRequestMission: Boolean
                 get() {
-                    return CheckDate != DateTime().toString("yyyyMMdd")
-                            && !Complete
+                    return _checkDate != DateTime().toString("yyyyMMdd")
+                            && !_complete
                 }
 
             fun clear() {
@@ -210,30 +210,30 @@ internal object PreferenceData {
 
             fun update(checkDateTime: DateTime? = null, showDateTime: DateTime? = null, complete: Boolean? = null) {
                 checkDateTime?.let {
-                    CheckDate = it.toString("yyyyMMdd")
+                    _checkDate = it.toString("yyyyMMdd")
                     Preference.Mission.checkDate = it.toString("yyyyMMdd")
                 }
                 showDateTime?.let {
-                    ShowDate = it.toString("yyyyMMdd")
+                    _showDate = it.toString("yyyyMMdd")
                     Preference.Mission.showDate = it.toString("yyyyMMdd")
                 }
                 complete?.let {
-                    Complete = it
+                    _complete = it
                     Preference.Mission.complete = it
                 }
             }
 
             private fun update(checkDateTime: String? = null, showDateTime: String? = null, complete: Boolean? = null) {
                 checkDateTime?.let {
-                    CheckDate = it
+                    _checkDate = it
                     Preference.Mission.checkDate = it
                 }
                 showDateTime?.let {
-                    ShowDate = it
+                    _showDate = it
                     Preference.Mission.showDate = it
                 }
                 complete?.let {
-                    Complete = it
+                    _complete = it
                     Preference.Mission.complete = it
                 }
             }
@@ -245,8 +245,8 @@ internal object PreferenceData {
 
     // region # ticket box
     object Box {
-        private var TicketBoxCheckDate = Preference.Box.ticketBoxCheckDate
-        val ticketBoxCheckDate: String get() = TicketBoxCheckDate
+        private var _ticketBoxCheckDate = Preference.Box.ticketBoxCheckDate
+        val ticketBoxCheckDate: String get() = _ticketBoxCheckDate
 
         fun clear() {
             Preference.Box.clear()
@@ -255,7 +255,7 @@ internal object PreferenceData {
 
         fun update(ticketBoxCheckDate: String? = null) {
             ticketBoxCheckDate?.let {
-                TicketBoxCheckDate = it
+                _ticketBoxCheckDate = it
                 Preference.Box.ticketBoxCheckDate = it
             }
         }
@@ -265,8 +265,8 @@ internal object PreferenceData {
 
     // region # popup-notice
     object PopupNotice {
-        private var PopupCloseDate: LinkedHashMap<String, Int> = makePopupDataCollection(Preference.PopupNotice.popupCloseDate)
-        val popupCloseDate: LinkedHashMap<String, Int> get() = PopupCloseDate
+        private var _popupCloseDate: LinkedHashMap<String, Int> = makePopupDataCollection(Preference.PopupNotice.popupCloseDate)
+        val popupCloseDate: LinkedHashMap<String, Int> get() = _popupCloseDate
 
         fun clear() {
             Preference.PopupNotice.clear()
@@ -275,7 +275,7 @@ internal object PreferenceData {
 
         fun update(popupCloseDate: Map<String, Int>? = null) {
             popupCloseDate?.let {
-                PopupCloseDate = it as LinkedHashMap<String, Int>
+                _popupCloseDate = it as LinkedHashMap<String, Int>
                 Preference.PopupNotice.popupCloseDate = JSONObject(it).toString()
             }
         }
@@ -302,14 +302,14 @@ internal object PreferenceData {
 
     // region # first
     object First {
-        private var IsFirstIntro = Preference.First.isFirstIntro
-        val isFirstIntro: Boolean get() = IsFirstIntro
+        private var _isFirstIntro = Preference.First.isFirstIntro
+        val isFirstIntro: Boolean get() = _isFirstIntro
 
-        private var IsFirstRouletteMessage = Preference.First.isFirstRouletteMessage
-        val isFirstRouletteMessage: Boolean get() = IsFirstRouletteMessage
+        private var _isFirstRouletteMessage = Preference.First.isFirstRouletteMessage
+        val isFirstRouletteMessage: Boolean get() = _isFirstRouletteMessage
 
-        private var IsFirstNotificationInducePopup = Preference.First.isFirstNotificationInducePopup
-        val isFirstNotificationInducePopup: Boolean get() = IsFirstNotificationInducePopup
+        private var _isFirstNotificationInducePopup = Preference.First.isFirstNotificationInducePopup
+        val isFirstNotificationInducePopup: Boolean get() = _isFirstNotificationInducePopup
 
         fun clear() {
             Preference.First.clear()
@@ -326,15 +326,15 @@ internal object PreferenceData {
             isFirstNotificationInducePopup: Boolean? = null
         ) {
             isFirstIntro?.let {
-                IsFirstIntro = it
+                _isFirstIntro = it
                 Preference.First.isFirstIntro = it
             }
             isFirstRouletteMessage?.let {
-                IsFirstRouletteMessage = it
+                _isFirstRouletteMessage = it
                 Preference.First.isFirstRouletteMessage = it
             }
             isFirstNotificationInducePopup?.let {
-                IsFirstNotificationInducePopup = it
+                _isFirstNotificationInducePopup = it
                 Preference.First.isFirstNotificationInducePopup = it
             }
         }
@@ -344,17 +344,17 @@ internal object PreferenceData {
 
     // region # floating button
     object FloatingLayout {
-        private var ButtonPosition = PointF(
+        private var _buttonPosition = PointF(
             Preference.FloatingLayout.buttonPositionX,
             Preference.FloatingLayout.buttonPositionY
         )
-        val buttonPosition: PointF get() = ButtonPosition
+        val buttonPosition: PointF get() = _buttonPosition
 
-        private var ShowTooltipMoveTip = Preference.FloatingLayout.showTooltipMoveTip
-        val showTooltipMoveTip: Boolean get() = ShowTooltipMoveTip
+        private var _showTooltipMoveTip = Preference.FloatingLayout.showTooltipMoveTip
+        val showTooltipMoveTip: Boolean get() = _showTooltipMoveTip
 
-        private var TooltipMessageCheckDate = Preference.FloatingLayout.tooltipMessageCheckDate
-        val tooltipMessageCheckDate: Int get() = TooltipMessageCheckDate
+        private var _tooltipMessageCheckDate = Preference.FloatingLayout.tooltipMessageCheckDate
+        val tooltipMessageCheckDate: Int get() = _tooltipMessageCheckDate
 
         fun clear() {
             Preference.FloatingLayout.clear()
@@ -374,16 +374,16 @@ internal object PreferenceData {
             tooltipMessageCheckDate: Int? = null
         ) {
             buttonPosition?.let {
-                ButtonPosition = it
+                _buttonPosition = it
                 Preference.FloatingLayout.buttonPositionX = it.x
                 Preference.FloatingLayout.buttonPositionY = it.y
             }
             showTooltipMoveTip?.let {
-                ShowTooltipMoveTip = it
+                _showTooltipMoveTip = it
                 Preference.FloatingLayout.showTooltipMoveTip = it
             }
             tooltipMessageCheckDate?.let {
-                TooltipMessageCheckDate = it
+                _tooltipMessageCheckDate = it
                 Preference.FloatingLayout.tooltipMessageCheckDate = it
             }
         }

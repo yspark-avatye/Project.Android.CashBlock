@@ -2,11 +2,10 @@ package com.avatye.cashblock.base.library.ad.curator.linear.loader
 
 import android.content.Context
 import android.view.LayoutInflater
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativeLinearBinding
-import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.Curator
+import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativeLinearBinding
 import com.igaworks.ssp.SSPErrorCode
 import com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd
 import com.igaworks.ssp.part.nativead.binder.AdPopcornSSPViewBinder
@@ -58,9 +57,7 @@ internal class LinearADNativeLoader(
     fun requestAD() {
         initialize {
             sspNativeAD?.loadAd() ?: run {
-                LogHandler.i(moduleName = MODULE_NAME) {
-                    "$tagName -> requestAD -> fail { loader: null, networkName: $networkName }"
-                }
+                logger.i(viewName = tagName) { "requestAD -> fail { loader: null, networkName: $networkName }" }
                 callback.onLoadFailed(isBlocked = false)
             }
         }
@@ -82,43 +79,31 @@ internal class LinearADNativeLoader(
             sspNativeAD = null
             weakContext.clear()
         } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release { networkName: $networkName }"
-            }
+            logger.e(viewName = tagName, throwable = e) { "release { networkName: $networkName }" }
         }
     }
 
     // region { INativeAdEventCallbackListener }
     override fun onNativeAdLoadSuccess() {
         sspNativeAD?.let {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> success { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "onNativeAdLoadSuccess -> success { networkName: $networkName }" }
             callback.onLoadSuccess(it)
         } ?: run {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> fail { loader: null, networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "onNativeAdLoadSuccess -> fail { loader: null, networkName: $networkName }" }
             callback.onLoadFailed(isBlocked = false)
         }
     }
 
     override fun onImpression() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onImpression { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onImpression { networkName: $networkName }" }
     }
 
     override fun onClicked() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onClicked { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onClicked { networkName: $networkName }" }
     }
 
     override fun onNativeAdLoadFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onNativeAdLoadFailed { code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onNativeAdLoadFailed { code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }" }
         callback.onLoadFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }
     // endregion

@@ -2,10 +2,12 @@ package com.avatye.cashblock.base.library.ad.curator.queue.loader.interstitial
 
 import android.app.Activity
 import android.graphics.Color
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.base.library.ad.curator.Curator
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
+import com.avatye.cashblock.base.library.ad.curator.Curator
+import com.avatye.cashblock.base.library.ad.curator.popup.loader.PopupADLoader
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderType
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.IADLoaderCallback
@@ -57,9 +59,7 @@ internal class InterstitialADLoader(
     override fun requestAD() {
         initialize {
             sspInterstitialAD?.loadAd() ?: run {
-                LogHandler.i(moduleName = MODULE_NAME) {
-                    "$tagName -> requestAD -> fail { loader: null, networkName: $networkName }"
-                }
+                logger.i(viewName = PopupADLoader.tagName) { "requestAD -> fail { loader: null, networkName: $networkName }" }
                 callback.ondFailed(isBlocked = false)
             }
         }
@@ -97,29 +97,25 @@ internal class InterstitialADLoader(
 
     // region { IInterstitialEventCallbackListener }
     override fun OnInterstitialLoaded() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialLoaded { networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "OnInterstitialLoaded { networkName: $networkName }" }
         callback.onLoaded()
     }
 
     override fun OnInterstitialReceiveFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialReceiveFailed { pid: $placementID, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
+        logger.i(viewName = PopupADLoader.tagName) {
+            "OnInterstitialReceiveFailed { pid: $placementID, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
         }
         callback.ondFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }
 
     override fun OnInterstitialOpened() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialOpened { networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "OnInterstitialOpened { networkName: $networkName }" }
         callback.onOpened()
     }
 
     override fun OnInterstitialOpenFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialOpenFailed { pid: $placementID, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
+        logger.i(viewName = PopupADLoader.tagName) {
+            "OnInterstitialOpenFailed { pid: $placementID, code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
         }
         callback.ondFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }
@@ -135,16 +131,12 @@ internal class InterstitialADLoader(
      * @param reason reason
      */
     override fun OnInterstitialClosed(reason: Int) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialClosed { reason: $reason, networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "OnInterstitialClosed { reason: $reason, networkName: $networkName }" }
         callback.onClosed(isCompleted = true)
     }
 
     override fun OnInterstitialClicked() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnInterstitialClicked { networkName: $networkName }"
-        }
+        logger.i(viewName = PopupADLoader.tagName) { "OnInterstitialClicked { networkName: $networkName }" }
     }
     // endregion
 }

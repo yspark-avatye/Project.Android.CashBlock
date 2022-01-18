@@ -6,7 +6,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import org.json.JSONObject
 
-class ResPublisherInitialize : ServeSuccess() {
+internal class ResPublisherInitialize : ServeSuccess() {
     var publisher = PublisherInitializeEntity()
         private set
 

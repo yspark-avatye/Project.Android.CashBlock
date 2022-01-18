@@ -1,7 +1,7 @@
 package com.avatye.cashblock.feature.roulette.presentation.viewmodel.winner
 
 import androidx.lifecycle.*
-import com.avatye.cashblock.base.component.contract.data.RouletteDataContract
+import com.avatye.cashblock.base.component.contract.api.RouletteApiContractor
 import com.avatye.cashblock.base.component.domain.entity.game.WinnerMessageEntity
 import com.avatye.cashblock.base.component.domain.model.contract.Contract
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
@@ -16,15 +16,15 @@ internal class WinnerViewModel : ViewModel() {
         }
     }
 
-    private val apiContract: RouletteDataContract by lazy {
-        RouletteDataContract(blockCode = RouletteConfig.blockCode)
+    private val api: RouletteApiContractor by lazy {
+        RouletteApiContractor(blockType = RouletteConfig.blockType)
     }
 
     private val _contents = MutableLiveData<ViewModelResult<MutableList<WinnerItemEntity>>>()
     val contents: LiveData<ViewModelResult<MutableList<WinnerItemEntity>>> get() = _contents
 
     fun request() {
-        apiContract.retrieveWinnerBoardList {
+        api.retrieveWinnerBoardList {
             when (it) {
                 is ContractResult.Success -> _contents.value = modelConvert(models = Contract.postComplete(it.contract).result)
                 is ContractResult.Failure -> _contents.value = Contract.postError(it)
@@ -34,7 +34,7 @@ internal class WinnerViewModel : ViewModel() {
 
     fun add(participateId: String, winnerMessage: String, callback: (ViewModelResult<Boolean>) -> Unit) {
         callback(Contract.postInProgress())
-        apiContract.postWinnerBoard(participateId = participateId, message = winnerMessage) {
+        api.postWinnerBoard(participateId = participateId, message = winnerMessage) {
             when (it) {
                 is ContractResult.Success -> callback(Contract.postComplete(true))
                 is ContractResult.Failure -> callback(Contract.postError(it))

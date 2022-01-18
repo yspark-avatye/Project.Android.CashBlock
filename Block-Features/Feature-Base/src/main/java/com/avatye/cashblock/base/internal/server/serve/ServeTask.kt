@@ -3,7 +3,14 @@ package com.avatye.cashblock.base.internal.server.serve
 import android.content.Context
 import android.os.Build
 import com.android.volley.Request
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.business.EventContractor
+import com.avatye.cashblock.base.component.domain.entity.app.AppEnvironment
+import com.avatye.cashblock.base.component.domain.entity.app.AppInspection
+import com.avatye.cashblock.base.component.support.toBase64
+import com.avatye.cashblock.base.internal.preference.AccountPreferenceData
+import com.avatye.cashblock.base.library.miscellaneous.toDateTimeValue
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.library.rally.Rally
 import com.avatye.cashblock.base.library.rally.request.RallyRequest
@@ -12,9 +19,8 @@ import com.avatye.cashblock.base.library.rally.response.RallyResponse
 import com.avatye.cashblock.base.library.rally.response.RallySuccess
 
 internal class ServeTask<T : ServeSuccess>(
-    private val appId: String? = null,
+    private val blockType: BlockType,
     private val authorization: Authorization,
-    private val tokenizer: IServeToken? = null,
     private val method: Method,
     private val requestUrl: String,
     private val acceptVersion: String,
@@ -28,11 +34,11 @@ internal class ServeTask<T : ServeSuccess>(
     companion object {
         private const val URL = "https://%s.roulette.avatye.com"
         private val baseUrl: String by lazy {
-            when (FeatureCore.appEnvironment) {
-                ServeEnvironment.DEV -> URL.format("api-dev")
-                ServeEnvironment.TEST, ServeEnvironment.QA -> URL.format("api-test")
-                ServeEnvironment.STAGE -> URL.format("api-stage")
-                ServeEnvironment.LIVE -> URL.format("api")
+            when (Core.appEnvironment) {
+                AppEnvironment.DEV -> URL.format("api-dev")
+                AppEnvironment.TEST, AppEnvironment.QA -> URL.format("api-test")
+                AppEnvironment.STAGE -> URL.format("api-stage")
+                AppEnvironment.LIVE -> URL.format("api")
             }
         }
 
@@ -73,6 +79,20 @@ internal class ServeTask<T : ServeSuccess>(
     }
     // endregion
 
+    // region # Token
+    private val tokenOfBasic: String
+        get() = when (Core.isInitialized) {
+            true -> "Basic %s".format("${Core.appId}:${Core.appSecret}".toBase64)
+            false -> ""
+        }
+
+    private val tokenOfBearer: String
+        get() = when (Core.isInitialized) {
+            true -> "bearer ${AccountPreferenceData.accessToken}"
+            false -> ""
+        }
+    // endregion
+
     private var tag: String = "Serve"
     fun withTag(tag: String) = apply {
         this.tag = tag
@@ -96,13 +116,13 @@ internal class ServeTask<T : ServeSuccess>(
         }
 
         Rally.addToRequest(
-            context = FeatureCore.application,
+            context = Core.application,
             request = RallyRequest(
                 reqTag = tag,
                 reqMethod = method.value,
                 reqUrl = "$baseUrl/$requestUrl",
                 reqHeader = makeHeaderArgs(),
-                reqBody = makeBodyArgs()
+                reqBody = argsBody
             ),
             response = rallyResponse
         )
@@ -113,30 +133,19 @@ internal class ServeTask<T : ServeSuccess>(
             this["x-device-os"] = "android"
             this["x-device-os-version"] = "${Build.VERSION.SDK_INT}"
             this["x-device-model"] = "${Build.MODEL}:${Build.MANUFACTURER}"
-            this["x-app-package"] = FeatureCore.appPackageName
-            this["x-app-version-code"] = FeatureCore.appVersionCode
-            this["x-app-version-name"] = FeatureCore.appVersionName
-            this["x-app-service-name"] = FeatureCore.appServiceName
+            this["x-app-package"] = Core.appPackageName
+            this["x-app-version-code"] = Core.appVersionCode
+            this["x-app-version-name"] = Core.appVersionName
             this["Content-Type"] = "application/json"
             this["accept-version"] = acceptVersion
-            tokenizer?.let {
-                this["Authorization"] = when (authorization) {
-                    Authorization.BASIC -> "Basic ${it.makeBasicToken()}"
-                    Authorization.BEARER -> "bearer ${it.makeBearerToken()}"
-                }
+            this["Authorization"] = when (authorization) {
+                Authorization.BASIC -> tokenOfBasic
+                Authorization.BEARER -> tokenOfBearer
             }
             argsHeader?.let {
                 for ((key, value) in it) {
                     this[key] = value
                 }
-            }
-        }
-    }
-
-    private fun makeBodyArgs() = (argsBody ?: HashMap<String, Any>()).apply {
-        if (!this.containsKey("appID")) {
-            appId?.let {
-                this["appID"] = it
             }
         }
     }
@@ -159,13 +168,25 @@ internal class ServeTask<T : ServeSuccess>(
             responseEntity.setResponseRawValue(response.body)
             responseCallback.onSuccess(responseEntity)
         } catch (e: Exception) {
-            responseCallback.onFailure(
-                failure = ServeFailure(message = e.message ?: "unknown error")
-            )
+            responseCallback.onFailure(failure = ServeFailure(message = e.message ?: "unknown error"))
         }
     }
 
     private fun parseError(error: RallyFailure) {
+        // status Unauthorized
+        if (error.statusCode == 401) {
+            EventContractor.postUnauthorized(blockType = blockType)
+        }
+        // status Forbidden
+        if (error.statusCode == 403) {
+            EventContractor.postForbidden(blockType = blockType)
+        }
+        // status Inspection
+        if (error.statusCode == 503 || error.statusCode == 504) {
+            Core.appInspection = makeInspectionEntity(rallyFailure = error)
+            EventContractor.postInspection(blockType = blockType)
+        }
+
         responseCallback.onFailure(
             failure = ServeFailure(
                 statusCode = error.statusCode,
@@ -174,5 +195,19 @@ internal class ServeTask<T : ServeSuccess>(
                 body = error.body
             )
         )
+    }
+
+    private fun makeInspectionEntity(rallyFailure: RallyFailure): AppInspection? {
+        var entity: AppInspection? = null
+        rallyFailure.body?.let {
+            entity = AppInspection(
+                blockType = blockType,
+                fromDateTime = it.toDateTimeValue("startDateTime"),
+                toDateTime = it.toDateTimeValue("endDateTime"),
+                message = it.toStringValue("message"),
+                link = it.toStringValue("link")
+            )
+        }
+        return entity
     }
 }

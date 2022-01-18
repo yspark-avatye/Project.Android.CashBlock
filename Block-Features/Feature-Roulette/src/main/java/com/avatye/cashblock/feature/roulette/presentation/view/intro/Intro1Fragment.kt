@@ -2,7 +2,7 @@ package com.avatye.cashblock.feature.roulette.presentation.view.intro
 
 import android.os.Bundle
 import android.view.View
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.toHtml
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrFragmentIntro1Binding
@@ -18,11 +18,11 @@ internal class Intro1Fragment : AppBaseFragment<AcbsrFragmentIntro1Binding>(Acbs
         super.onViewCreated(view, savedInstanceState)
         with(binding.introText11) {
             text = getString(R.string.acbsr_intro_1_1)
-                .format(RemoteContract.appInfoSetting.rouletteName)
+                .format(SettingContractor.appInfoSetting.rouletteName)
         }
         with(binding.introText13) {
             text = getString(R.string.acbsr_intro_1_3)
-                .format(RemoteContract.appInfoSetting.pointName)
+                .format(SettingContractor.appInfoSetting.pointName)
                 .toHtml
         }
     }

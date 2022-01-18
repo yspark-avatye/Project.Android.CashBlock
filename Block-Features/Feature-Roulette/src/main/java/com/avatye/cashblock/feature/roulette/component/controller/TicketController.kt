@@ -7,12 +7,13 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.widget.AppCompatImageView
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.listener.ILoginListener
 import com.avatye.cashblock.base.component.support.AnimatorEventCallback
 import com.avatye.cashblock.base.component.support.toPX
-import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.TouchTicketLiveData
 import com.avatye.cashblock.feature.roulette.component.livedata.VideoTicketLiveData
@@ -58,21 +59,21 @@ internal object TicketController {
 
         val allowNoAd: Boolean
             get() {
-                return RemoteContract.touchTicketSetting.allowNoAd
+                return SettingContractor.touchTicketSetting.allowNoAd
             }
 
         val popupExposeCount: Int
             get() {
-                val interval = RemoteContract.touchTicketSetting.popAD.interval
+                val interval = SettingContractor.touchTicketSetting.popAD.interval
                 return interval - intervalRange[Random.nextInt(intervalRange.size - 1)]
             }
 
 
         fun popupPosition(allowExcludeADNetwork: Boolean): Int {
             val position = if (allowExcludeADNetwork) {
-                ticketHeight * RemoteContract.touchTicketSetting.popAD.excludePosition
+                ticketHeight * SettingContractor.touchTicketSetting.popAD.excludePosition
             } else {
-                ticketHeight * RemoteContract.touchTicketSetting.popAD.position
+                ticketHeight * SettingContractor.touchTicketSetting.popAD.position
             }
             return position.toPX.toInt()
         }
@@ -117,7 +118,6 @@ internal object TicketController {
         }
     }
 
-
     object VideoTicketAcquire {
         fun animateComplete(targetView: View, callback: () -> Unit) {
             AnimatorSet().apply {
@@ -137,57 +137,48 @@ internal object TicketController {
         }
     }
 
-
     // outer
     internal object Session {
         fun syncTicketCondition(callback: () -> Unit) {
             checkLogin { success ->
-                if (success) {
-                    checkBalance {
-                        checkCondition {
-                            callback()
-                        }
-                    }
-                } else {
-                    callback()
+                when (success) {
+                    true -> checkBalance { checkCondition { callback() } }
+                    false -> callback()
                 }
             }
         }
 
-
         fun checkTicketCondition(listener: ITicketCount) {
             checkLogin { success ->
-                if (success) {
-                    checkBalance { balance ->
+                when (success) {
+                    true -> checkBalance { balance ->
                         checkCondition { condition ->
                             listener.callback(balance = balance, condition = condition)
                         }
                     }
-                } else {
-                    listener.callback(balance = -1, condition = -1)
+                    false -> listener.callback(balance = -1, condition = -1)
                 }
             }
         }
 
-
         private fun checkLogin(callback: (success: Boolean) -> Unit) {
-            when (AccountContract.isLogin) {
+            when (AccountContractor.isLogin) {
                 true -> callback(true)
-                false -> AccountContract.login(callback)
+                false -> AccountContractor.login(blockType = RouletteConfig.blockType, listener = object : ILoginListener {
+                    override fun onSuccess() = callback(true)
+                    override fun onFailure(reason: String) = callback(false)
+                })
             }
         }
 
-
         private fun checkBalance(callback: (balance: Int) -> Unit = {}) {
-            if (TicketBalanceLiveData.balance >= 0) {
-                callback(TicketBalanceLiveData.balance)
-            } else {
-                TicketBalanceLiveData.synchronization { _, syncValue ->
+            when (TicketBalanceLiveData.balance >= 0) {
+                true -> callback(TicketBalanceLiveData.balance)
+                false -> TicketBalanceLiveData.synchronization { _, syncValue ->
                     callback(syncValue)
                 }
             }
         }
-
 
         private fun checkCondition(callback: (condition: Int) -> Unit) {
             TouchTicketLiveData.synchronizationFrequency { touch ->

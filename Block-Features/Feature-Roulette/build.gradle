@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'maven-publish'
 }
 
 android {
@@ -46,4 +47,17 @@ dependencies {
     implementation "com.google.android.material:material:$dependency_version_material"
     implementation files('libs/adman_sdk_20210421.jar')
     api project(':Block-Features:Feature-Base')
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = "$maven_group_id"
+                artifactId = "${maven_artifact_id}-roulette"
+                version = "$app_version_name"
+            }
+        }
+    }
 }

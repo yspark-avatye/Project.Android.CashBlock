@@ -8,11 +8,11 @@ import android.provider.Settings
 import androidx.annotation.StringRes
 import com.avatye.cashblock.BuildConfig
 import com.avatye.cashblock.R
-import com.avatye.cashblock.base.FeatureCore
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.block.BlockCode
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.block.BlockType
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.widget.dialog.DialogMessageView
 import com.avatye.cashblock.base.library.LogHandler
 import java.util.*
@@ -172,9 +172,9 @@ object MessageDialogHelper {
         }
     }
 
-    fun requestSuggestion(activity: Activity, blockCode: BlockCode) {
+    fun requestSuggestion(activity: Activity, blockType: BlockType) {
         try {
-            val appInfoSetting = RemoteContract.appInfoSetting
+            val appInfoSetting = SettingContractor.appInfoSetting
             val suggestionText = "mailto:help@avatye.com"
                 .plus("?subject=${Uri.encode("[${appInfoSetting.appName}] 문의")}")
                 .plus("&body=")
@@ -191,11 +191,12 @@ object MessageDialogHelper {
                 // os
                 .plus(Uri.encode("\nOSVersion: ${Build.VERSION.SDK_INT}"))
                 // app
-                .plus(Uri.encode("\nApp-ID: ${blockCode.blockId}"))
+                .plus(Uri.encode("\nApp-ID: ${Core.appId}"))
                 .plus(Uri.encode("\nApp-Name: ${appInfoSetting.appName}"))
-                .plus(Uri.encode("\nApp-Version: ${FeatureCore.appVersionName}"))
+                .plus(Uri.encode("\nApp-Version: ${Core.appVersionName}"))
+                .plus(Uri.encode("\nApp-BlockName: ${blockType.name}"))
                 // sdk
-                .plus(Uri.encode("\nSDK-UserID: ${AccountContract.sdkUserID}"))
+                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserId}"))
                 .plus(Uri.encode("\nSDK-Version: ${BuildConfig.X_BUILD_SDK_VERSION_NAME}"))
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse(suggestionText)
@@ -208,9 +209,9 @@ object MessageDialogHelper {
     }
 
 
-    fun requestAlliance(activity: Activity, blockCode: BlockCode) {
+    fun requestAlliance(activity: Activity, blockType: BlockType) {
         try {
-            val appInfoSetting = RemoteContract.appInfoSetting
+            val appInfoSetting = SettingContractor.appInfoSetting
             val suggestionText = "mailto:business@avatye.com"
                 .plus("?subject=${Uri.encode("[캐시룰렛] 제휴 문의")}")
                 .plus("&body=")
@@ -218,11 +219,12 @@ object MessageDialogHelper {
                 .plus(Uri.encode("\n--------------------"))
                 .plus(Uri.encode("\nSystem: Android"))
                 // app
-                .plus(Uri.encode("\nApp-ID: ${blockCode.blockId}"))
+                .plus(Uri.encode("\nApp-ID: ${Core.appId}"))
                 .plus(Uri.encode("\nApp-Name: ${appInfoSetting.appName}"))
-                .plus(Uri.encode("\nApp-Version: ${FeatureCore.appVersionName}"))
+                .plus(Uri.encode("\nApp-Version: ${Core.appVersionName}"))
+                .plus(Uri.encode("\nApp-BlockName: ${blockType.name}"))
                 // sdk
-                .plus(Uri.encode("\nSDK-UserID: ${AccountContract.sdkUserID}"))
+                .plus(Uri.encode("\nSDK-UserID: ${AccountContractor.sdkUserId}"))
                 .plus(Uri.encode("\nSDK-Version: ${BuildConfig.X_BUILD_SDK_VERSION_NAME}"))
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse(suggestionText)
@@ -240,17 +242,17 @@ object MessageDialogHelper {
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
                     action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                    putExtra(Settings.EXTRA_APP_PACKAGE, FeatureCore.appPackageName)
+                    putExtra(Settings.EXTRA_APP_PACKAGE, Core.appPackageName)
                 }
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                     action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                    putExtra("app_package", FeatureCore.appPackageName)
+                    putExtra("app_package", Core.appPackageName)
                     putExtra("app_uid", activity.applicationInfo?.uid)
                 }
                 else -> {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                     addCategory(Intent.CATEGORY_DEFAULT)
-                    data = Uri.parse("package:${FeatureCore.appPackageName}")
+                    data = Uri.parse("package:${Core.appPackageName}")
                 }
             }
         })

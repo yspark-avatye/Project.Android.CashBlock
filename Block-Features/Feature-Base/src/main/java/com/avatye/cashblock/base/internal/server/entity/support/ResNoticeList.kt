@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.*
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONArray
 
-class ResNoticeList : ServeSuccess() {
+internal class ResNoticeList : ServeSuccess() {
     val noticeEntities: MutableList<NoticeEntity> = mutableListOf()
 
     override fun makeBody(responseValue: String) {

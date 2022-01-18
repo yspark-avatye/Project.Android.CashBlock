@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'maven-publish'
 }
 
 android {
@@ -45,4 +46,17 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$dependency_version_appcompat"
     implementation "com.google.android.material:material:$dependency_version_material"
     api project(':Block-Features:Feature-Base')
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = "$maven_group_id"
+                artifactId = "${maven_artifact_id}-offerwall"
+                version = "$app_version_name"
+            }
+        }
+    }
 }

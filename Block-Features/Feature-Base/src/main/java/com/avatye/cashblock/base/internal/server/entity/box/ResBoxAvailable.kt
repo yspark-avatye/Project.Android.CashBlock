@@ -5,7 +5,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toBooleanValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResBoxAvailable : ServeSuccess() {
+internal class ResBoxAvailable : ServeSuccess() {
     var boxAvailable = BoxAvailableEntity()
         private set
 

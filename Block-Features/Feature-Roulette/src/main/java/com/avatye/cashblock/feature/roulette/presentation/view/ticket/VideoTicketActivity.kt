@@ -9,21 +9,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
-import com.avatye.cashblock.base.component.contract.AccountContract
-import com.avatye.cashblock.base.component.contract.RemoteContract
+import com.avatye.cashblock.base.component.contract.business.AccountContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketBalanceEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketRequestEntity
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
-import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
-import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
@@ -48,7 +49,7 @@ internal class VideoTicketActivity : AppBaseActivity() {
         }
     }
 
-    private val videoTicketSetting = RemoteContract.videoTicketSetting
+    private val videoTicketSetting = SettingContractor.videoTicketSetting
 
     private enum class TicketAcquireStatus { LOADING, TICKETING, COMPLETE }
 
@@ -153,7 +154,7 @@ internal class VideoTicketActivity : AppBaseActivity() {
             // linear banner
             vb.bannerLinearView.onDestroy()
         } catch (e: Exception) {
-            logger.e(throwable = e) { "$viewTag -> onDestroy" }
+            logger.e(viewName = viewTag, throwable = e) { "$viewTag -> onDestroy" }
         }
     }
 
@@ -210,10 +211,11 @@ internal class VideoTicketActivity : AppBaseActivity() {
 
 
         // region # check-age-verify
-        if (AccountContract.ageVerified == AgeVerifiedType.VERIFIED) {
+        if (AccountContractor.ageVerified == AgeVerifiedType.VERIFIED) {
             requestVideoTicketSync()
         } else {
             DialogPopupAgeVerifyView.create(
+                blockType = RouletteConfig.blockType,
                 ownerActivity = this@VideoTicketActivity,
                 callback = object : DialogPopupAgeVerifyView.IDialogAction {
                     override fun onAction() {
@@ -299,13 +301,13 @@ internal class VideoTicketActivity : AppBaseActivity() {
             adQueueType = ADQueueType.VIDEO_TICKET_OPEN,
             callback = object : ICuratorQueueCallback {
                 override fun onLoaded(loader: ADLoaderBase) {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onLoaded { loaderType: ${loader.loaderType.name} }" }
                     loadingAnimation?.stop()
                     loader.show()
                 }
 
                 override fun onOpened() {
-                    logger.i { "$viewTag -> #OPEN -> ADQueue -> onOpened" }
+                    logger.i(viewName = viewTag) { "#OPEN -> ADQueue -> onOpened" }
                     loadingAnimation?.stop()
                 }
 

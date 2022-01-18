@@ -6,7 +6,7 @@ import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import org.json.JSONObject
 
-class ResGamePlay : ServeSuccess() {
+internal class ResGamePlay : ServeSuccess() {
     var gamePlayEntity = GamePlayEntity()
         private set
 

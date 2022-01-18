@@ -7,8 +7,6 @@ import org.joda.time.DateTime
 
 @Parcelize
 internal data class InspectionParcel(
-    val blockId: String,
-    val blockSecret: String,
     val blockType: BlockType,
     val startDateTime: DateTime? = null,
     val endDateTime: DateTime? = null,

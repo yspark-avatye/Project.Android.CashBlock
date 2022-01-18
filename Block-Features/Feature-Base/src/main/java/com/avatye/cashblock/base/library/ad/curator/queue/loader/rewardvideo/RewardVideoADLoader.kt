@@ -1,10 +1,9 @@
 package com.avatye.cashblock.base.library.ad.curator.queue.loader.rewardvideo
 
 import android.app.Activity
-import com.avatye.cashblock.base.MODULE_NAME
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.base.library.ad.curator.Curator
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
+import com.avatye.cashblock.base.library.ad.curator.Curator
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderType
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.IADLoaderCallback
@@ -52,7 +51,7 @@ internal class RewardVideoADLoader(
         initialize {
             playCompleted = false
             sspRewardVideoAD?.loadAd() ?: run {
-                LogHandler.i(moduleName = MODULE_NAME) { "$tagName -> requestAD -> success { networkName: $networkName }" }
+                logger.i(viewName = tagName) { "requestAD -> success { networkName: $networkName }" }
                 callback.ondFailed(isBlocked = false)
             }
         }
@@ -80,57 +79,45 @@ internal class RewardVideoADLoader(
     }
 
     override fun release() {
-        try {
+        kotlin.runCatching {
             sspRewardVideoAD?.setRewardVideoAdEventCallbackListener(null)
             sspRewardVideoAD?.destroy()
             sspRewardVideoAD = null
             weakContext.clear()
-        } catch (e: Exception) {
-            LogHandler.e(moduleName = MODULE_NAME, throwable = e) {
-                "$tagName -> release { networkName: $networkName }"
-            }
+        }.onFailure {
+            logger.e(viewName = tagName, throwable = it) { "release { networkName: $networkName }" }
         }
     }
 
     override fun OnRewardVideoAdLoaded() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoAdLoaded { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "OnRewardVideoAdLoaded { networkName: $networkName }" }
         callback.onLoaded()
     }
 
     override fun OnRewardVideoAdLoadFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoAdLoadFailed { code:${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
+        logger.i(viewName = tagName) {
+            "OnRewardVideoAdLoadFailed { code:${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
         }
         callback.ondFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }
 
     override fun OnRewardVideoAdOpened() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoAdOpened { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "OnRewardVideoAdOpened { networkName: $networkName }" }
         callback.onOpened()
     }
 
     override fun OnRewardVideoAdOpenFalied() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoAdOpenFalied { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "OnRewardVideoAdOpenFalied { networkName: $networkName }" }
         callback.ondFailed(isBlocked = false)
     }
 
     override fun OnRewardVideoAdClosed() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoAdClosed { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "OnRewardVideoAdClosed { networkName: $networkName }" }
         callback.onClosed(isCompleted = this.playCompleted)
     }
 
     override fun OnRewardVideoPlayCompleted(adNetworkNo: Int, completed: Boolean) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> OnRewardVideoPlayCompleted { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "OnRewardVideoPlayCompleted { networkName: $networkName }" }
         this.playCompleted = completed
     }
 }

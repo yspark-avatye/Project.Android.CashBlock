@@ -1,19 +1,18 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.app.ResSettings
-import com.avatye.cashblock.base.internal.server.serve.IServeToken
-import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import com.avatye.cashblock.base.internal.server.serve.ServeFailure
 import com.avatye.cashblock.base.internal.server.serve.ServeResponse
+import com.avatye.cashblock.base.internal.server.serve.ServeTask
 import org.json.JSONObject
 
-object APICore {
-    fun postEventLog(appId: String, tokenizer: IServeToken, eventKey: String, eventParam: HashMap<String, Any>? = null) {
+internal object APICore {
+    fun postEventLog(blockType: BlockType, eventKey: String, eventParam: HashMap<String, Any>? = null) {
         ServeTask(
-            appId = appId,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
-            tokenizer = tokenizer,
             method = ServeTask.Method.POST,
             requestUrl = "log/event",
             acceptVersion = "1.0.0",
@@ -29,11 +28,10 @@ object APICore {
         ).execute()
     }
 
-    fun getAppSettings(appId: String, tokenizer: IServeToken, keys: List<String>? = null, response: ServeResponse<ResSettings>) {
+    fun getAppSettings(blockType: BlockType, keys: List<String>? = null, response: ServeResponse<ResSettings>) {
         ServeTask(
-            appId = appId,
+            blockType = blockType,
             authorization = ServeTask.Authorization.BASIC,
-            tokenizer = tokenizer,
             method = ServeTask.Method.GET,
             requestUrl = "app/settings",
             acceptVersion = "1.0.0",

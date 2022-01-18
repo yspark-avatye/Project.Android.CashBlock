@@ -1,6 +1,6 @@
 package com.avatye.cashblock.base.internal.server.serve
 
-abstract class ServeSuccess {
+internal abstract class ServeSuccess {
 
     private var rawValue: String? = null
 

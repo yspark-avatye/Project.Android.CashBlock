@@ -1,7 +1,7 @@
 package com.avatye.cashblock.base.library.ad.curator
 
 import android.content.Context
-import com.avatye.cashblock.base.MODULE_NAME
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.LogHandler
 import com.igaworks.ssp.AdPopcornSSP
 import com.igaworks.ssp.SSPErrorCode
@@ -29,9 +29,7 @@ internal object Curator {
             kotlin.runCatching {
                 AdPopcornSSP.destroy()
             }.onFailure {
-                LogHandler.e(moduleName = MODULE_NAME, throwable = it) {
-                    "AdPopcornSSP -> Destroy -> Exception"
-                }
+                logger.e(viewName = "Curator", throwable = it) { "AdPopcornSSP -> Destroy -> Exception" }
             }
         }
     }

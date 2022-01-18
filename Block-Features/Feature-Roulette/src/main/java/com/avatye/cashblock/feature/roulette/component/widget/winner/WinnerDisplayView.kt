@@ -11,9 +11,8 @@ import androidx.core.content.res.use
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.roulette.MODULE_NAME
 import com.avatye.cashblock.feature.roulette.R
+import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.model.entity.winner.WinnerItemEntity
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrWidgetWinnerDisplayBinding
 import com.avatye.cashblock.unit.roulette.widget.winner.WinnerDisplayViewAdapter
@@ -79,9 +78,7 @@ internal class WinnerDisplayView(context: Context, attrs: AttributeSet? = null) 
         if (!isTicking) {
             isTicking = true
             countDownTimer?.start()
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> CountDownTimer -> onStart -> success"
-            }
+            logger.i(viewName = tagName) { "CountDownTimer -> onStart -> success" }
         }
     }
 
@@ -89,9 +86,7 @@ internal class WinnerDisplayView(context: Context, attrs: AttributeSet? = null) 
         if (isTicking) {
             isTicking = false
             countDownTimer?.cancel()
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> CountDownTimer -> onStop"
-            }
+            logger.i(viewName = tagName) { "CountDownTimer -> onStop" }
         }
     }
 

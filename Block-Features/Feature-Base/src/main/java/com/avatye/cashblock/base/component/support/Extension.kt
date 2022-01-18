@@ -78,6 +78,10 @@ fun <T : Parcelable> Activity.extraParcel(key: String): T? {
     return intent?.extras?.getParcelable(key)
 }
 
+fun <T : Parcelable> Intent.extraParcel(key: String): T? {
+    return this.extras?.getParcelable(key)
+}
+
 fun Activity.extraString(key: String): String? {
     return intent?.extras?.getString(key)
 }

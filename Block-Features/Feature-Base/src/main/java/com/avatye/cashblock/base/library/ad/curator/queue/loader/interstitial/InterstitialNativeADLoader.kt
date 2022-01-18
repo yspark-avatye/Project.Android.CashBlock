@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
-import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.R
-import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativeInterstitialBinding
+import com.avatye.cashblock.base.Core.logger
+import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.Curator
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderType
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.IADLoaderCallback
+import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativeInterstitialBinding
 import com.igaworks.ssp.SSPErrorCode
 import com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd
 import com.igaworks.ssp.part.nativead.binder.*
@@ -61,9 +62,7 @@ internal class InterstitialNativeADLoader(
                 kotlin.runCatching {
                     Class.forName("com.google.android.gms.ads.nativead.NativeAdView")
                 }.onSuccess {
-                    LogHandler.i(moduleName = MODULE_NAME) {
-                        "$tagName -> nativeAD { admob: imported }"
-                    }
+                    logger.i(viewName = tagName) { "nativeAD { admob: imported }" }
                     vb.nativeInterstitialAdmobStub.inflate()
                     adMobViewBinder = AdMobViewBinder.Builder(
                         R.id.native_interstitial_admob_container,
@@ -81,9 +80,7 @@ internal class InterstitialNativeADLoader(
                         .build()
 
                 }.onFailure { t ->
-                    LogHandler.e(throwable = t, moduleName = MODULE_NAME) {
-                        "$tagName -> nativeAD { admob: not imported }"
-                    }
+                    logger.e(viewName = tagName, throwable = t) { "nativeAD { admob: not imported }" }
                 }
             }
         }
@@ -106,9 +103,7 @@ internal class InterstitialNativeADLoader(
     override fun requestAD() {
         initialize {
             sspNativeAD?.loadAd() ?: run {
-                LogHandler.i(moduleName = MODULE_NAME) {
-                    "$tagName -> requestAD -> fail { loader: null, networkName: $networkName }"
-                }
+                logger.i(viewName = tagName) { "requestAD -> fail { loader: null, networkName: $networkName }" }
                 callback.ondFailed(isBlocked = false)
             }
         }
@@ -152,35 +147,25 @@ internal class InterstitialNativeADLoader(
 
     override fun onNativeAdLoadSuccess() {
         sspNativeAD?.let {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> success { networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "onNativeAdLoadSuccess -> success { networkName: $networkName }" }
             callback.onLoaded()
         } ?: run {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> onNativeAdLoadSuccess -> failed { nativeAD: null, networkName: $networkName }"
-            }
+            logger.i(viewName = tagName) { "onNativeAdLoadSuccess -> failed { nativeAD: null, networkName: $networkName }" }
             callback.ondFailed(isBlocked = false)
         }
     }
 
     override fun onNativeAdLoadFailed(sspErrorCode: SSPErrorCode?) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onNativeAdLoadFailed { code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onNativeAdLoadFailed { code: ${sspErrorCode?.errorCode}, message: ${sspErrorCode?.errorMessage}, networkName: $networkName }" }
         callback.ondFailed(isBlocked = Curator.isBlocked(sspErrorCode))
     }
 
     override fun onImpression() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onImpression(onOpened) { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onImpression(onOpened) { networkName: $networkName }" }
         callback.onOpened()
     }
 
     override fun onClicked() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onClicked { networkName: $networkName }"
-        }
+        logger.i(viewName = tagName) { "onClicked { networkName: $networkName }" }
     }
 }

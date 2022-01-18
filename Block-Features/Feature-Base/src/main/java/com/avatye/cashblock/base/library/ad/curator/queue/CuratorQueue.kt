@@ -1,8 +1,10 @@
 package com.avatye.cashblock.base.library.ad.curator.queue
 
 import android.app.Activity
+import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.base.library.LogHandler
+import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderType
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.IADLoaderCallback
@@ -11,7 +13,6 @@ import com.avatye.cashblock.base.library.ad.curator.queue.loader.interstitial.In
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.interstitial.InterstitialNativeADLoader
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.interstitial.InterstitialVideoADLoader
 import com.avatye.cashblock.base.library.ad.curator.queue.loader.rewardvideo.RewardVideoADLoader
-import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import java.util.*
 
 class CuratorQueue(
@@ -32,9 +33,7 @@ class CuratorQueue(
     init {
         sequential.forEach {
             loaderQueues.add(it)
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> init -> make-queue { ADLoaderType: ${it.loaderType.name}, placementID: ${it.placementID} }"
-            }
+            logger.i(viewName = tagName) { "init -> make-queue { ADLoaderType: ${it.loaderType.name}, placementID: ${it.placementID} }" }
         }
     }
 
@@ -46,9 +45,7 @@ class CuratorQueue(
         }
         // poll
         loaderQueues.poll()?.let {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> poll { ADLoaderType: ${it.loaderType.name}, placementID: ${it.placementID} }"
-            }
+            logger.i(viewName = tagName) { "poll { ADLoaderType: ${it.loaderType.name}, placementID: ${it.placementID} }" }
             currentADLoader = loaderFactory(it)
             currentADLoader?.requestAD()
         } ?: run {
@@ -68,9 +65,7 @@ class CuratorQueue(
     fun release() = currentADLoader?.release()
 
     override fun onLoaded() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onLoaded"
-        }
+        logger.i(viewName = tagName) { "onLoaded" }
         currentADLoader?.let {
             callback.onLoaded(it)
         } ?: run {
@@ -80,16 +75,12 @@ class CuratorQueue(
 
     override fun ondFailed(isBlocked: Boolean) {
         if (isBlocked) {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> ondFailed { isBlocked: true }"
-            }
+            logger.i(viewName = tagName) { "ondFailed { isBlocked: true }" }
             currentADLoader?.release()
             currentADLoader = null
             loaderQueues.clear()
         } else {
-            LogHandler.i(moduleName = MODULE_NAME) {
-                "$tagName -> ondFailed { isBlocked: false } -> poll"
-            }
+            logger.i(viewName = tagName) { "ondFailed { isBlocked: false } -> poll" }
             currentADLoader?.release()
             loaderQueues.clear()
             poll()
@@ -97,16 +88,12 @@ class CuratorQueue(
     }
 
     override fun onOpened() {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onOpened"
-        }
+        logger.i(viewName = tagName) { "onOpened" }
         callback.onOpened()
     }
 
     override fun onClosed(isCompleted: Boolean) {
-        LogHandler.i(moduleName = MODULE_NAME) {
-            "$tagName -> onClosed { isCompleted: $isCompleted }"
-        }
+        logger.i(viewName = tagName) { "onClosed { isCompleted: $isCompleted }" }
         callback.onComplete(success = isCompleted)
     }
 
