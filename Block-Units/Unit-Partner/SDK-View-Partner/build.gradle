@@ -65,7 +65,10 @@ dependencies {
     implementation "androidx.core:core-ktx:$dependency_version_ktx"
     implementation "androidx.appcompat:appcompat:$dependency_version_appcompat"
     implementation "com.google.android.material:material:$dependency_version_material"
-    //implementation project(':Block-Features:Feature-Base')
+    implementation "androidx.core:core-ktx:$dependency_version_ktx"
+    //
+    //implementation "org.bitbucket.avatye.sdk-cash-block:sdk-cash-block-roulette:22.0.2"
+    implementation project(':Block-Features:Feature-Base')
     implementation project(':Block-Features:Feature-Roulette')
     implementation project(':Block-Features:Feature-Offerwall')
 }

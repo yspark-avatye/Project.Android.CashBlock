@@ -23,7 +23,7 @@ buildscript {
     ext.config_version_sdk_target = 30
     ext.config_version_sdk_min = 21
     ext.app_version_code = 1
-    ext.app_version_name = "22.0.2"
+    ext.app_version_name = "22.0.3"
     // maven publishing
     ext.maven_group_id = 'org.bitbucket.avatye'
     ext.maven_artifact_id = 'sdk-cash-block'

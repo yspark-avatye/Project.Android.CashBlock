@@ -66,7 +66,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = "$maven_group_id"
-                artifactId = "${maven_artifact_id}-core"
+                artifactId = "core"
                 version = "$app_version_name"
             }
         }
