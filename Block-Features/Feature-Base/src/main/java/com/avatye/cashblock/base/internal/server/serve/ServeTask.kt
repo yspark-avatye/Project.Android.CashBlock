@@ -3,6 +3,7 @@ package com.avatye.cashblock.base.internal.server.serve
 import android.content.Context
 import android.os.Build
 import com.android.volley.Request
+import com.avatye.cashblock.BuildConfig
 import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.business.EventContractor
@@ -130,12 +131,18 @@ internal class ServeTask<T : ServeSuccess>(
 
     private fun makeHeaderArgs(): HashMap<String, String> {
         return hashMapOf<String, String>().apply {
+            this["x-app-id"] to Core.appId
             this["x-device-os"] = "android"
             this["x-device-os-version"] = "${Build.VERSION.SDK_INT}"
             this["x-device-model"] = "${Build.MODEL}:${Build.MANUFACTURER}"
-            this["x-app-package"] = Core.appPackageName
+            this["x-device-developer"] = if (Core.allowDeveloper) "1" else "0"
+            this["x-device-maintenance"] = if (Core.allowMaintenance) "1" else "0"
+            this["x-sdk-version-code"] = "${BuildConfig.X_BUILD_SDK_VERSION_CODE}"
+            this["x-sdk-version-name"] = BuildConfig.X_BUILD_SDK_VERSION_NAME
+            this["x-sdk-unit-name"] = "${blockType.name}@CashBlock"
             this["x-app-version-code"] = Core.appVersionCode
             this["x-app-version-name"] = Core.appVersionName
+            this["x-app-package"] = Core.appPackageName
             this["Content-Type"] = "application/json"
             this["accept-version"] = acceptVersion
             this["Authorization"] = when (authorization) {

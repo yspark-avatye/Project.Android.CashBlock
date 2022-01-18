@@ -1,5 +1,6 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.support.ResNotice
 import com.avatye.cashblock.base.internal.server.entity.support.ResNoticeList
@@ -44,6 +45,7 @@ internal object APISupport {
             method = ServeTask.Method.GET,
             requestUrl = "support/popups",
             acceptVersion = "1.0.0",
+            argsBody = hashMapOf("appID" to Core.appId),
             responseClass = ResPopupNotice::class.java,
             responseCallback = response
         ).execute()

@@ -18,6 +18,7 @@ object CoreConstants {
 
     internal const val CASHBLOCK_CONFIG_LOG = "cashblock.config.log"
     internal const val CASHBLOCK_CONFIG_DEVELOPER = "cashblock.config.developer"
+    internal const val CASHBLOCK_CONFIG_MAINTENANCE = "cashblock.config.maintenance"
     internal const val CASHBLOCK_CONFIG_ENVIRONMENT = "cashblock.config.environment"
 
     // connector
@@ -69,6 +70,15 @@ internal object Core {
     val allowDeveloper: Boolean by lazy {
         if (Core::application.isInitialized) {
             val flag = application.metaDataValue(CoreConstants.CASHBLOCK_CONFIG_DEVELOPER) ?: "false"
+            flag.equals(other = "true", ignoreCase = true)
+        } else {
+            false
+        }
+    }
+
+    val allowMaintenance: Boolean by lazy {
+        if (Core::application.isInitialized) {
+            val flag = application.metaDataValue(CoreConstants.CASHBLOCK_CONFIG_MAINTENANCE) ?: "false"
             flag.equals(other = "true", ignoreCase = true)
         } else {
             false

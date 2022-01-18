@@ -1,5 +1,6 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.app.ResSettings
@@ -17,6 +18,7 @@ internal object APICore {
             requestUrl = "log/event",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf(
+                "appID" to Core.appId,
                 "eventKey" to eventKey,
                 "eventParam" to makeParams(eventParam)
             ),
@@ -36,6 +38,7 @@ internal object APICore {
             requestUrl = "app/settings",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf<String, Any>().apply {
+                this["appID"] = Core.appId
                 if (keys?.isNotEmpty() == true) {
                     this["keys"] = keys.joinToString(separator = ",")
                 }

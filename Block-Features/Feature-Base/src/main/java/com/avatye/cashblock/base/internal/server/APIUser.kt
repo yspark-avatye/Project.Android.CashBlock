@@ -1,5 +1,6 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.user.Profile
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
@@ -16,6 +17,7 @@ internal object APIUser {
             requestUrl = "user/login",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf(
+                "appID" to Core.appId,
                 "appUserID" to profile.userId,
                 "gender" to profile.gender.value,
                 "birthDate" to profile.birthYear.toString()
