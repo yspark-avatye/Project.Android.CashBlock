@@ -1,5 +1,6 @@
 package com.avatye.cashblock.base.internal.server
 
+import com.avatye.cashblock.base.Core
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.internal.server.entity.ResVoid
 import com.avatye.cashblock.base.internal.server.entity.game.ResGameList
@@ -45,13 +46,21 @@ internal object APIGame {
      * participate 'roulette' game
      */
     fun postGamePlay(blockType: BlockType, gameId: String, response: ServeResponse<ResGamePlay>) {
+        val argsBody: HashMap<String, Any> = hashMapOf(
+            "gameID" to gameId
+        )
+        Core.appCustomData?.let {
+            if (it.isNotEmpty()) {
+                argsBody["customData"] = it
+            }
+        }
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
             requestUrl = "game/play",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf("gameID" to gameId),
+            argsBody = argsBody,
             responseClass = ResGamePlay::class.java,
             responseCallback = response
         ).execute()

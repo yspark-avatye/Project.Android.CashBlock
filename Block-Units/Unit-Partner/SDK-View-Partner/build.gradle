@@ -69,7 +69,9 @@ dependencies {
     implementation project(':Block-Features:Feature-Base')
     implementation project(':Block-Features:Feature-Roulette')
     implementation project(':Block-Features:Feature-Offerwall')
-    // jitpack
+    // jitpack - artifacts
+    //implementation "org.bitbucket.avatye.sdk-cash-block:sdk-cash-block-core:22.0.2"
     //implementation "org.bitbucket.avatye.sdk-cash-block:roulette:22.0.3"
     //implementation "org.bitbucket.avatye.sdk-cash-block:offerwall:22.0.3"
+    //implementation "org.bitbucket.avatye.sdk-cash-block:sdk-cash-block-publisher:22.0.2"
 }
