@@ -7,7 +7,7 @@ import com.avatye.cashblock.base.Core.logger
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 
 @SuppressLint("StaticFieldLeak")
-class AdvertiseIDTask(
+internal class AdvertiseIDTask(
     private val context: Context,
     private val callback: (isLimitAdTrackingEnabled: Boolean, aaid: String) -> Unit
 ) : AsyncTask<Void, Void, AdvertisingIdClient.Info>() {

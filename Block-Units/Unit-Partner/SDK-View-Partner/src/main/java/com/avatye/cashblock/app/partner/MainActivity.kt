@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
         //MobileAds.initialize(this)
         //Configuration.setAppUserId("io2tree-2@avatye.com")
 
-        viewAppUserID()
-
         /** set profile */
         vb.buttonAuth.setOnClickListener {
             if (vb.userId.text.isNullOrEmpty()) {
@@ -36,19 +34,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        /** start cash roulette */
-//        vb.buttonEnter.setOnClickListener {
-//            CashRouletteSDK.start(this)
-//        }
-//
-//        /** floating button */
-//        vb.buttonFloating.setOnClickListener {
-//            floatingLayout()
-//        }
-
         vb.buttonCondition.setOnClickListener {
             ticketCondition()
         }
+    }
+
+    override fun onResume() {
+        viewAppUserID()
+        super.onResume()
     }
 
     private fun viewAppUserID() {

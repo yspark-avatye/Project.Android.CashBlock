@@ -18,6 +18,7 @@ android {
         // buildConfigField
         buildConfigField "int", "X_BUILD_SDK_VERSION_CODE", "${String.valueOf(rootProject.ext.app_version_code)}"
         buildConfigField "String", "X_BUILD_SDK_VERSION_NAME", "\"${String.valueOf(rootProject.ext.app_version_name)}\""
+        buildConfigField "String", "X_BUILD_SDK_UNIT_NAME", "\"cashblock\""
     }
     buildFeatures {
         viewBinding true

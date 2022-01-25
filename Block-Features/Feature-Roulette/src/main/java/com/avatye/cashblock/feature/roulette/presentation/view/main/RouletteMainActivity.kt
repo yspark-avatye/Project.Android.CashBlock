@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.avatye.cashblock.base.component.contract.business.PolicyContractor
+import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
@@ -149,9 +149,11 @@ internal class RouletteMainActivity : AppBaseActivity() {
         vb.bannerLinearView.requestBanner()
         initViewRewardBanner()
         // endregion
-
-        // policy
-        PolicyContractor.notifyUseAAID()
+        CoreContractor.DeviceSetting.fetchAAID {
+            logger.i(viewName = viewTag) {
+                "CoreContractor.DeviceSetting.fetchAAID { complete: $it }"
+            }
+        }
     }
 
     private fun observeRouletteListViewModel() {

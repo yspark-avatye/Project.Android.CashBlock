@@ -5,6 +5,7 @@ import android.os.Build
 import com.android.volley.Request
 import com.avatye.cashblock.BuildConfig
 import com.avatye.cashblock.base.Core
+import com.avatye.cashblock.base.CoreConstants
 import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.business.EventContractor
 import com.avatye.cashblock.base.component.domain.entity.app.AppEnvironment
@@ -139,7 +140,7 @@ internal class ServeTask<T : ServeSuccess>(
             this["x-device-maintenance"] = if (Core.allowMaintenance) "1" else "0"
             this["x-sdk-version-code"] = "${BuildConfig.X_BUILD_SDK_VERSION_CODE}"
             this["x-sdk-version-name"] = BuildConfig.X_BUILD_SDK_VERSION_NAME
-            this["x-sdk-unit-name"] = "${blockType.name}@CashBlock"
+            this["x-sdk-unit-name"] = BuildConfig.X_BUILD_SDK_UNIT_NAME
             this["x-app-version-code"] = Core.appVersionCode
             this["x-app-version-name"] = Core.appVersionName
             this["x-app-package"] = Core.appPackageName

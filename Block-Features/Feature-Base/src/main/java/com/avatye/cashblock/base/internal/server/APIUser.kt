@@ -39,4 +39,29 @@ internal object APIUser {
             responseCallback = response
         ).execute()
     }
+
+    fun putUpdateUser(blockType: BlockType, deviceADID: String? = null, gender: Int? = null, birthDate: String? = null, response: ServeResponse<ResVoid>) {
+        val bodyArgs = hashMapOf<String, Any>().apply {
+            deviceADID?.let {
+                this["deviceADID"] = it
+            }
+            gender?.let {
+                this["gender"] = it
+            }
+            birthDate?.let {
+                this["birthDate"]
+            }
+        }
+        ServeTask(
+            blockType = blockType,
+            authorization = ServeTask.Authorization.BEARER,
+            method = ServeTask.Method.PUT,
+            requestUrl = "user",
+            acceptVersion = "1.0.0",
+            argsBody = bodyArgs,
+            responseClass = ResVoid::class.java,
+            responseCallback = response
+        ).execute()
+    }
+
 }

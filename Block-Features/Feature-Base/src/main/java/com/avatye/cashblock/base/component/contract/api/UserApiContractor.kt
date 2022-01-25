@@ -31,4 +31,22 @@ class UserApiContractor(private val blockType: BlockType) {
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
             })
     }
+
+    fun putUser(
+        deviceADID: String? = null,
+        gender: Int? = null,
+        birthDate: String? = null,
+        response: (contract: ContractResult<Unit>) -> Unit
+    ) {
+        APIUser.putUpdateUser(
+            blockType = blockType,
+            deviceADID = deviceADID,
+            gender = gender,
+            birthDate = birthDate,
+            response = object : ServeResponse<ResVoid> {
+                override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(Unit))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
+            }
+        )
+    }
 }
