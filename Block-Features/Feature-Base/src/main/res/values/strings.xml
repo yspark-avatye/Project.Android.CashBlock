@@ -69,11 +69,15 @@
     <string name="acb_common_setting_event">이벤트</string>
     <string name="acb_common_setting_mission">출첵 이벤트</string>
     <string name="acb_common_setting_notice">공지사항</string>
+    <string name="acb_common_setting_reward_inquiry">미적립 문의 내역</string>
     <string name="acb_common_setting_terms">이용약관</string>
+    <string name="acb_common_setting_license">라이센스</string>
     <string name="acb_common_setting_app">앱정보</string>
     <string name="acb_common_setting_etc">기타</string>
     <string name="acb_common_setting_sdk_version">버전정보</string>
-    <string name="acb_common_setting_alliance">제휴문의</string>
+    <string name="acb_common_setting_alliance">오퍼월 제휴 문의</string>
+    <string name="acb_common_setting_restoration_hidden_AD_title">숨김 광고 복구</string>
+    <string name="acb_common_setting_restoration">복구하기</string>
     <!-- endregion -->
     <string name="acb_library_ad_cta_default" translatable="false">더 알아보기</string>
 </resources>

@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/acb_core_color_white"
+    android:background="#FFFFFF"
     android:orientation="vertical">
 
-
+    <!-- region { header } -->
     <com.avatye.cashblock.base.component.widget.header.HeaderView
         android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:acb_widget_title="오퍼월"
+        app:acb_widget_title="@string/acb_common_setting_title"
         app:acb_widget_view_type="main"
         app:acb_widget_visible_close="true"
-        app:acb_widget_visible_more="true" />
-
-    <!-- region { linear bottom Banner } -->
-    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
-        android:id="@+id/top_banner_linear_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/acb_core_color_pale_blue"
+        app:acb_widget_visible_more="false"
+        tools:background="#B3B0B5"
         tools:layout_height="50dp" />
-    <!-- region { linear bottom Banner } -->
+    <!-- endregion -->
 
-
+    <!-- region { FrameLayout } -->
     <FrameLayout
-        android:id="@+id/offerwall_list_container"
+        android:id="@+id/setting_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
+    <!-- endregion -->
+
 </LinearLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_section_container"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:background="@color/acb_core_color_ice_blue_two"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/section_sticky_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/acb_core_color_light_blue" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingLeft="24dp"
+        android:paddingEnd="24dp"
+        android:paddingRight="24dp">
+
+        <TextView
+            android:id="@+id/section_title"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="14dp"
+            tools:text="섹션" />
+
+
+        <ImageView
+            android:id="@+id/section_folding_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/acb_common_ic_arrow_drop_black_12x6" />
+
+    </LinearLayout>
+
+</FrameLayout>
+
