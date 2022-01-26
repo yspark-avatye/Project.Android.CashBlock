@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.zoyi.com.bumptech.glide.Glide
-import com.zoyi.com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
