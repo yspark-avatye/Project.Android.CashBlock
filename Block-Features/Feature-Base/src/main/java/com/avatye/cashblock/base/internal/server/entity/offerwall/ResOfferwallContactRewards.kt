@@ -8,6 +8,7 @@ import org.json.JSONObject
 
 internal class ResOfferwallContactRewards : ServeSuccess() {
     var offerwallContactRewardEntity = OfferwallContactRewardsEntity()
+        private set
 
     override fun makeBody(responseValue: String) {
         JSONObject(responseValue).let {

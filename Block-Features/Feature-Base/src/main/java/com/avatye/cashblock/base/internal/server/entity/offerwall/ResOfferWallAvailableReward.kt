@@ -7,7 +7,7 @@ import org.json.JSONObject
 
 internal class ResOfferWallAvailableReward : ServeSuccess() {
     var offerwallAvailableRewardEntity = OfferwallAvailableRewardEntity()
-
+        private set
 
     override fun makeBody(responseValue: String) {
         JSONObject(responseValue).let {
@@ -15,7 +15,5 @@ internal class ResOfferWallAvailableReward : ServeSuccess() {
                 totalAvailableReward = it.toIntValue("totalAvailableReward")
             )
         }
-
-
     }
 }

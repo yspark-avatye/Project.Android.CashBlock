@@ -8,6 +8,7 @@ import org.json.JSONObject
 
 internal class ResOfferWallImpression : ServeSuccess() {
     var offerwallImpressionItemEntity = OfferwallImpressionItemEntity()
+        private set
 
     override fun makeBody(responseValue: String) {
         JSONObject(responseValue).let {

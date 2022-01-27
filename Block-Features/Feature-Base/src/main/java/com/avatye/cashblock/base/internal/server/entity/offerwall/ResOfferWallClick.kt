@@ -5,8 +5,9 @@ import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
 import org.json.JSONObject
 
-internal class ResOfferWallClick: ServeSuccess(){
+internal class ResOfferWallClick : ServeSuccess() {
     var offerwallClickEntity = OfferwallClickEntity()
+        private set
 
     override fun makeBody(responseValue: String) {
         JSONObject(responseValue).let {

@@ -8,14 +8,22 @@ import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 import com.avatye.cashblock.base.internal.server.serve.ServeTask
 
 internal object APIOfferwall {
-    fun getOfferwalls(blockType: BlockType, deviceADID: String, tabID: String = "", service: ServiceType, response: ServeResponse<ResOfferwallList>) {
+    fun getOfferwalls(blockType: BlockType, deviceADID: String, tabID: String? = null, service: ServiceType, response: ServeResponse<ResOfferwallList>) {
+        val bodyArgs = hashMapOf<String, Any>(
+            "serviceID" to service.value,
+            "deviceADID" to deviceADID,
+        ).apply {
+            tabID?.let {
+                "tabID" to it
+            }
+        }
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
             requestUrl = "/advertising/offerwalls",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf("deviceADID" to deviceADID, "tabID" to "", "serviceID" to service.value),
+            argsBody = bodyArgs,
             responseClass = ResOfferwallList::class.java,
             responseCallback = response
         )
@@ -28,7 +36,10 @@ internal object APIOfferwall {
             method = ServeTask.Method.GET,
             requestUrl = "/advertising/offerwalls/available",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf("deviceADID" to deviceADID, "serviceID" to service.value),
+            argsBody = hashMapOf(
+                "deviceADID" to deviceADID,
+                "serviceID" to service.value
+            ),
             responseClass = ResOfferWallAvailableReward::class.java,
             responseCallback = response
         )
@@ -41,7 +52,11 @@ internal object APIOfferwall {
             method = ServeTask.Method.POST,
             requestUrl = "/advertising/offerwall/impression",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf("deviceADID" to deviceADID, "advertiseID" to advertiseID, "serviceID" to service.value),
+            argsBody = hashMapOf(
+                "deviceADID" to deviceADID,
+                "advertiseID" to advertiseID,
+                "serviceID" to service.value
+            ),
             responseClass = ResOfferWallImpression::class.java,
             responseCallback = response
         )
@@ -54,7 +69,10 @@ internal object APIOfferwall {
             method = ServeTask.Method.POST,
             requestUrl = "/advertising/offerwall/close",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf("deviceADID" to deviceADID, "advertiseID" to advertiseID),
+            argsBody = hashMapOf(
+                "deviceADID" to deviceADID,
+                "advertiseID" to advertiseID
+            ),
             responseClass = ResVoid::class.java,
             responseCallback = response
         )

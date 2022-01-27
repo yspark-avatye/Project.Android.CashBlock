@@ -13,20 +13,28 @@ import org.json.JSONObject
 
 internal class ResOfferwallList : ServeSuccess() {
 
-    lateinit var pointName: String
+    var pointName: String = ""
         private set
 
-    private var sections: MutableList<OfferwallSectionEntity> = mutableListOf()
-    private var joinCompleteItems: MutableList<OfferwallItemEntity> = mutableListOf()
-
     var sectionEntity = OfferwallSectionEntity()
+        private set
+
     var categoryEntity = OfferwallSectionEntity.OfferwallCategoryEntity()
+        private set
+
     var itemEntity = OfferwallItemEntity()
+        private set
 
     var sectionPos: Int = 0
+        private set
+
     var categoryPos: Int = 0
+        private set
 
     var viewType: OfferwallViewStateType = OfferwallViewStateType.VIEW_TYPE_ITEM
+
+    private val sections: MutableList<OfferwallSectionEntity> = mutableListOf()
+    private val joinCompleteItems: MutableList<OfferwallItemEntity> = mutableListOf()
 
 
     override fun makeBody(responseValue: String) {
@@ -46,15 +54,15 @@ internal class ResOfferwallList : ServeSuccess() {
                 )
 
                 // region # items
-                val items = sectionObj.toJSONArrayValue("items")
-                items?.let { items ->
-                    if (items.length() > 0) {
-                        items.until { it ->
-                            val item = getItem(it)
+                val sectionItems = sectionObj.toJSONArrayValue("items")
+                sectionItems?.let { sections ->
+                    if (sections.length() > 0) {
+                        sections.until { section ->
+                            val item = getItem(section)
                             viewType = OfferwallViewStateType.VIEW_TYPE_ITEM
                             categoryPos = -1
 
-                            if(item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
+                            if (item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
                                 joinCompleteItems.add(item)
                             } else {
                                 sectionEntity.items.add(item)
@@ -66,9 +74,9 @@ internal class ResOfferwallList : ServeSuccess() {
                 // endregion
 
                 // region # categories
-                val categories = sectionObj.toJSONArrayValue("categories")
-                categories?.let { categories ->
-                    if(categories.length() > 0 ) {
+                val categoryCollection = sectionObj.toJSONArrayValue("categories")
+                categoryCollection?.let { categories ->
+                    if (categories.length() > 0) {
                         categories.until { categoryObj ->
                             categoryEntity = OfferwallSectionEntity.OfferwallCategoryEntity(
                                 categoryID = categoryObj.toStringValue("categoryID"),
@@ -81,13 +89,13 @@ internal class ResOfferwallList : ServeSuccess() {
                                 val item = getItem(it)
                                 viewType = OfferwallViewStateType.VIEW_TYPE_CATEGORY_ITEM
 
-                                if(item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
+                                if (item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
                                     joinCompleteItems.add(item)
                                 } else {
                                     categoryEntity.items.add(item)
                                 }
 
-                                if(categoryEntity.items.size > 0) {
+                                if (categoryEntity.items.size > 0) {
                                     sectionEntity.categories.add(categoryEntity)
                                 }
 
