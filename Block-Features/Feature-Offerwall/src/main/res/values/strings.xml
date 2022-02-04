@@ -2,6 +2,7 @@
 <resources>
     <!-- region # Offerwall Detail View -->
     <string name="acbso_offerwall_button_install">참여하러 가기</string>
+    <string name="acbso_offerwall_button_confirm_cpi">참여하기</string>
     <string name="acbso_offerwall_button_confirm">참여하고 %,d 캐시받기</string>
     <string name="acbso_offerwall_button_validate">참여 확인하고 %,d 캐시 적립받기</string>
     <string name="acbso_offerwall_detail_title">참여방법</string>

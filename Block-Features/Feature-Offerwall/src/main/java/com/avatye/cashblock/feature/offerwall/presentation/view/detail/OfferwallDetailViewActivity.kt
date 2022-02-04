@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
+import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
+import com.avatye.cashblock.base.component.support.extraFloat
+import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launchFortResult
 import com.avatye.cashblock.base.component.widget.dialog.DialogMessageView
 import com.avatye.cashblock.feature.offerwall.R
@@ -19,11 +23,12 @@ internal class OfferwallDetailViewActivity : AppBaseActivity() {
         /** this activity code */
         const val REQUEST_CODE = 11001
 
-        fun open(activity: Activity, parcel:OfferWallParcel, options: Bundle?) {
+        fun open(activity: Activity, serviceType: ServiceType, parcel: OfferWallParcel, options: Bundle?) {
             activity.launchFortResult(
                 intent = Intent(activity, OfferwallDetailViewActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     putExtra(OfferWallParcel.NAME, parcel)
+                    putExtra(ServiceNameParcel.NAME, ServiceNameParcel(serviceType = serviceType))
                 },
                 transition = ActivityTransitionType.NONE.value,
                 requestCode = REQUEST_CODE,
@@ -36,9 +41,21 @@ internal class OfferwallDetailViewActivity : AppBaseActivity() {
         AcbsoActivityOfferwallDetailViewBinding.inflate(LayoutInflater.from(this))
     }
 
+
+    override fun onBackPressed() {
+        supportFinishAfterTransition()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
+
+        val advertiseID = extraParcel<OfferWallParcel>(OfferWallParcel.NAME)?.advertiseID
+
+
+
+
+
 
         with(vb.headerView) {
 
@@ -77,7 +94,11 @@ internal class OfferwallDetailViewActivity : AppBaseActivity() {
             // endregion
         }
 
-        transactionFragment(fragment = OfferwallDetailViewFragment())
+        transactionFragment(fragment = OfferwallDetailViewFragment().apply {
+            val bundle = Bundle()
+            bundle.putString("advertiseID", advertiseID)
+            arguments = bundle
+        })
 
 
     }

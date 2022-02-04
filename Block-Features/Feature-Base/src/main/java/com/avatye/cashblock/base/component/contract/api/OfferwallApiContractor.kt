@@ -13,14 +13,14 @@ import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class OfferwallApiContractor(private val blockType: BlockType) {
 
-    fun retrieveList(deviceADID: String, tabID: String = "", serviceID: ServiceType, response: (contract: ContractResult<OfferwallItemEntity>) -> Unit) {
+    fun retrieveList(deviceADID: String, tabID: String? = null, serviceID: ServiceType, response: (contract: ContractResult<MutableList<OfferwallSectionEntity>>) -> Unit) {
         APIOfferwall.getOfferwalls(
             blockType = blockType,
             deviceADID = deviceADID,
             tabID = tabID,
             service = serviceID,
             response = object : ServeResponse<ResOfferwallList> {
-                override fun onSuccess(success: ResOfferwallList) = response(Contract.onSuccess(success = success.itemEntity))
+                override fun onSuccess(success: ResOfferwallList) = response(Contract.onSuccess(success = success.sections))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
             })
     }
@@ -45,8 +45,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResOfferWallImpression> {
                 override fun onSuccess(success: ResOfferWallImpression) = response(Contract.onSuccess(success = success.offerwallImpressionItemEntity))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun postClose(deviceADID: String, advertiseID: String, response: (contract: ContractResult<Unit>) -> Unit) {
@@ -57,19 +56,18 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResVoid> {
                 override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success = Unit))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun postClick(
         deviceADID: String,
         advertiseID: String,
-        deviceID: String = "",
-        deviceModel: String = "",
-        deviceNetwork: String = "",
-        deviceOS: String = "",
-        deviceCarrier: String = "",
-        customData: String = "",
+        deviceID: String? = null,
+        deviceModel: String? = null,
+        deviceNetwork: String? = null,
+        deviceOS: String? = null,
+        deviceCarrier: String? = null,
+        customData: String? = null,
         service: ServiceType,
         response: (contract: ContractResult<OfferwallClickEntity>) -> Unit
     ) {
@@ -87,16 +85,15 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResOfferWallClick> {
                 override fun onSuccess(success: ResOfferWallClick) = response(Contract.onSuccess(success = success.offerwallClickEntity))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun postConversion(
         deviceADID: String,
         advertiseID: String,
         clickID: String,
-        deviceID: String = "",
-        deviceNetwork: String = "",
+        deviceID: String? = null,
+        deviceNetwork: String? = null,
         service: ServiceType,
         response: (contract: ContractResult<Unit>) -> Unit
     ) {
@@ -111,21 +108,20 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResVoid> {
                 override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success = Unit))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun postContactReward(
-        contactID: String = "",
+        contactID: String? = null,
         advertiseID: String,
-        title: String = "",
+        title: String? = null,
         contents: String,
         state: Int = 0,
         resultMsgType: Int = 0,
-        deviceID: String = "",
+        deviceID: String? = null,
         deviceADID: String,
-        phone: String = "",
-        userName: String = "",
+        phone: String? = null,
+        userName: String? = null,
         response: (contract: ContractResult<Unit>) -> Unit
     ) {
         APIOfferwall.postOfferwallContactReward(
@@ -143,8 +139,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResVoid> {
                 override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success = Unit))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun retrieveContactRewardInfo(advertiseID: String, response: (contract: ContractResult<Unit>) -> Unit) {
@@ -154,23 +149,22 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResVoid> {
                 override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success = Unit))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
     fun retrieveContactRewards(
-        contactID: String = "",
+        contactID: String? = null,
         advertiseID: String,
-        title: String = "",
+        title: String? = null,
         contents: String,
         type: Int = 0,
         state: Int = 0,
-        deviceID: String = "",
+        deviceID: String? = null,
         deviceADID: String,
-        phone: String = "",
-        userName: String = "",
+        phone: String? = null,
+        userName: String? = null,
         resultMsgType: Int = 0,
-        customMsg: String = "",
+        customMsg: String? = null,
         response: (contract: ContractResult<OfferwallContactRewardsEntity>) -> Unit
     ) {
         APIOfferwall.getOfferwallContactRewards(
@@ -190,23 +184,15 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             response = object : ServeResponse<ResOfferwallContactRewards> {
                 override fun onSuccess(success: ResOfferwallContactRewards) = response(Contract.onSuccess(success = success.offerwallContactRewardEntity))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
-            }
-        )
+            })
     }
 
-
-//            APIOfferwall.getOfferwalls(tag = tag, response = object : ServeResponse<ResOfferwallList> {
-//                override fun onSuccess(success: ResOfferwallList) = response(Contract.onSuccess(success.responseModel))
-//                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-//            })
-//        }
-//
-//        fun retrieveTabs(response: (contract: ContractResult<String>) -> Unit) {
-//            APIOfferwall.getOfferwallTabs(tag = tag, response = object : ServeResponse<ResVoid> {
-//                override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success.rawString))
-//                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure))
-//            })
-//        }
-//
-
+    fun retrieveTabs(response: (contract: ContractResult<MutableList<OfferWallTabEntity>>) -> Unit) {
+        APIOfferwall.getOfferwallTabs(
+            blockType = blockType,
+            response = object : ServeResponse<ResOfferwallTabs> {
+                override fun onSuccess(success: ResOfferwallTabs) = response(Contract.onSuccess(success = success.tabEntities))
+                override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
+            })
+    }
 }

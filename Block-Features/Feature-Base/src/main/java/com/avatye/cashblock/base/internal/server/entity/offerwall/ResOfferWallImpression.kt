@@ -16,6 +16,7 @@ internal class ResOfferWallImpression : ServeSuccess() {
                 advertiseID = it.toStringValue("advertiseID"),
                 productID = it.toStringValue("productID"),
                 title = it.toStringValue("title"),
+                displayTitle = it.toStringValue("displayTitle"),
                 iconUrl = it.toStringValue("iconUrl"),
                 state = it.toIntValue("state"),
                 userGuide = it.toStringValue("userGuide"),

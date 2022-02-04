@@ -1,9 +1,6 @@
 package com.avatye.cashblock.base.internal.server.entity.offerwall
 
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallItemEntity
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallSectionEntity
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallViewStateType
+import com.avatye.cashblock.base.component.domain.entity.offerwall.*
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.library.miscellaneous.toJSONArrayValue
@@ -33,8 +30,34 @@ internal class ResOfferwallList : ServeSuccess() {
 
     var viewType: OfferwallViewStateType = OfferwallViewStateType.VIEW_TYPE_ITEM
 
-    private val sections: MutableList<OfferwallSectionEntity> = mutableListOf()
+    val sections: MutableList<OfferwallSectionEntity> = mutableListOf()
     private val joinCompleteItems: MutableList<OfferwallItemEntity> = mutableListOf()
+
+
+    private fun getTypeFirstItem(listType: OfferwallBindItemListType): OfferwallItemEntity {
+        when (listType) {
+            OfferwallBindItemListType.SECTION -> {
+                return OfferwallItemEntity(
+                    sectionID = sectionEntity.sectionID,
+                    sectionName = sectionEntity.sectionName,
+                    viewType = OfferwallViewStateType.VIEW_TYPE_SECTION,
+                    sectionTitle = sectionEntity.sectionTitle,
+                )
+                // TODO sectionPOS,categoryPos
+            }
+
+            OfferwallBindItemListType.CATEGORY -> {
+                return OfferwallItemEntity(
+                    sectionID = categoryEntity.categoryID,
+                    viewType = OfferwallViewStateType.VIEW_TYPE_CATEGORY,
+                    sectionTitle = categoryEntity.categoryName,
+                )
+                // TODO sectionPOS,categoryPos
+            }
+
+            else -> return OfferwallItemEntity()
+        }
+    }
 
 
     override fun makeBody(responseValue: String) {
@@ -44,8 +67,8 @@ internal class ResOfferwallList : ServeSuccess() {
             // endregion
 
             // region # section (Root)
-            val sectionArray = it.toJSONArrayValue("sections")
-            sectionArray?.until { sectionObj ->
+            val sectionCollection = it.toJSONArrayValue("sections")
+            sectionCollection?.until { sectionObj ->
                 sectionEntity = OfferwallSectionEntity(
                     sectionID = sectionObj.toStringValue("sectionID"),
                     sectionName = sectionObj.toStringValue("sectionName"),
@@ -58,7 +81,7 @@ internal class ResOfferwallList : ServeSuccess() {
                 sectionItems?.let { sections ->
                     if (sections.length() > 0) {
                         sections.until { section ->
-                            val item = getItem(section)
+                            val item = getItemEntity(section)
                             viewType = OfferwallViewStateType.VIEW_TYPE_ITEM
                             categoryPos = -1
 
@@ -71,22 +94,27 @@ internal class ResOfferwallList : ServeSuccess() {
                         }
                     }
                 }
+
+                // first item (section)
+                val sectionFirtstItem: OfferwallItemEntity = getTypeFirstItem(listType = OfferwallBindItemListType.SECTION)
+
                 // endregion
+
 
                 // region # categories
                 val categoryCollection = sectionObj.toJSONArrayValue("categories")
-                categoryCollection?.let { categories ->
-                    if (categories.length() > 0) {
-                        categories.until { categoryObj ->
+                categoryCollection?.let { it ->
+                    if (it.length() > 0) {
+                        it.until { categoryObj ->
                             categoryEntity = OfferwallSectionEntity.OfferwallCategoryEntity(
                                 categoryID = categoryObj.toStringValue("categoryID"),
                                 categoryName = categoryObj.toStringValue("categoryName"),
                                 categorySortOrder = categoryObj.toIntValue("categorySortOrder"),
                             )
-
                             val categoryItems = categoryObj.toJSONArrayValue("items")
-                            categoryItems?.until { it ->
-                                val item = getItem(it)
+
+                            categoryItems?.until { categories ->
+                                val item = getItemEntity(categories)
                                 viewType = OfferwallViewStateType.VIEW_TYPE_CATEGORY_ITEM
 
                                 if (item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
@@ -95,7 +123,11 @@ internal class ResOfferwallList : ServeSuccess() {
                                     categoryEntity.items.add(item)
                                 }
 
+                                // first item (category)
+                                val categoryFirstItem = getTypeFirstItem(listType = OfferwallBindItemListType.CATEGORY)
+
                                 if (categoryEntity.items.size > 0) {
+                                    categoryEntity.items.add(0, categoryFirstItem)
                                     sectionEntity.categories.add(categoryEntity)
                                 }
 
@@ -104,21 +136,26 @@ internal class ResOfferwallList : ServeSuccess() {
                         }
                     }
                 }
+                // endregion
 
+                // item add
+                if (sectionEntity.items.size > 0 || sectionEntity.categories.size > 0) {
+                    sectionEntity.items.add(0, sectionFirtstItem)
+                    sections.add(sectionEntity)
+                    sectionPos++
+                }
                 // endregion
 
                 // region # w 적립완료 및 참여 불가
                 viewType = OfferwallViewStateType.VIEW_TYPE_SECTION
-
                 // endregion
 
             }
             // endregion
-
         }
     }
 
-    private fun getItem(itemObj: JSONObject): OfferwallItemEntity {
+    private fun getItemEntity(itemObj: JSONObject): OfferwallItemEntity {
         return OfferwallItemEntity(
             advertiseID = itemObj.toStringValue("advertiseID"),
             productID = itemObj.toStringValue("productID"),

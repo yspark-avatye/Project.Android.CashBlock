@@ -21,12 +21,12 @@ internal object APIOfferwall {
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
-            requestUrl = "/advertising/offerwalls",
+            requestUrl = "advertising/offerwalls",
             acceptVersion = "1.0.0",
             argsBody = bodyArgs,
             responseClass = ResOfferwallList::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun getOfferwallsAvailableReward(blockType: BlockType, deviceADID: String, service: ServiceType, response: ServeResponse<ResOfferWallAvailableReward>) {
@@ -34,7 +34,7 @@ internal object APIOfferwall {
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
-            requestUrl = "/advertising/offerwalls/available",
+            requestUrl = "advertising/offerwalls/available",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf(
                 "deviceADID" to deviceADID,
@@ -42,7 +42,7 @@ internal object APIOfferwall {
             ),
             responseClass = ResOfferWallAvailableReward::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun postOfferwallImpression(blockType: BlockType, deviceADID: String, advertiseID: String, service: ServiceType, response: ServeResponse<ResOfferWallImpression>) {
@@ -50,7 +50,7 @@ internal object APIOfferwall {
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
-            requestUrl = "/advertising/offerwall/impression",
+            requestUrl = "advertising/offerwall/impression",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf(
                 "deviceADID" to deviceADID,
@@ -59,7 +59,7 @@ internal object APIOfferwall {
             ),
             responseClass = ResOfferWallImpression::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun postOfferwallClose(blockType: BlockType, deviceADID: String, advertiseID: String, response: ServeResponse<ResVoid>) {
@@ -67,7 +67,7 @@ internal object APIOfferwall {
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
-            requestUrl = "/advertising/offerwall/close",
+            requestUrl = "advertising/offerwall/close",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf(
                 "deviceADID" to deviceADID,
@@ -75,35 +75,58 @@ internal object APIOfferwall {
             ),
             responseClass = ResVoid::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun postOfferwallClick(
         blockType: BlockType,
         deviceADID: String,
         advertiseID: String,
-        deviceID: String = "",
-        deviceModel: String = "",
-        deviceNetwork: String = "",
-        deviceOS: String = "",
-        deviceCarrier: String = "",
-        customData: String = "",
+        deviceID: String? = null,
+        deviceModel: String? = null,
+        deviceNetwork: String? = null,
+        deviceOS: String? = null,
+        deviceCarrier: String? = null,
+        customData: String? = null,
         service: ServiceType,
         response: ServeResponse<ResOfferWallClick>
     ) {
+
+        val bodyArgs = hashMapOf<String, Any>(
+            "deviceADID" to deviceADID,
+            "advertiseID" to advertiseID,
+            "serviceID" to service.value,
+        ).apply {
+            deviceID?.let {
+                "deviceID" to it
+            }
+            deviceModel?.let {
+                "deviceModel" to it
+            }
+            deviceNetwork?.let {
+                "deviceNetwork" to it
+            }
+            deviceOS?.let {
+                "deviceOS" to it
+            }
+            deviceCarrier?.let {
+                "deviceCarrier" to it
+            }
+            customData?.let {
+                "customData" to it
+            }
+        }
+
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
-            requestUrl = "/advertising/offerwall/click",
+            requestUrl = "advertising/offerwall/click",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf(
-                "deviceADID" to deviceADID, "advertiseID" to advertiseID, "deviceID" to deviceID, "deviceModel" to deviceModel,
-                "deviceNetwork" to deviceNetwork, "deviceOS" to deviceOS, "deviceCarrier" to deviceCarrier, "customData" to customData, "serviceID" to service.value
-            ),
+            argsBody = bodyArgs,
             responseClass = ResOfferWallClick::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun postOfferwallConversion(
@@ -111,65 +134,83 @@ internal object APIOfferwall {
         deviceADID: String,
         advertiseID: String,
         clickID: String,
-        deviceID: String = "",
-        deviceNetwork: String = "",
+        deviceID: String? = null,
+        deviceNetwork: String? = null,
         service: ServiceType,
         response: ServeResponse<ResVoid>
     ) {
+        val bodyArgs = hashMapOf<String, Any>(
+            "deviceADID" to deviceADID,
+            "advertiseID" to advertiseID,
+            "clickID" to clickID,
+            "serviceID" to service.value,
+        ).apply {
+            deviceID?.let {
+                "deviceID" to it
+            }
+            deviceNetwork?.let {
+                "deviceNetwork" to it
+            }
+        }
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
-            requestUrl = "/advertising/offerwall/conversion",
+            requestUrl = "advertising/offerwall/conversion",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf(
-                "deviceADID" to deviceADID,
-                "advertiseID" to advertiseID,
-                "clickID" to clickID,
-                "deviceID" to deviceID,
-                "deviceNetwork" to deviceNetwork,
-                "serviceID" to service.value
-            ),
+            argsBody = bodyArgs,
             responseClass = ResVoid::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun postOfferwallContactReward(
         blockType: BlockType,
-        contactID: String = "",
+        contactID: String? = null,
         advertiseID: String,
-        title: String = "",
+        title: String? = null,
         contents: String,
         state: Int = 0,
         resultMsgType: Int = 0,
-        deviceID: String = "",
+        deviceID: String? = null,
         deviceADID: String,
-        phone: String = "",
-        userName: String = "",
+        phone: String? = null,
+        userName: String? = null,
         response: ServeResponse<ResVoid>
     ) {
+        val bodyArgs = hashMapOf<String, Any>(
+            "advertiseID" to advertiseID,
+            "contents" to contents,
+            "state" to state,
+            "resultMsgType" to resultMsgType,
+            "deviceADID" to deviceADID,
+        ).apply {
+            contactID?.let {
+                "contactID" to it
+            }
+            title?.let {
+                "title" to it
+            }
+            deviceID?.let {
+                "deviceID" to deviceID
+            }
+            phone?.let {
+                "phone" to phone
+            }
+            userName?.let {
+                "userName" to userName
+            }
+        }
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.POST,
-            requestUrl = "/advertising/support/contact/reward",
+            requestUrl = "advertising/support/contact/reward",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf(
-                "contactID" to contactID,
-                "advertiseID" to advertiseID,
-                "title" to title,
-                "contents" to contents,
-                "state" to state,
-                "resultMsgType" to resultMsgType,
-                "deviceID" to deviceID,
-                "deviceADID" to deviceADID,
-                "phone" to phone,
-                "userName" to userName
-            ),
+            argsBody = bodyArgs,
             responseClass = ResVoid::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResVoid>) {
@@ -177,53 +218,81 @@ internal object APIOfferwall {
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
-            requestUrl = "/advertising/support/contact/reward/info",
+            requestUrl = "advertising/support/contact/reward/info",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf("advertiseID" to advertiseID),
             responseClass = ResVoid::class.java,
             responseCallback = response
-        )
+        ).execute()
     }
 
     fun getOfferwallContactRewards(
         blockType: BlockType,
-        contactID: String = "",
+        contactID: String? = null,
         advertiseID: String,
-        title: String = "",
+        title: String? = null,
         contents: String,
         type: Int = 0,
         state: Int = 0,
-        deviceID: String = "",
+        deviceID: String? = null,
         deviceADID: String,
-        phone: String = "",
-        userName: String = "",
+        phone: String? = null,
+        userName: String? = null,
         resultMsgType: Int = 0,
-        customMsg: String = "",
+        customMsg: String? = null,
         response: ServeResponse<ResOfferwallContactRewards>
     ) {
+        val bodyArgs = hashMapOf<String, Any>(
+            "advertiseID" to advertiseID,
+            "contents" to contents,
+            "type" to type,
+            "state" to state,
+            "deviceADID" to deviceADID,
+            "resultMsgType" to resultMsgType,
+        ).apply {
+            contactID?.let {
+                "contactID" to it
+            }
+            title?.let {
+                "title" to it
+            }
+            deviceID?.let {
+                "deviceID" to it
+            }
+            phone?.let {
+                "phone" to it
+            }
+            userName?.let {
+                "userName" to it
+            }
+            customMsg?.let {
+                "customMsg" to it
+            }
+        }
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
-            requestUrl = "/advertising/support/contact/rewards",
+            requestUrl = "advertising/support/contact/rewards",
             acceptVersion = "1.0.0",
-            argsBody = hashMapOf(
-                "contactID" to contactID,
-                "advertiseID" to advertiseID,
-                "title" to title,
-                "contents" to contents,
-                "type" to type,
-                "state" to state,
-                "deviceID" to deviceID,
-                "deviceADID" to deviceADID,
-                "phone" to phone,
-                "userName" to userName,
-                "resultMsgType" to resultMsgType,
-                "customMsg" to customMsg,
-            ),
+            argsBody = bodyArgs,
             responseClass = ResOfferwallContactRewards::class.java,
             responseCallback = response
-        )
+        ).execute()
+    }
+
+
+    fun getOfferwallTabs(blockType: BlockType, response: ServeResponse<ResOfferwallTabs>) {
+        ServeTask(
+            blockType = blockType,
+            authorization = ServeTask.Authorization.BEARER,
+            method = ServeTask.Method.GET,
+            requestUrl = "advertising/offerwall/tabs",
+            acceptVersion = "1.0.0",
+            argsBody = null,
+            responseClass = ResOfferwallTabs::class.java,
+            responseCallback = response,
+        ).execute()
     }
 
 

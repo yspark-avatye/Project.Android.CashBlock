@@ -13,7 +13,7 @@ internal data class ServeFailure(
     val errorMessage: String
         get() {
             return when {
-                message.isEmpty() -> "네크워크가 연결되어 있지 않거나 일시적인 오류가 발생하였습니다.\\n잠시 후 다시 시도해 주세요."
+                message.isEmpty() -> "네트워크가 연결되어 있지 않거나 일시적인 오류가 발생하였습니다.\\n잠시 후 다시 시도해 주세요."
                 else -> message
             }
         }

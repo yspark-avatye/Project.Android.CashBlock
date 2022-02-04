@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
@@ -21,8 +22,6 @@ import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
 import com.avatye.cashblock.feature.offerwall.presentation.view.setting.OfferwallSettingActivity
 
 internal class OfferwallMainActivity : AppBaseActivity() {
-
-    var loadingDialog: DialogLoadingView? = null
 
     companion object {
         fun open(
@@ -59,8 +58,6 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
 
-        this.loadingDialog = loadingView
-
         logger.i(viewName = viewTag) { "onCreate { serviceType: ${serviceType.name} }" }
         // region { banner }
         vb.topBannerLinearView.bannerData = AdvertiseController.createBannerData()
@@ -68,18 +65,21 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         // endregion
 
         with(vb.headerView) {
-            actionMore { OfferwallSettingActivity.open(activity = this@OfferwallMainActivity, close = false) }
+            actionMore { OfferwallSettingActivity.open(activity = this@OfferwallMainActivity, serviceType = serviceType, close = false) }
             actionClose { finish() }
         }
 
         logger.i(viewName = viewTag) { "onCreate" }
 
-        // region # banner
-        vb.topBannerLinearView.bannerData = AdvertiseController.createBannerData()
-        vb.topBannerLinearView.requestBanner()
+        // region # deviceAAID
+        CoreContractor.DeviceSetting.fetchAAID {
+            logger.i(viewName = viewTag) {
+                "CoreContractor.DeviceSetting.fetchAAID { complete: $it }"
+            }
+        }
         // endregion
 
-        transactionFragment(OfferwallMainFragment())
+        transactionFragment(fragment = OfferwallMainFragment())
     }
 
     override fun onResume() {

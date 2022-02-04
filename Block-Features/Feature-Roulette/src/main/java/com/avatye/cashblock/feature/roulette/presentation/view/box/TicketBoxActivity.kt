@@ -34,7 +34,7 @@ import com.avatye.cashblock.feature.roulette.component.model.entity.ADPlacementT
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivityTicketBoxBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
-import com.avatye.cashblock.unit.roulette.viewmodel.box.TicketBoxViewModel
+import com.avatye.cashblock.feature.roulette.presentation.viewmodel.box.TicketBoxViewModel
 import org.joda.time.DateTime
 
 internal class TicketBoxActivity : AppBaseActivity() {

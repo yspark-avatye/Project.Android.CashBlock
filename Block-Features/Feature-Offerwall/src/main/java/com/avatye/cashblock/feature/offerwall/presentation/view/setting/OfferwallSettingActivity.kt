@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
+import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivitySettingBinding
@@ -19,10 +21,11 @@ import com.avatye.cashblock.feature.offerwall.presentation.view.main.OfferwallMa
 internal class OfferwallSettingActivity : AppBaseActivity() {
 
     companion object {
-        fun open(activity: Activity, close: Boolean = false) {
+        fun open(activity: Activity, serviceType: ServiceType, close: Boolean = false) {
             activity.launch(
                 intent = Intent(activity, OfferwallSettingActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    putExtra(ServiceNameParcel.NAME, ServiceNameParcel(serviceType = serviceType))
                 },
                 transition = ActivityTransitionType.NONE.value,
                 close = close
@@ -39,7 +42,7 @@ internal class OfferwallSettingActivity : AppBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
         vb.headerView.actionClose { finish() }
-        transaction(OfferwallSettingFragment())
+        transaction(fragment = OfferwallSettingFragment())
     }
 
 

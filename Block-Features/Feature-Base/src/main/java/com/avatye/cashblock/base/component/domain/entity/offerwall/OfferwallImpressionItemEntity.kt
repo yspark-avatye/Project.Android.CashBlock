@@ -4,6 +4,7 @@ data class OfferwallImpressionItemEntity(
     val advertiseID: String = "",
     val productID: String = "",
     val title: String = "",
+    val displayTitle: String = "",
     val iconUrl: String = "",
     val state: Int = 0,
     val userGuide: String = "",
