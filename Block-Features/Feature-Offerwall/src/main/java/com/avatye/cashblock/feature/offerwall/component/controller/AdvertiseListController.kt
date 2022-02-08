@@ -93,10 +93,9 @@ object AdvertiseListController {
         return offerwalls
     }
 
-    fun getHddenSectionID(tabEntity: OfferWallTabEntity, list: MutableList<OfferwallItemEntity>): String {
+    fun getHiddenSectionID(tabEntity: OfferWallTabEntity, list: MutableList<OfferwallItemEntity>): String {
         val tabID = tabEntity.tabID
         val sectionID = list[0].sectionID
-
         return tabID.plus(sectionID)
     }
 
@@ -126,7 +125,7 @@ object AdvertiseListController {
             return mutableListOf()
         }
 
-        val hiddenSectionID = getHddenSectionID(tabEntity = tabEntity, list = list)
+        val hiddenSectionID = getHiddenSectionID(tabEntity = tabEntity, list = list)
 
         if ((PreferenceData.Hidden.hiddenSections ?: listOf()).contains(hiddenSectionID)) {
             return listOf(list[0]).toMutableList()

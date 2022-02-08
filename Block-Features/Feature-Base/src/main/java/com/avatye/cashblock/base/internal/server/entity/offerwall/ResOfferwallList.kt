@@ -96,7 +96,7 @@ internal class ResOfferwallList : ServeSuccess() {
                 }
 
                 // first item (section)
-                val sectionFirtstItem: OfferwallItemEntity = getTypeFirstItem(listType = OfferwallBindItemListType.SECTION)
+                val sectionFirstItem: OfferwallItemEntity = getTypeFirstItem(listType = OfferwallBindItemListType.SECTION)
 
                 // endregion
 
@@ -140,7 +140,7 @@ internal class ResOfferwallList : ServeSuccess() {
 
                 // item add
                 if (sectionEntity.items.size > 0 || sectionEntity.categories.size > 0) {
-                    sectionEntity.items.add(0, sectionFirtstItem)
+                    sectionEntity.items.add(0, sectionFirstItem)
                     sections.add(sectionEntity)
                     sectionPos++
                 }
