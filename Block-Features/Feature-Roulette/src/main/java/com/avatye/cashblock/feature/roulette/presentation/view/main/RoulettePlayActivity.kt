@@ -22,7 +22,7 @@ import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
-import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.data.AppConstData
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
@@ -167,7 +167,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                 }
             }
             // banner
-            vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+            vb.bannerLinearView.bannerData = ADController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
             vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
             vb.bannerLinearView.requestBanner()
             // image load

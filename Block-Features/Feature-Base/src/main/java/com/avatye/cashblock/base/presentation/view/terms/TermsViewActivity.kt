@@ -12,7 +12,7 @@ import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.miscellaneous.ScrollWebView
 import com.avatye.cashblock.base.presentation.AppBaseActivity
-import com.avatye.cashblock.base.presentation.controller.AdvertiseController
+import com.avatye.cashblock.base.presentation.controller.ADController
 import com.avatye.cashblock.base.presentation.parcel.TermsParcel
 import com.avatye.cashblock.databinding.AcbCommonActivityTermsViewBinding
 
@@ -73,7 +73,7 @@ internal class TermsViewActivity : AppBaseActivity() {
             vb.termsContent.loadUrl(it.url)
             // endregion
             // banner
-            vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
+            vb.bannerLinearView.bannerData = ADController.createBannerData()
             vb.bannerLinearView.sourceType = when (getBlockType()) {
                 BlockType.ROULETTE -> BannerLinearView.SourceType.ROULETTE
                 BlockType.OFFERWALL -> BannerLinearView.SourceType.OFFERWALL
