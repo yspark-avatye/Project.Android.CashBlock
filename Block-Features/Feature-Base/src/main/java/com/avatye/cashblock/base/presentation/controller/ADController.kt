@@ -7,7 +7,7 @@ import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADSize
 
-internal object AdvertiseController {
+internal object ADController {
 
     private val verifier = object : IADAgeVerifier {
         override fun isVerified(): Boolean {

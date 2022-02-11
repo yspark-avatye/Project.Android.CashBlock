@@ -20,7 +20,7 @@ import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
 import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 
 
-internal object AdvertiseController {
+internal object ADController {
 
     fun allowExcludeADNetwork(placementType: ADPlacementType, networkNo: Int): Boolean {
         if (networkNo == ADNetworkType.ADFIT.value) {

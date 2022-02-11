@@ -19,7 +19,7 @@ import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.feature.roulette.BuildConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig
-import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.controller.MissionController
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
@@ -111,7 +111,7 @@ internal class SettingMainActivity : AppBaseActivity() {
         // version
         vb.configSdkVersion.text = "V${BuildConfig.X_BUILD_SDK_VERSION_NAME}"
         // banner
-        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+        vb.bannerLinearView.bannerData = ADController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
         vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         // attendance
