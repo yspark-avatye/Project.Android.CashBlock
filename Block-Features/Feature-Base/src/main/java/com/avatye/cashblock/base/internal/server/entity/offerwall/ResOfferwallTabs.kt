@@ -8,8 +8,6 @@ import com.avatye.cashblock.base.library.miscellaneous.until
 import org.json.JSONArray
 
 internal class ResOfferwallTabs: ServeSuccess() {
-    var offerwallTabs = OfferWallTabEntity()
-        private set
 
     val tabEntities: MutableList<OfferWallTabEntity> = mutableListOf()
 
