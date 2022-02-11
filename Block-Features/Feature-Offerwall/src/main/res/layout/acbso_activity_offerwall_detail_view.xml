@@ -9,84 +9,85 @@
 
 
     <!-- region { header view } -->
-    <com.avatye.cashblock.base.component.widget.header.HeaderView
-        android:id="@+id/header_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:acb_widget_view_type="sub"
-        tools:layout_height="50dp"/>
-    <!-- endregion -->
+        android:orientation="horizontal"
+        tools:background="#4C000000">
 
+        <com.avatye.cashblock.base.component.widget.header.HeaderView
+            android:id="@+id/header_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:acb_widget_title="@string/acbso_offerwall_main_title"
+            app:acb_widget_view_type="sub" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/adHide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="16dp"
+                android:drawableTop="@drawable/acbso_ic_hide"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingBottom="3dp"
+                android:text="@string/acbso_offerwall_hide"
+                android:textColor="#424242"
+                android:textSize="10dp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/adClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="16dp"
+                android:drawableTop="@drawable/acbso_ic_remove_bar"
+                android:drawablePadding="6dp"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingBottom="3dp"
+                android:text="@string/acbso_offerwall_close"
+                android:textColor="#424242"
+                android:textSize="10dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/adRewardInquiry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="16dp"
+                android:drawableTop="@drawable/acbso_ic_inquiry_reward"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingBottom="3dp"
+                android:text="@string/acbso_offerwall_reward_inquiry"
+                android:textColor="#424242"
+                android:textSize="10dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- endregion -->
 
     <FrameLayout
         android:id="@+id/ad_detail_view_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-
-
-
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        tools:background="#4C000000">-->
-
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/avt_cp_ova_tv_hide"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:drawableTop="@drawable/acbso_ic_hide_12x12"-->
-<!--            android:gravity="center"-->
-<!--            android:paddingBottom="3dp"-->
-<!--            android:text="@string/avatye_string_offerwall_hide"-->
-<!--            android:textColor="#424242"-->
-<!--            android:textSize="10dp"-->
-<!--            android:visibility="gone"-->
-<!--            tools:visibility="visible" />-->
-
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/avt_cp_ova_tv_close"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:drawableTop="@drawable/avtcb_vd_remove_bar_12x12"-->
-<!--            android:drawablePadding="6dp"-->
-<!--            android:gravity="center"-->
-<!--            android:paddingBottom="3dp"-->
-<!--            android:text="@string/avatye_string_offerwall_close"-->
-<!--            android:textColor="#424242"-->
-<!--            android:textSize="10dp"-->
-<!--            android:visibility="gone"-->
-<!--            tools:visibility="visible" />-->
-
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/avt_cp_ova_tv_reward_inquiry"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:drawableTop="@drawable/avtcb_vd_contact_reward_11x10"-->
-<!--            android:gravity="center"-->
-<!--            android:paddingBottom="3dp"-->
-<!--            android:text="@string/avatye_string_offerwall_contact_reward"-->
-<!--            android:textColor="#424242"-->
-<!--            android:textSize="10dp"-->
-<!--            android:visibility="gone"-->
-<!--            tools:visibility="visible" />-->
-
-
-<!--    </LinearLayout>-->
-
-
-
-
+        android:layout_weight="1" />
 </LinearLayout>

@@ -1,5 +1,12 @@
 package com.avatye.cashblock.base.component.domain.entity.offerwall
 
+/***
+ * ListType
+ * 1: 전체 (MIX)
+ * 2: 빠른적립, 쇼핑적립, 게임적립 (Only-Section)
+ * 3: 목돈적립 (Only-Category)
+ */
+
 enum class OfferWallListType(val value:Int) {
     MIX(1),
     ONLY_SECTION(2),

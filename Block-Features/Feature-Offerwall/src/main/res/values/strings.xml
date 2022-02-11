@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- region # Offerwall main -->
+    <string name="acbso_offerwall_main_title">오퍼월</string>
+    <!-- endregion -->
+
     <!-- region # Offerwall Detail View -->
+    <string name="acbso_offerwall_hide">광고숨김</string>
+    <string name="acbso_offerwall_close">광고제거</string>
+    <string name="acbso_offerwall_reward_inquiry">문의하기</string>
     <string name="acbso_offerwall_button_install">참여하러 가기</string>
     <string name="acbso_offerwall_button_confirm_cpi">참여하기</string>
     <string name="acbso_offerwall_button_confirm">참여하고 %,d 캐시받기</string>
@@ -8,6 +15,8 @@
     <string name="acbso_offerwall_detail_title">참여방법</string>
     <string name="acbso_offerwall_do_you_want_to_remove_from_the_participating_list">광고 제거 시 복구가 불가하며\n포인트가 적립되지 않습니다.\n\n그래도 제거하시겠습니까?</string>
     <string name="acbso_offerwall_do_you_want_to_hide_from_the_participating_list">광고를 숨기시겠습니까?\n\n숨긴 광고는 \'설정\'에서 다시\n복구할 수 있습니다.</string>
+    <string name="acbso_offerwall_failed_to_remove_please_try_again">광고 제거에 실패했습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="acbso_offerwall_failed_to_participate_please_try_again">광고 참여에 실패하였습니다.\n잠시 후 다시 시도해주세요.</string>
     <!-- endregion -->
 
     <!-- region # Inquiry Reward -->

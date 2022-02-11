@@ -7,7 +7,6 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
@@ -25,12 +24,14 @@ import com.avatye.cashblock.base.component.support.toLocale
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
+import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseListController
+import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallListBinding
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoItemOfferwallCategoryBinding
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoItemOfferwallListBinding
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoItemOfferwallSectionBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
-import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallParcel
+import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallViewParcel
 import com.avatye.cashblock.feature.offerwall.presentation.view.detail.OfferwallDetailViewActivity
 import com.avatye.sdk.cashbutton.core.widget.stickylayout.StickyHeaders
 import com.avatye.sdk.cashbutton.core.widget.stickylayout.StickyHeadersLinearLayoutManager
@@ -62,7 +63,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
 
     val offerWallAdapter: OfferWallAdapter = OfferWallAdapter()
     var parentFragment: OfferwallMainFragment? = null
-    private var tab: OfferWallTabEntity? = null
+    private lateinit var tab: OfferWallTabEntity
     private var tabPosition = 0
 
 
@@ -70,6 +71,11 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
         super.onCreate(savedInstanceState)
         arguments?.let { tabPosition = it.getInt("position") }
         parentFragment = getParentFragment() as OfferwallMainFragment
+        parentFragment?.let {
+            if (it.tabList.isNotEmpty()) {
+                tab = it.tabList[tabPosition]
+            }
+        }
     }
 
 
@@ -87,17 +93,21 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 }
             }
         }
-
-        parentFragment?.let {
-            if (it.tabList.isNotEmpty()) {
-                tab = it.tabList[tabPosition]
-            }
-        }
     }
 
-    //region # Make Offerwall-List
 
-    // endregion
+    private fun syncSectionData(hiddenSectionID: String, position: Int = 0) {
+        val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
+
+        if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
+            val resultItem = hiddenSections?.filterNot { it.contains(hiddenSectionID) }
+            PreferenceData.Hidden.update(hiddenSections = resultItem)
+        } else {
+            val resultItem = hiddenSections?.plus(hiddenSectionID)
+            PreferenceData.Hidden.update(hiddenSections = resultItem)
+        }
+        parentFragment?.offerwallListPagerAdapter?.listRefresh(position, true)
+    }
 
 
     private fun getItemTitle(entity: OfferwallItemEntity, listType: OfferwallBindItemListType): String {
@@ -156,7 +166,6 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
         }
 
         override fun getItemViewType(position: Int): Int {
-            Log.e("asd", "asd -> getItemViewType -> offerwalls[position].viewType.value: ${offerwalls[position].viewType.value}")
             return offerwalls[position].viewType.value
         }
 
@@ -175,20 +184,37 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
         }
 
 
+        fun refreshList(positionStart: Int) {
+            notifyItemRangeChanged(positionStart, offerwalls.size)
+        }
+
+
         inner class OfferWallSectionViewHolder(private val itemBinding: AcbsoItemOfferwallSectionBinding) : RecyclerView.ViewHolder(itemBinding.root) {
             fun bindSection() {
                 val entity = offerwalls[adapterPosition]
                 val title = getItemTitle(entity, OfferwallBindItemListType.SECTION)
 
-                bindHiddenSection(entity, adapterPosition)
+                bindHiddenSection(adapterPosition)
                 itemBinding.sectionTitle.text = "${title}(${entity.sectionCount})"
                 itemBinding.sectionStickyLine.isVisible = adapterPosition != 0
             }
 
-            private fun bindHiddenSection(entity: OfferwallItemEntity, position: Int) {
-                //TODO hidden section
-            }
+            private fun bindHiddenSection(position: Int) {
+                val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
+                val hiddenSectionID = AdvertiseListController.getHddenSectionID(
+                    tabEntity = tab,
+                    list = offerwalls
+                )
+                if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
+                    itemBinding.sectionFoldingArrow.rotation = 180F
+                } else {
+                    itemBinding.sectionFoldingArrow.rotation = 0F
+                }
 
+                itemBinding.listItemSectionContainer.setOnClickListener {
+                    syncSectionData(hiddenSectionID, position)
+                }
+            }
         }
 
         inner class OfferwallCategoryViewHolder(private val itemBinding: AcbsoItemOfferwallCategoryBinding) : RecyclerView.ViewHolder(itemBinding.root) {
@@ -196,11 +222,11 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 val entity = offerwalls[adapterPosition]
                 val title = getItemTitle(entity, OfferwallBindItemListType.CATEGORY)
 
-                when (tab?.listType) {
+                when (tab.listType) {
                     OfferWallListType.ONLY_CATEGORY.value -> {
                         itemBinding.categoryFoldingArrow.isVisible = true
                         itemBinding.categoryTitle.text = "${title}(${entity.categoryCount})"
-                        bindHiddenCategory(entity, adapterPosition)
+                        bindHiddenCategory(adapterPosition)
                     }
                     else -> {
                         itemBinding.categoryFoldingArrow.isVisible = false
@@ -209,8 +235,22 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 }
             }
 
-            private fun bindHiddenCategory(entity: OfferwallItemEntity, position: Int) {
-                //TODO hidden category
+            private fun bindHiddenCategory(position: Int) {
+                val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
+                val hiddenSectionID = AdvertiseListController.getHddenSectionID(
+                    tabEntity = tab,
+                    list = offerwalls
+                )
+
+                if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
+                    itemBinding.categoryFoldingArrow.rotation = 180F
+                } else {
+                    itemBinding.categoryFoldingArrow.rotation = 0F
+                }
+
+                itemBinding.listItemCategoryContainer.setOnClickListener {
+                    syncSectionData(hiddenSectionID, position)
+                }
             }
         }
 
@@ -230,7 +270,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                         OfferwallDetailViewActivity.open(
                             activity = parentActivity,
                             serviceType = serviceType ?: ServiceType.OFFERWALL,
-                            parcel = OfferWallParcel(entity.advertiseID, adapterPosition, title, entity.reward),
+                            parcel = OfferWallViewParcel(entity.advertiseID, adapterPosition, title, entity.reward),
                             options = getActivityOptions(entity)
                         )
 
@@ -246,7 +286,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 // region # Text
                 itemBinding.itemRewardAmount.text = entity.reward.toLocale()
                 itemBinding.itemActionType.text = entity.actionName
-                itemBinding.itemTitle.text = getItemTitle(entity,  OfferwallBindItemListType.BASE)
+                itemBinding.itemTitle.text = getItemTitle(entity, OfferwallBindItemListType.BASE)
                 itemBinding.itemDescription.text = if (entity.additionalDescription.isEmpty()) {
                     entity.userGuide
                 } else {

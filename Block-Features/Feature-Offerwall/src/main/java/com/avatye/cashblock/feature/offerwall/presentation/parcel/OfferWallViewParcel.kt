@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-internal data class OfferWallParcel(
+internal data class OfferWallViewParcel(
     val advertiseID: String
     , val currentPos: Int
     , val title: String
