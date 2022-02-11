@@ -20,6 +20,8 @@ object AdvertiseListController {
 
 
     fun makeOfferwallList(sectionList: MutableList<OfferwallSectionEntity>, tabEntity: OfferWallTabEntity): MutableList<OfferwallItemEntity> {
+        offerwalls = mutableListOf()
+
         when (tabEntity.listType) {
             // Mix
             OfferWallListType.MIX.value -> {

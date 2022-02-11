@@ -1,6 +1,8 @@
 package com.avatye.cashblock.feature.offerwall.presentation.view.main
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
@@ -31,6 +33,7 @@ import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseList
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
+import com.avatye.cashblock.feature.offerwall.presentation.view.detail.OfferwallDetailViewActivity
 import org.joda.time.DateTime
 
 internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMainBinding>(AcbsoFragmentOfferwallMainBinding::inflate) {
@@ -68,6 +71,25 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
         binding.bannerLinearView.onPause()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return
+        }
+
+        if (requestCode == OfferwallDetailViewActivity.REQUEST_CODE) {
+//            data?.extras?.getParcelable<OfferWallActionParcel>(OfferWallActionParcel.NAME)?.let {
+//                if (it.journeyType == OfferWallJourneyType.NONE) {
+//                    if (it.forceRefresh) {
+//                        requestOfferWalls(isRetry = false, isLanding = false)
+//                    }
+//                } else {
+//                    offerWallListPagerAdapter.changeSection(it.currentPosition, it.journeyType)
+//                }
+//            }
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,7 +110,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
 
     override fun onHiddenChanged(hidden: Boolean) {
-        // 복구하기 시 특정 프래그먼트의 hidden 상태 여부
+        // 숨김광고 복구하기 시 특정 프래그먼트의 hidden 상태 여부
         super.onHiddenChanged(hidden)
         if (!hidden && isRefreshOfferwallList) {
             offerwallListPagerAdapter.listRefresh()
@@ -106,7 +128,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                     } else {
                         DateTime().toString("yyyyMMdd12")
                     }.toLong()
-                    PreferenceData.Tab.conditionTime = conditionTime
+                    PreferenceData.Tab.update(conditionTime = conditionTime)
 
                     tabList = it.contract
                     callback()
@@ -128,8 +150,8 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
     fun requestOfferWallList(isRetry: Boolean = false, callback: () -> Unit = {}) {
         loadingView?.show(cancelable = false)
 
-        CoreContractor.DeviceSetting.retrieveAAID { AAIDEntity ->
-            api.retrieveList(deviceADID = AAIDEntity.aaid, serviceID = serviceType ?: ServiceType.OFFERWALL) {
+        CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
+            api.retrieveList(deviceADID = aaidEntity.aaid, serviceID = serviceType ?: ServiceType.OFFERWALL) {
                 when (it) {
                     is ContractResult.Success -> {
                         if (isAvailable) {
@@ -138,10 +160,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
                             it.contract.forEach { sectionEntity ->
                                 sectionEntity.items.forEach { items ->
-                                    offerwallListPagerAdapter.setData(
-                                        isRetry = isRetry,
-                                        data = items,
-                                    )
+                                    offerwallListPagerAdapter.setData(isRetry = isRetry)
                                 }
                             }
 
@@ -215,6 +234,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
         tab.setOnClickListener {
             binding.vpViewpager2.setCurrentItem(index, true)
+            offerwallListPagerAdapter.setData()
         }
     }
 
@@ -272,7 +292,6 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
 
     inner class OfferwallListPagerAdapter : FragmentStateAdapter(this) {
-        private var itemEntity: OfferwallItemEntity = OfferwallItemEntity()
         private var offerwalls: MutableList<OfferwallItemEntity> = mutableListOf()
 
         private var fragmentList = hashMapOf<Int, OfferWallListFragment>()
@@ -288,9 +307,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
         }
 
 
-        fun setData(isRetry: Boolean = false, data: OfferwallItemEntity) {
-            itemEntity = data
-
+        fun setData(isRetry: Boolean = false) {
             offerwalls = AdvertiseListController.makeOfferwallList(
                 sectionList = sectionList,
                 tabEntity = tabList[currentPagePosition]
@@ -310,7 +327,7 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                     tabEntity = tabList[currentPagePosition]
                 )
                 it.offerWallAdapter.offerwalls = offerwalls
-                // refresh
+                it.offerWallAdapter.refreshList(position)
 
             }
         }

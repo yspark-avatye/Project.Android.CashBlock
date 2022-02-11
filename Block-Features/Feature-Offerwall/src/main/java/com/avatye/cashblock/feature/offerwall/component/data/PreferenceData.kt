@@ -47,7 +47,7 @@ internal object PreferenceData {
     // region # Tab
     object Tab {
         private var _conditionTime = Preference.Tab.conditionTime
-        var conditionTime: Long = 0
+        val conditionTime: Long
             get() = _conditionTime
 
         fun clear() {
@@ -77,6 +77,27 @@ internal object PreferenceData {
         private var _hiddenItems = Preference.Hidden.hiddenItems
         val hiddenItems: List<String>?
             get() = _hiddenItems
+
+
+        fun clear() {
+            Preference.Hidden.clear()
+            update(
+                hiddenSections = Preference.Hidden.hiddenSections,
+                hiddenItems = Preference.Hidden.hiddenItems
+            )
+        }
+
+        fun update(
+            hiddenSections: List<String>? = null,
+            hiddenItems: List<String>? = null,
+        ) {
+            hiddenSections?.let {
+                _hiddenSections = it
+            }
+            hiddenItems?.let {
+                _hiddenItems = it
+            }
+        }
     }
     // endregion
 

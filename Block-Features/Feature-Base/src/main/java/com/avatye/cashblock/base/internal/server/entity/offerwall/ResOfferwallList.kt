@@ -1,5 +1,6 @@
 package com.avatye.cashblock.base.internal.server.entity.offerwall
 
+import android.util.Log
 import com.avatye.cashblock.base.component.domain.entity.offerwall.*
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import com.avatye.cashblock.base.library.miscellaneous.toIntValue

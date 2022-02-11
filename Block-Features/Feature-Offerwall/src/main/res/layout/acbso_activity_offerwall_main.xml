@@ -12,7 +12,7 @@
         android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:acb_widget_title="오퍼월"
+        app:acb_widget_title="@string/acbso_offerwall_main_title"
         app:acb_widget_view_type="main"
         app:acb_widget_visible_close="true"
         app:acb_widget_visible_more="true" />

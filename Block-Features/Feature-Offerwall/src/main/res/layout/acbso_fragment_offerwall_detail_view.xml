@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <!-- region { description } -->
@@ -45,7 +45,7 @@
 
         <!-- region { action type } -->
         <TextView
-            android:id="@+id/item_action_type"
+            android:id="@+id/action_type"
             style="@style/CashBlock.Widget.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             style="@style/CashBlock.Widget.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/item_action_type"
+            android:layout_below="@+id/action_type"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
@@ -110,8 +110,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@+id/icon_container"
-            android:drawablePadding="2dp"
             android:drawableEnd="@drawable/acbso_ic_coin_blue"
+            android:drawablePadding="2dp"
             android:gravity="center_vertical|end"
             android:textColor="#2196F3"
             android:textSize="20dp"
@@ -188,44 +188,49 @@
     </RelativeLayout>
     <!-- endregion -->
 
-
     <!-- region { buttons } -->
-    <Button
-        android:id="@+id/confirm_button"
-        style="@style/CashBlock.Widget.Button.c01"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        tools:text="@string/acbso_offerwall_button_confirm" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/confirm_button"
+            style="@style/CashBlock.Widget.Button.c01"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            tools:text="@string/acbso_offerwall_button_confirm" />
 
 
-    <Button
-        android:id="@+id/validate_button"
-        style="@style/CashBlock.Widget.Button.c01"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp"
-        tools:text="@string/acbso_offerwall_button_validate" />
+        <Button
+            android:id="@+id/validate_button"
+            style="@style/CashBlock.Widget.Button.c01"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            tools:text="@string/acbso_offerwall_button_validate" />
+
+    </LinearLayout>
     <!-- endregion -->
+
 
     <!-- region { linear bottom Banner } -->
     <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
         android:id="@+id/banner_linear_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/acb_dimen_widget_banner_linear_view_height"
         android:background="@color/acb_core_color_pale_blue"
-        tools:layout_height="50dp"/>
+        tools:layout_height="55dp" />
     <!-- region { linear bottom Banner } -->
-
-
 
 
 </LinearLayout>

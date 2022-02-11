@@ -2,12 +2,15 @@ package com.avatye.cashblock.feature.offerwall.component.controller
 
 import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallImpressionItemEntity
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 
 
 internal object AdvertiseController {
+
+    var impressionItemEntity = OfferwallImpressionItemEntity()
 
     private val verifier = object : IADAgeVerifier {
         override fun isVerified(): Boolean {
