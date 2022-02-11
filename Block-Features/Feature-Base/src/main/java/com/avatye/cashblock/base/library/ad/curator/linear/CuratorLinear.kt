@@ -7,11 +7,13 @@ import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.ILinearADCallback
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADLoader
 import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADNativeLoader
+import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADSize
 
 
 class CuratorLinear(
     private val context: Context,
     private val placementAppKey: String,
+    private val placementADSize: LinearADSize,
     private val sspPlacementID: String,
     private val nativePlacementID: String,
     private val mediationExtraData: HashMap<String, Any>? = null,
@@ -62,6 +64,7 @@ class CuratorLinear(
             sspLoader = LinearADLoader(
                 context = context,
                 placementAppKey = placementAppKey,
+                placementADSize = placementADSize,
                 placementID = sspPlacementID,
                 mediationExtraData = mediationExtraData,
                 callback = CallbackSSPAD()
@@ -75,6 +78,7 @@ class CuratorLinear(
             nativeLoader = LinearADNativeLoader(
                 context = context,
                 placementAppKey = placementAppKey,
+                placementADSize = placementADSize,
                 placementID = nativePlacementID,
                 callback = CallbackNativeAD()
             )

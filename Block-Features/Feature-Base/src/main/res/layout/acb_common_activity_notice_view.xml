@@ -84,7 +84,8 @@
     <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
         android:id="@+id/banner_linear_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/acb_dimen_widget_banner_linear_view_height" />
+        android:layout_height="wrap_content"
+        tools:layout_height="55dp" />
     <!-- endregion -->
 
 </LinearLayout>

@@ -15,12 +15,15 @@ import com.avatye.cashblock.base.component.domain.entity.mission.MissionStateEnt
 import com.avatye.cashblock.base.component.support.ChannelTalkUtil
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.launch
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.feature.roulette.BuildConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig
+import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.controller.MissionController
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
+import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivitySettingMainBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
 
@@ -107,6 +110,10 @@ internal class SettingMainActivity : AppBaseActivity() {
         }
         // version
         vb.configSdkVersion.text = "V${BuildConfig.X_BUILD_SDK_VERSION_NAME}"
+        // banner
+        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
+        vb.bannerLinearView.requestBanner()
         // attendance
         MissionController.Attendance.requestList(ownerActivity = this@SettingMainActivity) {
             it?.let { data ->

@@ -19,10 +19,13 @@ import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransition
 import com.avatye.cashblock.base.component.domain.entity.game.GamePlayEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
+import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.roulette.component.data.AppConstData
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
+import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 import com.avatye.cashblock.feature.roulette.component.model.parcel.RoulettePlayParcel
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivityRoulettePlayBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
@@ -105,19 +108,19 @@ internal class RoulettePlayActivity : AppBaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        vb.linearBannerView.onResume()
+        vb.bannerLinearView.onResume()
         vb.winnerDiplayView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        vb.linearBannerView.onPause()
+        vb.bannerLinearView.onPause()
         vb.winnerDiplayView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        vb.linearBannerView.onDestroy()
+        vb.bannerLinearView.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -163,10 +166,12 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                     }
                 }
             }
+            // banner
+            vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+            vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
+            vb.bannerLinearView.requestBanner()
             // image load
-            requestRouletteImage {
-                observeViewModel()
-            }
+            requestRouletteImage { observeViewModel() }
         } ?: run {
             CoreUtil.showToast(CoreResource.string.acb_common_message_error)
             leakHandler.postDelayed({ finish() }, 750L)
@@ -199,30 +204,30 @@ internal class RoulettePlayActivity : AppBaseActivity() {
 
     private fun observeViewModel() {
         // region #ticket balance
-        ticketViewModel.balance.observe(this, {
+        ticketViewModel.balance.observe(this) {
             with(vb.ticketQuantity) {
                 text = getString(R.string.acbsr_string_roulette_ticket_quantity)
                     .format(if (it >= 0) it.toLocaleOver(9999) else "-")
                     .toHtml
             }
             possibility = (it >= parcel.useTicketAmount)
-        })
+        }
         ticketViewModel.syncBalance { _, _ ->
             logger.i(viewName = viewTag) { "TicketViewModel -> syncBalance" }
         }
         // endregion
 
         // region #winner board
-        winnerViewModel.contents.observe(this, {
+        winnerViewModel.contents.observe(this) {
             if (it is ViewModelResult.Complete) {
                 vb.winnerDiplayView.updateData(winners = it.result)
             }
-        })
+        }
         winnerViewModel.request()
         // endregion
 
         // region #roulette play
-        roulettePlayViewModel.playResult.observe(this, {
+        roulettePlayViewModel.playResult.observe(this) {
             when (it) {
                 is ViewModelResult.InProgress -> {}
                 is ViewModelResult.Complete -> requestRoulettePlay(it.result)
@@ -239,7 +244,7 @@ internal class RoulettePlayActivity : AppBaseActivity() {
                     messageDialog.show(cancelable = false)
                 }
             }
-        })
+        }
         // endregion
     }
 

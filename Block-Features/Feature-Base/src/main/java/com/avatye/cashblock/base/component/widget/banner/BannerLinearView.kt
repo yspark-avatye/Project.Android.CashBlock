@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import com.avatye.cashblock.R
 import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
 import com.avatye.cashblock.base.library.ad.curator.linear.CuratorLinear
 import com.avatye.cashblock.base.library.ad.curator.linear.ICuratorLinearCallback
+import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADSize
 import com.avatye.cashblock.databinding.AcbLibraryAdWidgetBannerLinearBinding
 import com.igaworks.ssp.part.banner.AdPopcornSSPBannerAd
 
@@ -18,8 +20,11 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
 
     private val tagName: String = "BannerLinearView"
 
+    enum class SourceType { ROULETTE, OFFERWALL }
+
     data class BannerData(
         val placementAppKey: String,
+        val placementADSize: LinearADSize,
         val sspPlacementID: String,
         val nativePlacementID: String,
         val mezzo: MediationMezzoData?,
@@ -40,9 +45,52 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
     data class MediationMezzoData(val storeUrl: String, val allowBackground: Boolean = false)
 
     var bannerData: BannerData? = null
+    var sourceType: SourceType? = null
+
     private var curatorLinear: CuratorLinear? = null
     private val vb: AcbLibraryAdWidgetBannerLinearBinding by lazy {
         AcbLibraryAdWidgetBannerLinearBinding.inflate(LayoutInflater.from(context), this, true)
+    }
+
+    private fun setBannerBackFill(isVisible: Boolean) {
+        if (bannerData != null && sourceType != null) {
+            val backFillResId = getBannerBackFillResourceId(sourceType = sourceType!!, linearADSize = bannerData!!.placementADSize)
+            if (isVisible && backFillResId > 0) {
+                when (bannerData!!.placementADSize) {
+                    LinearADSize.W320XH50 -> {
+                        // 320x50
+                        vb.bannerLinearBackFill320x50.isVisible = true
+                        vb.bannerLinearBackFill320x50.setImageResource(backFillResId)
+                        // 320x100
+                        vb.bannerLinearBackFill320x100.isVisible = false
+                    }
+                    LinearADSize.W320XH100 -> {
+                        // 320x100
+                        vb.bannerLinearBackFill320x100.isVisible = true
+                        vb.bannerLinearBackFill320x100.setImageResource(backFillResId)
+                        // 320x50
+                        vb.bannerLinearBackFill320x50.isVisible = false
+                    }
+                }
+                return
+            }
+        }
+        vb.bannerLinearBackFill320x50.isVisible = false
+        vb.bannerLinearBackFill320x100.isVisible = false
+    }
+
+    private fun getBannerBackFillResourceId(sourceType: SourceType, linearADSize: LinearADSize): Int {
+        return if (linearADSize == LinearADSize.W320XH50) {
+            when (sourceType) {
+                SourceType.ROULETTE -> R.drawable.acb_common_bitmap_roulette_banner_linear_back_fill_h50
+                SourceType.OFFERWALL -> 0
+            }
+        } else {
+            when (sourceType) {
+                SourceType.ROULETTE -> R.drawable.acb_common_bitmap_roulette_banner_linear_back_fill_h100
+                SourceType.OFFERWALL -> 0
+            }
+        }
     }
 
     private fun requestCuratorLinear() {
@@ -60,6 +108,7 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
             curatorLinear = CuratorLinear(
                 context = this.context,
                 placementAppKey = it.placementAppKey,
+                placementADSize = it.placementADSize,
                 sspPlacementID = it.sspPlacementID,
                 nativePlacementID = it.nativePlacementID,
                 mediationExtraData = it.makeMediationExtra(),
@@ -67,6 +116,7 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
                 callback = this@BannerLinearView
             )
             this@BannerLinearView.isVisible = true
+            setBannerBackFill(isVisible = true)
             post {
                 curatorLinear?.requestAD()
             }
@@ -117,7 +167,7 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
             vb.bannerLinearFrame.removeAllViews()
             vb.bannerLinearFrame.addView(adView)
             vb.bannerLinearFrame.isVisible = true
-            vb.bannerLinearBackfill.isVisible = false
+            setBannerBackFill(isVisible = false)
         }
     }
 
@@ -125,7 +175,7 @@ class BannerLinearView(context: Context, attrs: AttributeSet? = null) : FrameLay
         this.post {
             LogHandler.i(moduleName = MODULE_NAME) { "$tagName -> curatorLinear::onFailure(isBlock: $isBlocked)" }
             vb.bannerLinearFrame.isVisible = false
-            vb.bannerLinearBackfill.isVisible = true
+            setBannerBackFill(isVisible = true)
         }
     }
 

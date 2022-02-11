@@ -129,8 +129,10 @@ internal object RemotePreferenceData {
             rewardBannerDelay = Preference.InAppConfig.Main.rewardBannerDelay,
             pid = InAppSettingEntity.Main.PlacementID(
                 rewardBanner = Preference.InAppConfig.Main.PID.rewardBanner,
-                linearSSP = Preference.InAppConfig.Main.PID.linearSSP,
-                linearNative = Preference.InAppConfig.Main.PID.linearNative
+                linearSSP_320x50 = Preference.InAppConfig.Main.PID.linearSSP_320X50,
+                linearSSP_320x100 = Preference.InAppConfig.Main.PID.linearSSP_320X100,
+                linearNative_320x50 = Preference.InAppConfig.Main.PID.linearNative_320X50,
+                linearNative_320x100 = Preference.InAppConfig.Main.PID.linearNative_320X100
             )
         )
     )
@@ -158,7 +160,8 @@ internal object RemotePreferenceData {
             excludePosition = Preference.TouchTicketConfig.PopAD.excludePosition
         ),
         pid = TouchTicketSettingEntity.PlacementID(
-            linearSSP = Preference.TouchTicketConfig.PID.linearSSP,
+            linearSSP_320x50 = Preference.TouchTicketConfig.PID.linearSSP_320X50,
+            linearSSP_320x100 = Preference.TouchTicketConfig.PID.linearSSP_320X100,
             popupSSP = Preference.TouchTicketConfig.PID.popupSSP,
             popupNative = Preference.TouchTicketConfig.PID.popupNative,
             openInterstitialSSP = Preference.TouchTicketConfig.PID.openInterstitialSSP,
@@ -186,7 +189,8 @@ internal object RemotePreferenceData {
         period = Preference.VideoTicketConfig.period,
         limitCount = Preference.VideoTicketConfig.limitCount,
         pid = VideoTicketSettingEntity.PlacementID(
-            linearSSP = Preference.VideoTicketConfig.PID.linearSSP,
+            linearSSP_320x50 = Preference.VideoTicketConfig.PID.linearSSP_320X50,
+            linearSSP_320x100 = Preference.VideoTicketConfig.PID.linearSSP_320X100,
             openRewardVideoSSP = Preference.VideoTicketConfig.PID.openRewardVideoSSP,
             openInterstitialSSP = Preference.VideoTicketConfig.PID.openInterstitialSSP,
             openInterstitialNative = Preference.VideoTicketConfig.PID.openInterstitialNative,
@@ -217,7 +221,8 @@ internal object RemotePreferenceData {
             excludePosition = Preference.TicketBoxConfig.PopAD.excludePosition
         ),
         pid = TicketBoxSettingEntity.PlacementID(
-            linearSSP = Preference.TicketBoxConfig.PID.linearSSP,
+            linearSSP_320x50 = Preference.TicketBoxConfig.PID.linearSSP_320X50,
+            linearSSP_320x100 = Preference.TicketBoxConfig.PID.linearSSP_320X100,
             popupSSP = Preference.TicketBoxConfig.PID.popupSSP,
             popupNative = Preference.TicketBoxConfig.PID.popupNative,
             openInterstitialSSP = Preference.TicketBoxConfig.PID.openInterstitialSSP,
@@ -480,8 +485,10 @@ internal object RemotePreferenceData {
         object InAppConfig {
             private const val IN_APP_MAIN_REWARD_BANNER_DELAY = "inapp:main:reward-banner-delay"
             private const val IN_APP_MAIN_PID_REWARD_BANNER = "inapp:main:pid:reward-banner"
-            private const val IN_APP_MAIN_PID_LINEAR_SSP = "inapp:main:pid:linear-ssp"
-            private const val IN_APP_MAIN_PID_LINEAR_NATIVE = "inapp:main:pid:linear-native"
+            private const val IN_APP_MAIN_PID_LINEAR_SSP_320X50 = "inapp:main:pid:linear-ssp:320X50"
+            private const val IN_APP_MAIN_PID_LINEAR_SSP_320X100 = "inapp:main:pid:linear-ssp:320X100"
+            private const val IN_APP_MAIN_PID_LINEAR_NATIVE_320X50 = "inapp:main:pid:linear-native:320X50"
+            private const val IN_APP_MAIN_PID_LINEAR_NATIVE_320X100 = "inapp:main:pid:linear-native:320X100"
             private val D = InAppSettingEntity.empty()
 
             object Main {
@@ -496,14 +503,24 @@ internal object RemotePreferenceData {
                             return pref.getString(IN_APP_MAIN_PID_REWARD_BANNER, D.main.pid.rewardBanner) ?: D.main.pid.rewardBanner
                         }
 
-                    val linearSSP: String
+                    val linearSSP_320X50: String
                         get() {
-                            return pref.getString(IN_APP_MAIN_PID_LINEAR_SSP, D.main.pid.linearSSP) ?: D.main.pid.linearSSP
+                            return pref.getString(IN_APP_MAIN_PID_LINEAR_SSP_320X50, D.main.pid.linearSSP_320x50) ?: D.main.pid.linearSSP_320x50
                         }
 
-                    val linearNative: String
+                    val linearSSP_320X100: String
                         get() {
-                            return pref.getString(IN_APP_MAIN_PID_LINEAR_NATIVE, D.main.pid.linearNative) ?: D.main.pid.linearNative
+                            return pref.getString(IN_APP_MAIN_PID_LINEAR_SSP_320X100, D.main.pid.linearSSP_320x100) ?: D.main.pid.linearSSP_320x100
+                        }
+
+                    val linearNative_320X50: String
+                        get() {
+                            return pref.getString(IN_APP_MAIN_PID_LINEAR_NATIVE_320X50, D.main.pid.linearNative_320x50) ?: D.main.pid.linearNative_320x50
+                        }
+
+                    val linearNative_320X100: String
+                        get() {
+                            return pref.getString(IN_APP_MAIN_PID_LINEAR_NATIVE_320X100, D.main.pid.linearNative_320x100) ?: D.main.pid.linearNative_320x100
                         }
                 }
             }
@@ -512,16 +529,20 @@ internal object RemotePreferenceData {
                 pref.edit {
                     putLong(IN_APP_MAIN_REWARD_BANNER_DELAY, setting.main.rewardBannerDelay)
                     putString(IN_APP_MAIN_PID_REWARD_BANNER, setting.main.pid.rewardBanner)
-                    putString(IN_APP_MAIN_PID_LINEAR_SSP, setting.main.pid.linearSSP)
-                    putString(IN_APP_MAIN_PID_LINEAR_NATIVE, setting.main.pid.linearNative)
+                    putString(IN_APP_MAIN_PID_LINEAR_SSP_320X50, setting.main.pid.linearSSP_320x50)
+                    putString(IN_APP_MAIN_PID_LINEAR_SSP_320X100, setting.main.pid.linearSSP_320x100)
+                    putString(IN_APP_MAIN_PID_LINEAR_NATIVE_320X50, setting.main.pid.linearNative_320x50)
+                    putString(IN_APP_MAIN_PID_LINEAR_NATIVE_320X100, setting.main.pid.linearNative_320x100)
                 }
             }
 
             fun clear() {
                 arrayOf(
                     IN_APP_MAIN_PID_REWARD_BANNER,
-                    IN_APP_MAIN_PID_LINEAR_SSP,
-                    IN_APP_MAIN_PID_LINEAR_NATIVE
+                    IN_APP_MAIN_PID_LINEAR_SSP_320X50,
+                    IN_APP_MAIN_PID_LINEAR_SSP_320X100,
+                    IN_APP_MAIN_PID_LINEAR_NATIVE_320X50,
+                    IN_APP_MAIN_PID_LINEAR_NATIVE_320X100
                 ).forEach {
                     pref.edit { remove(it) }
                 }
@@ -541,7 +562,8 @@ internal object RemotePreferenceData {
             private const val TOUCH_TICKET_POP_AD_EXCLUDE_POSITION = "touch-ticket:pop-ad:exclude-position"
 
             // placement id
-            private const val TOUCH_TICKET_PID_LINEAR_SSP = "touch-ticket:pid:linear-ssp"
+            private const val TOUCH_TICKET_PID_LINEAR_SSP_320X50 = "touch-ticket:pid:linear-ssp:320X50"
+            private const val TOUCH_TICKET_PID_LINEAR_SSP_320X100 = "touch-ticket:pid:linear-ssp:320X100"
             private const val TOUCH_TICKET_PID_POPUP_SSP = "touch-ticket:pid:popup-ssp"
             private const val TOUCH_TICKET_PID_POPUP_NATIVE = "touch-ticket:pid:popup-native"
             private const val TOUCH_TICKET_PID_OPEN_INTERSTITIAL_SSP = "touch-ticket:pid:open-interstitial-ssp"
@@ -597,9 +619,15 @@ internal object RemotePreferenceData {
 
 
             object PID {
-                val linearSSP: String
+                val linearSSP_320X50: String
                     get() {
-                        return pref.getString(TOUCH_TICKET_PID_LINEAR_SSP, D.pid.linearSSP) ?: D.pid.linearSSP
+                        return pref.getString(TOUCH_TICKET_PID_LINEAR_SSP_320X50, D.pid.linearSSP_320x50) ?: D.pid.linearSSP_320x50
+                    }
+
+
+                val linearSSP_320X100: String
+                    get() {
+                        return pref.getString(TOUCH_TICKET_PID_LINEAR_SSP_320X100, D.pid.linearSSP_320x100) ?: D.pid.linearSSP_320x100
                     }
 
 
@@ -669,7 +697,8 @@ internal object RemotePreferenceData {
                     putBoolean(TOUCH_TICKET_POP_AD_EXCLUDE, setting.popAD.exclude)
                     putFloat(TOUCH_TICKET_POP_AD_EXCLUDE_POSITION, setting.popAD.excludePosition)
                     // placement id
-                    putString(TOUCH_TICKET_PID_LINEAR_SSP, setting.pid.linearSSP)
+                    putString(TOUCH_TICKET_PID_LINEAR_SSP_320X50, setting.pid.linearSSP_320x50)
+                    putString(TOUCH_TICKET_PID_LINEAR_SSP_320X100, setting.pid.linearSSP_320x100)
                     putString(TOUCH_TICKET_PID_POPUP_SSP, setting.pid.popupSSP)
                     putString(TOUCH_TICKET_PID_POPUP_NATIVE, setting.pid.popupNative)
                     putString(TOUCH_TICKET_PID_OPEN_INTERSTITIAL_SSP, setting.pid.openInterstitialSSP)
@@ -691,7 +720,8 @@ internal object RemotePreferenceData {
                     TOUCH_TICKET_POP_AD_POSITION,
                     TOUCH_TICKET_POP_AD_EXCLUDE,
                     TOUCH_TICKET_POP_AD_EXCLUDE_POSITION,
-                    TOUCH_TICKET_PID_LINEAR_SSP,
+                    TOUCH_TICKET_PID_LINEAR_SSP_320X50,
+                    TOUCH_TICKET_PID_LINEAR_SSP_320X100,
                     TOUCH_TICKET_PID_POPUP_SSP,
                     TOUCH_TICKET_PID_POPUP_NATIVE,
                     TOUCH_TICKET_PID_OPEN_INTERSTITIAL_SSP,
@@ -712,7 +742,8 @@ internal object RemotePreferenceData {
             private const val VIDEO_TICKET_LIMIT_COUNT = "video-ticket:limit-count"
 
             // placement id
-            private const val VIDEO_TICKET_PID_LINEAR_SSP = "video-ticket:pid:linear-ssp"
+            private const val VIDEO_TICKET_PID_LINEAR_SSP_320X50 = "video-ticket:pid:linear-ssp:320X50"
+            private const val VIDEO_TICKET_PID_LINEAR_SSP_320X100 = "video-ticket:pid:linear-ssp:320X100"
             private const val VIDEO_TICKET_PID_OPEN_REWARD_VIDEO_SSP = "video-ticket:pid:open-reward-video-ssp"
             private const val VIDEO_TICKET_PID_OPEN_INTERSTITIAL_SSP = "video-ticket:pid:open-interstitial-ssp"
             private const val VIDEO_TICKET_PID_OPEN_INTERSTITIAL_NATIVE = "video-ticket:pid:open-interstitial-native"
@@ -736,9 +767,15 @@ internal object RemotePreferenceData {
 
 
             object PID {
-                val linearSSP: String
+                val linearSSP_320X50: String
                     get() {
-                        return pref.getString(VIDEO_TICKET_PID_LINEAR_SSP, D.pid.linearSSP) ?: D.pid.linearSSP
+                        return pref.getString(VIDEO_TICKET_PID_LINEAR_SSP_320X50, D.pid.linearSSP_320x50) ?: D.pid.linearSSP_320x50
+                    }
+
+
+                val linearSSP_320X100: String
+                    get() {
+                        return pref.getString(VIDEO_TICKET_PID_LINEAR_SSP_320X100, D.pid.linearSSP_320x100) ?: D.pid.linearSSP_320x100
                     }
 
 
@@ -789,7 +826,8 @@ internal object RemotePreferenceData {
                     putInt(VIDEO_TICKET_PERIOD, setting.period)
                     putInt(VIDEO_TICKET_LIMIT_COUNT, setting.limitCount)
                     // pid
-                    putString(VIDEO_TICKET_PID_LINEAR_SSP, setting.pid.linearSSP)
+                    putString(VIDEO_TICKET_PID_LINEAR_SSP_320X50, setting.pid.linearSSP_320x50)
+                    putString(VIDEO_TICKET_PID_LINEAR_SSP_320X100, setting.pid.linearSSP_320x100)
                     putString(VIDEO_TICKET_PID_OPEN_REWARD_VIDEO_SSP, setting.pid.openRewardVideoSSP)
                     putString(VIDEO_TICKET_PID_OPEN_INTERSTITIAL_SSP, setting.pid.openInterstitialSSP)
                     putString(VIDEO_TICKET_PID_OPEN_INTERSTITIAL_NATIVE, setting.pid.openInterstitialNative)
@@ -803,7 +841,8 @@ internal object RemotePreferenceData {
                 arrayOf(
                     VIDEO_TICKET_PERIOD,
                     VIDEO_TICKET_LIMIT_COUNT,
-                    VIDEO_TICKET_PID_LINEAR_SSP,
+                    VIDEO_TICKET_PID_LINEAR_SSP_320X50,
+                    VIDEO_TICKET_PID_LINEAR_SSP_320X100,
                     VIDEO_TICKET_PID_OPEN_REWARD_VIDEO_SSP,
                     VIDEO_TICKET_PID_OPEN_INTERSTITIAL_SSP,
                     VIDEO_TICKET_PID_OPEN_INTERSTITIAL_NATIVE,
@@ -829,7 +868,8 @@ internal object RemotePreferenceData {
             private const val TICKET_BOX_POP_AD_EXCLUDE_POSITION = "ticket-box:pop-ad:exclude-position"
 
             // placement id
-            private const val TICKET_BOX_PID_LINEAR_SSP = "ticket-box:pid:linear-ssp"
+            private const val TICKET_BOX_PID_LINEAR_SSP_320X50 = "ticket-box:pid:linear-ssp:320X50"
+            private const val TICKET_BOX_PID_LINEAR_SSP_320X100 = "ticket-box:pid:linear-ssp:320X100"
             private const val TICKET_BOX_PID_POPUP_SSP = "ticket-box:pid:popup-ssp"
             private const val TICKET_BOX_PID_POPUP_NATIVE = "ticket-box:pid:popup-native"
             private const val TICKET_BOX_PID_OPEN_INTERSTITIAL_SSP = "ticket-box:pid:open-interstitial-ssp"
@@ -872,9 +912,15 @@ internal object RemotePreferenceData {
 
 
             object PID {
-                val linearSSP: String
+                val linearSSP_320X50: String
                     get() {
-                        return pref.getString(TICKET_BOX_PID_LINEAR_SSP, D.pid.linearSSP) ?: D.pid.linearSSP
+                        return pref.getString(TICKET_BOX_PID_LINEAR_SSP_320X50, D.pid.linearSSP_320x50) ?: D.pid.linearSSP_320x50
+                    }
+
+
+                val linearSSP_320X100: String
+                    get() {
+                        return pref.getString(TICKET_BOX_PID_LINEAR_SSP_320X100, D.pid.linearSSP_320x100) ?: D.pid.linearSSP_320x100
                     }
 
 
@@ -942,7 +988,8 @@ internal object RemotePreferenceData {
                     putBoolean(TICKET_BOX_POP_AD_EXCLUDE, setting.popAD.exclude)
                     putFloat(TICKET_BOX_POP_AD_EXCLUDE_POSITION, setting.popAD.excludePosition)
                     // placement id
-                    putString(TICKET_BOX_PID_LINEAR_SSP, setting.pid.linearSSP)
+                    putString(TICKET_BOX_PID_LINEAR_SSP_320X50, setting.pid.linearSSP_320x50)
+                    putString(TICKET_BOX_PID_LINEAR_SSP_320X100, setting.pid.linearSSP_320x100)
                     putString(TICKET_BOX_PID_POPUP_SSP, setting.pid.popupSSP)
                     putString(TICKET_BOX_PID_POPUP_NATIVE, setting.pid.popupNative)
                     putString(TICKET_BOX_PID_OPEN_INTERSTITIAL_SSP, setting.pid.openInterstitialSSP)
@@ -962,7 +1009,8 @@ internal object RemotePreferenceData {
                     TICKET_BOX_POP_AD_POSITION,
                     TICKET_BOX_POP_AD_EXCLUDE,
                     TICKET_BOX_POP_AD_EXCLUDE_POSITION,
-                    TICKET_BOX_PID_LINEAR_SSP,
+                    TICKET_BOX_PID_LINEAR_SSP_320X50,
+                    TICKET_BOX_PID_LINEAR_SSP_320X100,
                     TICKET_BOX_PID_POPUP_SSP,
                     TICKET_BOX_PID_POPUP_NATIVE,
                     TICKET_BOX_PID_OPEN_INTERSTITIAL_SSP,

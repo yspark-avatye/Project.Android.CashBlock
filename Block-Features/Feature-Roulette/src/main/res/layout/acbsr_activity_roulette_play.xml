@@ -167,7 +167,7 @@
 
         <!-- region { LinearBannerView } -->
         <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
-            android:id="@+id/linear_banner_view"
+            android:id="@+id/banner_linear_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout_height="55dp" />

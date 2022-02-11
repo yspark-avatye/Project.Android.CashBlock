@@ -2,10 +2,11 @@ package com.avatye.cashblock.base.library.ad.curator.linear.loader
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
+import com.avatye.cashblock.R
 import com.avatye.cashblock.base.Core.logger
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.Curator
-import com.avatye.cashblock.databinding.AcbLibraryAdLayoutNativeLinearBinding
 import com.igaworks.ssp.SSPErrorCode
 import com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd
 import com.igaworks.ssp.part.nativead.binder.AdPopcornSSPViewBinder
@@ -16,6 +17,7 @@ internal class LinearADNativeLoader(
     private val context: Context,
     private val placementAppKey: String,
     private val placementID: String,
+    private val placementADSize: LinearADSize,
     private val callback: ILinearADCallback
 ) : INativeAdEventCallbackListener {
 
@@ -25,24 +27,26 @@ internal class LinearADNativeLoader(
 
     private val weakContext = WeakReference(context)
     private val networkName get() = ADNetworkType.from(sspNativeAD?.currentNetwork ?: 0).name
-    private val vb: AcbLibraryAdLayoutNativeLinearBinding by lazy {
-        AcbLibraryAdLayoutNativeLinearBinding.inflate(LayoutInflater.from(weakContext.get()))
-    }
 
     private var sspNativeAD: AdPopcornSSPNativeAd? = null
     private fun createAdvertiseInstance() {
         if (sspNativeAD == null) {
-            sspNativeAD = vb.sspNativeAdView.apply {
+            val nativeLayout = makeNativeLayoutView()
+            val nativeADView: AdPopcornSSPNativeAd = nativeLayout.findViewById(R.id.sspNativeAdView)
+            sspNativeAD = nativeADView.apply {
                 setPlacementId(placementID)
                 setPlacementAppKey(placementAppKey)
                 setNativeAdEventCallbackListener(this@LinearADNativeLoader)
-                // ssp
-                adPopcornSSPViewBinder = AdPopcornSSPViewBinder.Builder(vb.nativeLinearIgawContainer.id)
-                    .iconImageViewId(vb.nativeLinearIgawIcon.id)
-                    .titleViewId(vb.nativeLinearIgawTitle.id)
-                    .descViewId(vb.nativeLinearIgawDescription.id)
-                    .callToActionId(vb.nativeLinearIgawCta.id)
-                    .build()
+                // view-binder
+                adPopcornSSPViewBinder = AdPopcornSSPViewBinder.Builder(R.id.native_linear_igaw_container).apply {
+                    if (placementADSize == LinearADSize.W320XH100) {
+                        mainImageViewId(R.id.native_linear_ssp_image)
+                    }
+                    iconImageViewId(R.id.native_linear_ssp_icon)
+                    titleViewId(R.id.native_linear_ssp_title)
+                    descViewId(R.id.native_linear_ssp_description)
+                    callToActionId(R.id.native_linear_ssp_cta)
+                }.build()
             }
         }
     }
@@ -51,6 +55,17 @@ internal class LinearADNativeLoader(
         Curator.initSSP(context = context, appKey = placementAppKey) {
             createAdvertiseInstance()
             actionCompleteInitialize()
+        }
+    }
+
+    private fun makeNativeLayoutView(): View {
+        return when (placementADSize) {
+            LinearADSize.W320XH50 -> {
+                LayoutInflater.from(weakContext.get()).inflate(R.layout.acb_library_ad_layout_native_linear_320x50, null)
+            }
+            LinearADSize.W320XH100 -> {
+                LayoutInflater.from(weakContext.get()).inflate(R.layout.acb_library_ad_layout_native_linear_320x100, null)
+            }
         }
     }
 

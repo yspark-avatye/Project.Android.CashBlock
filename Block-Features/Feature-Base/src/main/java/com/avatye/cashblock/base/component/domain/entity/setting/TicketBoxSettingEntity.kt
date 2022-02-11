@@ -16,7 +16,8 @@ data class TicketBoxSettingEntity(
 
     // placement id setting
     data class PlacementID(
-        val linearSSP: String,
+        val linearSSP_320x50: String,
+        val linearSSP_320x100: String,
         val popupSSP: String,
         val popupNative: String,
         val openInterstitialSSP: String,
@@ -37,7 +38,8 @@ data class TicketBoxSettingEntity(
                 excludePosition = 1.2F
             ),
             pid = PlacementID(
-                linearSSP = "",
+                linearSSP_320x50 = "",
+                linearSSP_320x100 = "",
                 popupSSP = "",
                 popupNative = "",
                 openInterstitialSSP = "",

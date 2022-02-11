@@ -18,6 +18,7 @@ import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
@@ -199,14 +200,15 @@ internal class VideoTicketActivity : AppBaseActivity() {
 
         // region # banner-linear
         vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.VIDEO_TICKET)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         // endregion
 
 
         // region # view-model observe
-        ticketTransactionViewModel.transaction.observe(this, { observeTransaction(it) })
-        ticketTransactionViewModel.ticketing.observe(this, { observeTicketing(it) })
-        ticketViewModel.videoTicket.observe(this, { receivableCount = it })
+        ticketTransactionViewModel.transaction.observe(this) { observeTransaction(it) }
+        ticketTransactionViewModel.ticketing.observe(this) { observeTicketing(it) }
+        ticketViewModel.videoTicket.observe(this) { receivableCount = it }
         // endregion
 
 

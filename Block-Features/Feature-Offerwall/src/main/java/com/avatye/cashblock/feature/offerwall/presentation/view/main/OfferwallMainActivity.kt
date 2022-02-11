@@ -9,6 +9,7 @@ import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransition
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
@@ -41,7 +42,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         leakHandler.post {
             ViewOpenContractor.openInspectionView(
                 activity = this@OfferwallMainActivity,
-                blockType = blockType,
+                blockType = getBlockType(),
                 close = true
             )
         }
@@ -53,6 +54,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         setContentViewWith(vb.root)
         // region { banner }
         vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.OFFERWALL
         vb.bannerLinearView.requestBanner()
         // endregion
     }

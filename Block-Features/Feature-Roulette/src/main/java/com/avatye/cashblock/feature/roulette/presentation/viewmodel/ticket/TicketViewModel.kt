@@ -45,15 +45,15 @@ internal class TicketViewModel(private val lifecycleOwner: LifecycleOwner) : Vie
     // endregion
 
     init {
-        TicketBalanceLiveData.observe(lifecycleOwner, {
+        TicketBalanceLiveData.observe(lifecycleOwner) {
             _balance.value = it
-        })
-        TouchTicketLiveData.observe(lifecycleOwner, {
+        }
+        TouchTicketLiveData.observe(lifecycleOwner) {
             _touchTicket.value = it
-        })
-        VideoTicketLiveData.observe(lifecycleOwner, {
+        }
+        VideoTicketLiveData.observe(lifecycleOwner) {
             _videoTicket.value = it
-        })
+        }
     }
 
     fun synchronization(complete: () -> Unit = {}) {
