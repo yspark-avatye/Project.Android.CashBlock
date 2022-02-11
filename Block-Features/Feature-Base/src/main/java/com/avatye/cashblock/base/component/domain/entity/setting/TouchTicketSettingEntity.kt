@@ -18,7 +18,8 @@ data class TouchTicketSettingEntity(
 
     // placement id setting
     data class PlacementID(
-        val linearSSP: String,
+        val linearSSP_320x50: String,
+        val linearSSP_320x100: String,
         val popupSSP: String,
         val popupNative: String,
         val openInterstitialSSP: String,
@@ -41,15 +42,16 @@ data class TouchTicketSettingEntity(
                 excludePosition = 1.2F
             ),
             pid = PlacementID(
-                linearSSP = "p3tn4qmn5jelkna",
-                popupSSP = "kw0k3dxyr8f8qn7",
-                popupNative = "qn8ljp30byj8sgo",
-                openInterstitialSSP = "8thf53toueddyzn",
-                openInterstitialNative = "2a2mg1yuz8qo04h",
-                openInterstitialVideoSSP = "dsna6b20zl9o8vn",
+                linearSSP_320x50 = "",
+                linearSSP_320x100 = "",
+                popupSSP = "",
+                popupNative = "",
+                openInterstitialSSP = "",
+                openInterstitialNative = "",
+                openInterstitialVideoSSP = "",
                 openBoxBannerSSP = "",
-                closeInterstitialSSP = "2hg1rdpov1q5zwu",
-                closeInterstitialNative = "efrdtmodtqdadbe"
+                closeInterstitialSSP = "",
+                closeInterstitialNative = ""
             )
         )
     }

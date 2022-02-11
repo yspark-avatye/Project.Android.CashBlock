@@ -15,6 +15,7 @@ import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransition
 import com.avatye.cashblock.base.component.domain.entity.game.GameEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.decor.GridDividerItemDecoration
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
@@ -145,7 +146,8 @@ internal class RouletteMainActivity : AppBaseActivity() {
         // endregion
 
         // region { banner }
-        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON)
+        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X50)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         initViewRewardBanner()
         // endregion
@@ -157,7 +159,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
     }
 
     private fun observeRouletteListViewModel() {
-        rouletteViewModel.result.observe(this, {
+        rouletteViewModel.result.observe(this) {
             when (it) {
                 is ViewModelResult.InProgress -> {
                     vb.placeHolderRecyclerView.status = PlaceHolderRecyclerView.Status.LOADING
@@ -174,22 +176,22 @@ internal class RouletteMainActivity : AppBaseActivity() {
                     loadingView?.dismiss()
                 }
             }
-        })
+        }
         // synchronization
         rouletteViewModel.request()
     }
 
     private fun observeTicketViewModel() {
         // balance
-        ticketViewModel.balance.observe(this, {
+        ticketViewModel.balance.observe(this) {
             with(vb.ticketBalance) {
                 text = getString(R.string.acbsr_string_roulette_ticket_quantity)
                     .format(if (it >= 0) it.toLocaleOver(9999) else "-")
                     .toHtml
             }
-        })
+        }
         // touch ticket
-        ticketViewModel.touchTicket.observe(this, {
+        ticketViewModel.touchTicket.observe(this) {
             vb.touchTicketInfo.alpha = if (it > 0) 1F else 0.3F
             vb.touchTicketLimitCount.text = " / ${ticketViewModel.touchTicketLimit}"
             vb.touchTicketReceivedCount.text = if (it >= 0) it.toString() else "-"
@@ -199,9 +201,9 @@ internal class RouletteMainActivity : AppBaseActivity() {
                     false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
                 }
             }
-        })
+        }
         // video ticket
-        ticketViewModel.videoTicket.observe(this, {
+        ticketViewModel.videoTicket.observe(this) {
             vb.videoTicketInfo.alpha = if (it > 0) 1F else 0.3F
             vb.videoTicketLimitCount.text = " / ${ticketViewModel.videoTicketLimit}"
             vb.videoTicketReceivedCount.text = if (it >= 0) it.toString() else "-"
@@ -211,17 +213,17 @@ internal class RouletteMainActivity : AppBaseActivity() {
                     false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
                 }
             }
-        })
+        }
         // synchronization
         ticketViewModel.synchronization()
     }
 
     private fun observeWinnerViewMode() {
-        winnerViewModel.contents.observe(this, {
+        winnerViewModel.contents.observe(this) {
             if (it is ViewModelResult.Complete) {
                 vb.winnerMessageBoard.updateData(winners = it.result)
             }
-        })
+        }
         winnerViewModel.request()
     }
 

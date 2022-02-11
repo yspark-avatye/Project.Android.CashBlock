@@ -5,9 +5,12 @@ import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
+import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADSize
 
 
 internal object AdvertiseController {
+
+    private val placementADSize = LinearADSize.W320XH50
 
     private val verifier = object : IADAgeVerifier {
         override fun isVerified(): Boolean {
@@ -16,18 +19,32 @@ internal object AdvertiseController {
     }
 
     fun createBannerData(): BannerLinearView.BannerData {
-        val placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey
-        val nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative
         val mezzo = BannerLinearView.MediationMezzoData(
             storeUrl = SettingContractor.appInfoSetting.storeUrl,
             allowBackground = false
         )
         return BannerLinearView.BannerData(
-            placementAppKey = placementAppKey,
-            sspPlacementID = SettingContractor.inAppSetting.main.pid.linearSSP,
-            nativePlacementID = nativePlacementID,
+            placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey,
+            placementADSize = placementADSize,
+            sspPlacementID = makeSSPPID(linearADSize = placementADSize),
+            nativePlacementID = makeNativePID(linearADSize = placementADSize),
             mezzo = mezzo,
             verifier = verifier
         )
     }
+
+    private fun makeSSPPID(linearADSize: LinearADSize): String {
+        return when (linearADSize) {
+            LinearADSize.W320XH50 -> SettingContractor.inAppSetting.main.pid.linearSSP_320x50
+            LinearADSize.W320XH100 -> SettingContractor.inAppSetting.main.pid.linearSSP_320x100
+        }
+    }
+
+    private fun makeNativePID(linearADSize: LinearADSize): String {
+        return when (linearADSize) {
+            LinearADSize.W320XH50 -> SettingContractor.inAppSetting.main.pid.linearNative_320x50
+            LinearADSize.W320XH100 -> SettingContractor.inAppSetting.main.pid.linearNative_320x100
+        }
+    }
+
 }

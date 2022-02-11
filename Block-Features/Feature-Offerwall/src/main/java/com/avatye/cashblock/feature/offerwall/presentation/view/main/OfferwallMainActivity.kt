@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import androidx.fragment.app.Fragment
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
@@ -12,10 +11,8 @@ import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransition
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
-import com.avatye.cashblock.base.component.widget.dialog.DialogLoadingView
-import com.avatye.cashblock.base.component.widget.dialog.IDialogView
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
-import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
@@ -48,7 +45,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         leakHandler.post {
             ViewOpenContractor.openInspectionView(
                 activity = this@OfferwallMainActivity,
-                blockType = blockType,
+                blockType = getBlockType(),
                 close = true
             )
         }
@@ -57,11 +54,11 @@ internal class OfferwallMainActivity : AppBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
-
         logger.i(viewName = viewTag) { "onCreate { serviceType: ${serviceType.name} }" }
         // region { banner }
-        vb.topBannerLinearView.bannerData = AdvertiseController.createBannerData()
-        vb.topBannerLinearView.requestBanner()
+        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.OFFERWALL
+        vb.bannerLinearView.requestBanner()
         // endregion
 
         with(vb.headerView) {
@@ -84,25 +81,27 @@ internal class OfferwallMainActivity : AppBaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        vb.topBannerLinearView.onResume()
+        // banners
+        vb.bannerLinearView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        vb.topBannerLinearView.onPause()
+        // banners
+        vb.bannerLinearView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        vb.topBannerLinearView.onDestroy()
+        // banner
+        vb.bannerLinearView.onDestroy()
     }
 
-
     private fun transactionFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.offerwall_list_container, fragment)
-            commit()
-        }
+//        supportFragmentManager.beginTransaction().apply {
+//            replace(R.id.offerwall_list_container, fragment)
+//            commit()
+//        }
     }
 
 }

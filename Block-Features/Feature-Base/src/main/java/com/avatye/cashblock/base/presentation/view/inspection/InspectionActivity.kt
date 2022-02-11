@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import com.avatye.cashblock.R
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launch
@@ -30,6 +31,10 @@ internal class InspectionActivity : AppBaseActivity() {
 
     private val vb: AcbCommonActivityInspectionBinding by lazy {
         AcbCommonActivityInspectionBinding.inflate(LayoutInflater.from(this))
+    }
+
+    override fun getBlockType(): BlockType {
+        return extraParcel<InspectionParcel>(InspectionParcel.NAME)?.blockType ?: BlockType.CORE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

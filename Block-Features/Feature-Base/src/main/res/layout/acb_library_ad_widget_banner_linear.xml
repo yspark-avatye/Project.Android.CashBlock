@@ -2,21 +2,32 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="#FFFFFF"
+    android:padding="2dp"
     tools:background="#4C000000">
 
     <FrameLayout
         android:id="@+id/banner_linear_frame"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/banner_linear_backfill"
-        android:layout_width="320dp"
+        android:id="@+id/banner_linear_back_fill_320x50"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/banner_linear_back_fill_320x100"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:visibility="gone" />

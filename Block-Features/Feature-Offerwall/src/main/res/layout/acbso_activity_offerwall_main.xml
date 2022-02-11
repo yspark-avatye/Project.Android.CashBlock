@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/acb_core_color_white"
     android:orientation="vertical">
 
@@ -17,19 +17,37 @@
         app:acb_widget_visible_close="true"
         app:acb_widget_visible_more="true" />
 
-    <!-- region { linear bottom Banner } -->
-    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/top_banner_linear_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/acb_core_color_pale_blue"
-        tools:layout_height="50dp" />
-    <!-- region { linear bottom Banner } -->
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/acb_core_color_pale_blue" />
 
 
-    <FrameLayout
-        android:id="@+id/offerwall_list_container"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_viewpager2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+
+    <!-- region { linear bottom Banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/acb_core_color_pale_blue"
+        tools:layout_height="55dp" />
+    <!-- region { linear bottom Banner } -->
+
+
 </LinearLayout>

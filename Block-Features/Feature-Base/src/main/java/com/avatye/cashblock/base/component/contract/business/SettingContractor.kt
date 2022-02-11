@@ -182,14 +182,18 @@ object SettingContractor {
             // make value
             var rewardBannerDelay = d.main.rewardBannerDelay
             var rewardBanner = d.main.pid.rewardBanner
-            var linearSSP = d.main.pid.linearSSP
-            var linearNative = d.main.pid.linearNative
+            var linearSSP_320X50 = d.main.pid.linearSSP_320x50
+            var linearSSP_320X100 = d.main.pid.linearSSP_320x100
+            var linearNative_320X50 = d.main.pid.linearNative_320x50
+            var linearNative_320X100 = d.main.pid.linearNative_320x100
             config.toJSONObjectValue("main")?.let { main ->
                 rewardBannerDelay = main.toLongValue("rewardBannerDelay", d.main.rewardBannerDelay)
                 main.toJSONObjectValue("pid")?.let { pid ->
                     rewardBanner = pid.toStringValue("rewardBanner", d.main.pid.rewardBanner)
-                    linearSSP = pid.toStringValue("linearSSP", d.main.pid.linearSSP)
-                    linearNative = pid.toStringValue("linearNative", d.main.pid.linearNative)
+                    linearSSP_320X50 = pid.toStringValue("linearSSP", d.main.pid.linearSSP_320x50)
+                    linearSSP_320X100 = pid.toStringValue("linearSSP_320x100", d.main.pid.linearSSP_320x100)
+                    linearNative_320X50 = pid.toStringValue("linearNative", d.main.pid.linearNative_320x50)
+                    linearNative_320X100 = pid.toStringValue("linearNative_320x100", d.main.pid.linearNative_320x100)
                 }
             }
             // make model
@@ -198,8 +202,10 @@ object SettingContractor {
                     rewardBannerDelay = rewardBannerDelay,
                     pid = InAppSettingEntity.Main.PlacementID(
                         rewardBanner = rewardBanner,
-                        linearSSP = linearSSP,
-                        linearNative = linearNative
+                        linearSSP_320x50 = linearSSP_320X50,
+                        linearSSP_320x100 = linearSSP_320X100,
+                        linearNative_320x50 = linearNative_320X50,
+                        linearNative_320x100 = linearNative_320X100
                     )
                 )
             )
@@ -223,33 +229,16 @@ object SettingContractor {
                     excludePosition = pop?.toFloatValue("excludePosition") ?: d.popAD.excludePosition
                 ),
                 pid = TouchTicketSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue(
-                        "linearSSP", d.pid.linearSSP
-                    ) ?: d.pid.linearSSP,
-                    popupSSP = pid?.toStringValue(
-                        "popupSSP", d.pid.popupSSP
-                    ) ?: d.pid.popupSSP,
-                    popupNative = pid?.toStringValue(
-                        "popupNative", d.pid.popupNative
-                    ) ?: d.pid.popupNative,
-                    openInterstitialSSP = pid?.toStringValue(
-                        "openInterstitialSSP", d.pid.openInterstitialSSP
-                    ) ?: d.pid.openInterstitialSSP,
-                    openInterstitialNative = pid?.toStringValue(
-                        "openInterstitialNative", d.pid.openInterstitialNative
-                    ) ?: d.pid.openInterstitialNative,
-                    openInterstitialVideoSSP = pid?.toStringValue(
-                        "openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP
-                    ) ?: d.pid.openInterstitialVideoSSP,
-                    openBoxBannerSSP = pid?.toStringValue(
-                        "openBoxBannerSSP", d.pid.openBoxBannerSSP
-                    ) ?: d.pid.openBoxBannerSSP,
-                    closeInterstitialSSP = pid?.toStringValue(
-                        "closeInterstitialSSP", d.pid.closeInterstitialSSP
-                    ) ?: d.pid.closeInterstitialSSP,
-                    closeInterstitialNative = pid?.toStringValue(
-                        "closeInterstitialNative", d.pid.closeInterstitialNative
-                    ) ?: d.pid.closeInterstitialNative
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP", d.pid.linearSSP_320x50) ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100", d.pid.linearSSP_320x100) ?: d.pid.linearSSP_320x100,
+                    popupSSP = pid?.toStringValue("popupSSP", d.pid.popupSSP) ?: d.pid.popupSSP,
+                    popupNative = pid?.toStringValue("popupNative", d.pid.popupNative) ?: d.pid.popupNative,
+                    openInterstitialSSP = pid?.toStringValue("openInterstitialSSP", d.pid.openInterstitialSSP) ?: d.pid.openInterstitialSSP,
+                    openInterstitialNative = pid?.toStringValue("openInterstitialNative", d.pid.openInterstitialNative) ?: d.pid.openInterstitialNative,
+                    openInterstitialVideoSSP = pid?.toStringValue("openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP) ?: d.pid.openInterstitialVideoSSP,
+                    openBoxBannerSSP = pid?.toStringValue("openBoxBannerSSP", d.pid.openBoxBannerSSP) ?: d.pid.openBoxBannerSSP,
+                    closeInterstitialSSP = pid?.toStringValue("closeInterstitialSSP", d.pid.closeInterstitialSSP) ?: d.pid.closeInterstitialSSP,
+                    closeInterstitialNative = pid?.toStringValue("closeInterstitialNative", d.pid.closeInterstitialNative) ?: d.pid.closeInterstitialNative
                 )
             )
             RemotePreferenceData.fetchTouchTicketSetting(setting = setting)
@@ -264,7 +253,8 @@ object SettingContractor {
                 period = config.toIntValue("period", d.period),
                 limitCount = config.toIntValue("limitCount", d.limitCount),
                 pid = VideoTicketSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue("linearSSP") ?: d.pid.linearSSP,
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP") ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100") ?: d.pid.linearSSP_320x100,
                     openRewardVideoSSP = pid?.toStringValue("openRewardVideoSSP") ?: d.pid.openRewardVideoSSP,
                     openInterstitialSSP = pid?.toStringValue("openInterstitialSSP") ?: d.pid.openInterstitialSSP,
                     openInterstitialNative = pid?.toStringValue("openInterstitialNative") ?: d.pid.openInterstitialNative,
@@ -291,33 +281,16 @@ object SettingContractor {
                     excludePosition = pop?.toFloatValue("excludePosition") ?: d.popAD.excludePosition
                 ),
                 pid = TicketBoxSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue(
-                        "linearSSP", d.pid.linearSSP
-                    ) ?: d.pid.linearSSP,
-                    popupSSP = pid?.toStringValue(
-                        "popupSSP", d.pid.popupSSP
-                    ) ?: d.pid.popupSSP,
-                    popupNative = pid?.toStringValue(
-                        "popupNative", d.pid.popupNative
-                    ) ?: d.pid.popupNative,
-                    openInterstitialSSP = pid?.toStringValue(
-                        "openInterstitialSSP", d.pid.openInterstitialSSP
-                    ) ?: d.pid.openInterstitialSSP,
-                    openInterstitialNative = pid?.toStringValue(
-                        "openInterstitialNative", d.pid.openInterstitialNative
-                    ) ?: d.pid.openInterstitialNative,
-                    openInterstitialVideoSSP = pid?.toStringValue(
-                        "openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP
-                    ) ?: d.pid.openInterstitialVideoSSP,
-                    openBoxBannerSSP = pid?.toStringValue(
-                        "openBoxBannerSSP", d.pid.openBoxBannerSSP
-                    ) ?: d.pid.openBoxBannerSSP,
-                    closeInterstitialSSP = pid?.toStringValue(
-                        "closeInterstitialSSP", d.pid.closeInterstitialSSP
-                    ) ?: d.pid.closeInterstitialSSP,
-                    closeInterstitialNative = pid?.toStringValue(
-                        "closeInterstitialNative", d.pid.closeInterstitialNative
-                    ) ?: d.pid.closeInterstitialNative
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP", d.pid.linearSSP_320x50) ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100", d.pid.linearSSP_320x100) ?: d.pid.linearSSP_320x100,
+                    popupSSP = pid?.toStringValue("popupSSP", d.pid.popupSSP) ?: d.pid.popupSSP,
+                    popupNative = pid?.toStringValue("popupNative", d.pid.popupNative) ?: d.pid.popupNative,
+                    openInterstitialSSP = pid?.toStringValue("openInterstitialSSP", d.pid.openInterstitialSSP) ?: d.pid.openInterstitialSSP,
+                    openInterstitialNative = pid?.toStringValue("openInterstitialNative", d.pid.openInterstitialNative) ?: d.pid.openInterstitialNative,
+                    openInterstitialVideoSSP = pid?.toStringValue("openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP) ?: d.pid.openInterstitialVideoSSP,
+                    openBoxBannerSSP = pid?.toStringValue("openBoxBannerSSP", d.pid.openBoxBannerSSP) ?: d.pid.openBoxBannerSSP,
+                    closeInterstitialSSP = pid?.toStringValue("closeInterstitialSSP", d.pid.closeInterstitialSSP) ?: d.pid.closeInterstitialSSP,
+                    closeInterstitialNative = pid?.toStringValue("closeInterstitialNative", d.pid.closeInterstitialNative) ?: d.pid.closeInterstitialNative
                 )
             )
             RemotePreferenceData.fetchTicketBoxSetting(setting = setting)

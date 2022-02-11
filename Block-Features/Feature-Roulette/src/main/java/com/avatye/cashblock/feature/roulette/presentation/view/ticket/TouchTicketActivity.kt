@@ -17,6 +17,7 @@ import com.avatye.cashblock.base.component.domain.entity.ticket.TicketRequestEnt
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.popup.CuratorPopup
@@ -246,6 +247,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
 
         // region # banner-linear
         vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.TOUCH_TICKET)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         // endregion
 

@@ -25,7 +25,7 @@ import com.bumptech.glide.RequestManager
 
 abstract class CoreBaseActivity : AppCompatActivity() {
 
-    abstract val blockType: BlockType
+    abstract fun getBlockType(): BlockType
 
     protected val viewTag: String = this::class.java.simpleName
     protected open val exitTransitionType: ActivityTransitionType = ActivityTransitionType.NONE
@@ -188,7 +188,7 @@ abstract class CoreBaseActivity : AppCompatActivity() {
 
     private inner class BroadcastWatchReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val parel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
+            val parcel: EventBusParcel? = intent?.extraParcel(EventBusParcel.NAME)
             logger.i(viewName = this::class.java.simpleName) {
                 "BroadcastWatchReceiver -> onReceive { action: ${intent?.action ?: "null"} }"
             }
@@ -197,7 +197,7 @@ abstract class CoreBaseActivity : AppCompatActivity() {
                 when (actionName) {
                     ActionType.UNAUTHORIZED.actionName -> receiveActionUnAuthorized()
                     ActionType.INSPECTION.actionName -> {
-                        if (blockType == parel?.blockType) {
+                        if (getBlockType() == parcel?.blockType) {
                             receiveActionInspection()
                         }
                     }

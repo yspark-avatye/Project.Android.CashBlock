@@ -17,6 +17,7 @@ import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.popup.CuratorPopup
@@ -32,6 +33,7 @@ import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxContr
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADPlacementType
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
+import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivityTicketBoxBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
 import com.avatye.cashblock.feature.roulette.presentation.viewmodel.box.TicketBoxViewModel
@@ -192,7 +194,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
             message.show(cancelable = false)
             return
         }
-        // BINDING
+        // binding
         vb.ticketBoxLoadingImage.apply {
             advertisingLoadAnimation = background as AnimationDrawable
             advertisingLoadAnimation?.let {
@@ -224,7 +226,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         currentStatus = TicketBoxStatus.LOADING
 
         // region # view model
-        ticketBoxViewModel.boxAvailable.observe(this, {
+        ticketBoxViewModel.boxAvailable.observe(this) {
             vb.ticketBoxLoadingContainer.post {
                 // animation
                 advertisingLoadAnimationPlay = true
@@ -244,8 +246,8 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     }
                 }
             }
-        })
-        ticketBoxViewModel.boxUse.observe(this, {
+        }
+        ticketBoxViewModel.boxUse.observe(this) {
             when (it) {
                 is ViewModelResult.InProgress -> {
                     loadingView?.show(cancelable = false)
@@ -260,10 +262,16 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     observeTicketBoxUse(it.result)
                 }
             }
-        })
+        }
+        // endregion
+
+        // banner
+        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
+        vb.bannerLinearView.requestBanner()
+
         // request box available
         ticketBoxViewModel.requestBoxAvailable()
-        // endregion
     }
 
     // region 'ticket box' - box available result
