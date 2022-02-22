@@ -14,7 +14,7 @@
             android:theme="@style/CashBlock.AppTheme" />
 
         <activity
-            android:name=".presentation.view.setting.OfferwallSettingActivity"
+            android:name=".presentation.view.setting.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CashBlock.AppTheme" />
 
@@ -25,6 +25,11 @@
 
         <activity
             android:name=".presentation.view.inquiry.InquiryRewardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
+
+        <activity
+            android:name=".presentation.view.inquiry.InquiryListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CashBlock.AppTheme" />
 

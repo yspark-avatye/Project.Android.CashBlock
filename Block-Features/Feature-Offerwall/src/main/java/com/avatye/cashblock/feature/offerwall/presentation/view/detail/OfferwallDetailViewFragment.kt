@@ -19,6 +19,7 @@ import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.toLocale
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
+import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallDetailViewBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
@@ -80,7 +81,7 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
         }
 
         // region # banner
-        binding.bannerLinearView.bannerData = AdvertiseController.createBannerData()
+        binding.bannerLinearView.bannerData = ADController.createBannerData()
         binding.bannerLinearView.requestBanner()
         // endregion
 

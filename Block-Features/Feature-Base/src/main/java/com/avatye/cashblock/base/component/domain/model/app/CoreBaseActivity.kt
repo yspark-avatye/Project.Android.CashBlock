@@ -139,9 +139,8 @@ abstract class CoreBaseActivity : AppCompatActivity() {
         setContentView(view)
         // post event log
         logKey?.let {
-            CoreApiContractor(blockType = BlockType.CORE).let { contract ->
-                contract.postEventLog(eventKey = it, eventParam = logParam)
-            }
+            CoreApiContractor(blockType = BlockType.CORE)
+                .postEventLog(eventKey = it, eventParam = logParam)
         }
     }
 

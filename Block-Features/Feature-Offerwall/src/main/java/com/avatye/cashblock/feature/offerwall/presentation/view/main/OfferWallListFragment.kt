@@ -201,10 +201,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
 
             private fun bindHiddenSection(position: Int) {
                 val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
-                val hiddenSectionID = AdvertiseListController.getHddenSectionID(
-                    tabEntity = tab,
-                    list = offerwalls
-                )
+                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(tabEntity = tab, list = offerwalls)
                 if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
                     itemBinding.sectionFoldingArrow.rotation = 180F
                 } else {
@@ -237,10 +234,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
 
             private fun bindHiddenCategory(position: Int) {
                 val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
-                val hiddenSectionID = AdvertiseListController.getHddenSectionID(
-                    tabEntity = tab,
-                    list = offerwalls
-                )
+                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(tabEntity = tab, list = offerwalls)
 
                 if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
                     itemBinding.categoryFoldingArrow.rotation = 180F

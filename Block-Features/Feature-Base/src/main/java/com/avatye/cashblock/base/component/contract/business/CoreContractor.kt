@@ -1,6 +1,8 @@
 package com.avatye.cashblock.base.component.contract.business
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import com.avatye.cashblock.R
 import com.avatye.cashblock.base.Core
@@ -11,6 +13,7 @@ import com.avatye.cashblock.base.component.domain.entity.ad.AAIDEntity
 import com.avatye.cashblock.base.component.domain.entity.app.AppEnvironment
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.CoreUtil
+import com.avatye.cashblock.base.component.widget.dialog.DialogMessageView
 import com.avatye.cashblock.base.internal.preference.SettingPreferenceData
 import com.avatye.cashblock.base.library.ad.aaid.AdvertiseIDTask
 
@@ -110,6 +113,20 @@ object CoreContractor {
                 }
             }
         }
+
+        // dialog
+        fun showLimitAdTrackingDialog(activity: Activity) {
+            DialogMessageView.create(activity).apply {
+                setMessage(resourceID = R.string.acb_common_message_limit_ad_tracking)
+                setPositiveButton(resourceID = R.string.acb_common_button_setting_off) {
+                    val action = "com.google.android.gms.settings.ADS_PRIVACY"
+                    val settings = Intent(action)
+                    activity.startActivity(settings)
+                }
+                setNegativeButton(resourceID = R.string.acb_common_button_cancel)
+            }.show(cancelable = false)
+        }
+
     }
     // endregion
 }

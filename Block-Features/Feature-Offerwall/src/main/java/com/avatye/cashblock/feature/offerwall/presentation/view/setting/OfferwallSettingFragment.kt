@@ -1,15 +1,14 @@
 package com.avatye.cashblock.feature.offerwall.presentation.view.setting
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentSettingBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
 
 internal class OfferwallSettingFragment : AppBaseFragment<AcbsoFragmentSettingBinding>(AcbsoFragmentSettingBinding::inflate), View.OnClickListener {
 
-    private val parentActivity: OfferwallSettingActivity by lazy {
-        activity as OfferwallSettingActivity
+    private val parentActivity: SettingActivity by lazy {
+        activity as SettingActivity
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

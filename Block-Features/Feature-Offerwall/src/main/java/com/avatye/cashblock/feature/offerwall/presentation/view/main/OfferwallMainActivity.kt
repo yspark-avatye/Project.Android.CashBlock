@@ -13,10 +13,10 @@ import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
-import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
-import com.avatye.cashblock.feature.offerwall.presentation.view.setting.OfferwallSettingActivity
+import com.avatye.cashblock.feature.offerwall.presentation.view.setting.SettingActivity
 
 internal class OfferwallMainActivity : AppBaseActivity() {
 
@@ -56,13 +56,13 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         setContentViewWith(vb.root)
         logger.i(viewName = viewTag) { "onCreate { serviceType: ${serviceType.name} }" }
         // region { banner }
-        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData()
+        vb.bannerLinearView.bannerData = ADController.createBannerData()
         vb.bannerLinearView.sourceType = BannerLinearView.SourceType.OFFERWALL
         vb.bannerLinearView.requestBanner()
         // endregion
 
         with(vb.headerView) {
-            actionMore { OfferwallSettingActivity.open(activity = this@OfferwallMainActivity, serviceType = serviceType, close = false) }
+            actionMore { SettingActivity.open(activity = this@OfferwallMainActivity, serviceType = serviceType, close = false) }
             actionClose { finish() }
         }
 
