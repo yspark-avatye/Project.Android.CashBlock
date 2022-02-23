@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+
+    <!-- region # header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+
+        <com.avatye.cashblock.base.component.widget.header.HeaderView
+            android:id="@+id/header_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:acb_widget_title="@string/acb_common_menu_notice"
+            app:acb_widget_view_type="sub"
+            app:acb_widget_visible_close="true" />
+
+
+        <FrameLayout
+            android:id="@+id/reward_progress_container"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="4.5dp">
+
+
+            <FrameLayout
+                android:id="@+id/reward_progress_animation_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+
+                <com.avatye.cashblock.feature.roulette.component.widget.miscellaneous.CircleProgressView
+                    android:id="@+id/reward_circle_progress"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    app:acbsr_widget_progress_background_color="#F1F4f8"
+                    app:acbsr_widget_progress_border_color="#FFFFFF"
+                    app:acbsr_widget_progress_border_width="0dp"
+                    app:acbsr_widget_progress_center_color="#FFFFFF"
+                    app:acbsr_widget_progress_foreground_color="#757575"
+                    app:acbsr_widget_progress_max="100"
+                    app:acbsr_widget_progress_min="0"
+                    app:acbsr_widget_progress_thickness="2dp"
+                    app:acbsr_widget_progress_value="0"
+                    tools:acbsr_widget_progress_value="30"
+                    tools:visibility="visible" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/reward_time_text"
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="1dp"
+                    android:text="5"
+                    android:textColor="#757575"
+                    android:textSize="12dp"
+                    tools:text="1" />
+
+
+            </FrameLayout>
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/page_close"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:src="@drawable/acb_common_ic_close_black_14x14"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+        </FrameLayout>
+
+
+        <!-- region # bubble tips -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/reward_time_bubble_tips"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:background="@drawable/acbsr_shape_webview_bubble_middle_end"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/acbsr_string_quantum_bit_reward_time_message"
+                android:textColor="#FFFFFF"
+                android:textSize="11dp" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </RelativeLayout>
+
+
+    <!-- endregion -->
+
+
+    <ProgressBar
+        android:id="@+id/web_content_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:max="100"
+        android:progressDrawable="@drawable/acb_common_progressbar_webview" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/acb_core_color_pale_blue" />
+
+
+    <com.avatye.cashblock.base.component.widget.miscellaneous.ScrollWebView
+        android:id="@+id/web_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

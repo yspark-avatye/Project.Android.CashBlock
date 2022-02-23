@@ -10,12 +10,12 @@ import android.os.Build
 import android.util.AttributeSet
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
-import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.R
+import com.avatye.cashblock.base.MODULE_NAME
 import com.avatye.cashblock.base.library.LogHandler
 
 @SuppressLint("SetJavaScriptEnabled")
-internal class ScrollWebView(context: Context, attrs: AttributeSet? = null) : WebView(context, attrs) {
+class ScrollWebView(context: Context, attrs: AttributeSet? = null) : WebView(context, attrs) {
 
     companion object {
         val NAME: String = ScrollWebView::class.java.simpleName

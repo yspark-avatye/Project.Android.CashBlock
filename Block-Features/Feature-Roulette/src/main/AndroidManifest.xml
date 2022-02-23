@@ -54,5 +54,9 @@
             android:name=".presentation.view.setting.SettingMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CashBlock.AppTheme" />
+        <activity
+            android:name=".presentation.view.miscellaneous.RewardBannerBrowserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CashBlock.AppTheme" />
     </application>
 </manifest>

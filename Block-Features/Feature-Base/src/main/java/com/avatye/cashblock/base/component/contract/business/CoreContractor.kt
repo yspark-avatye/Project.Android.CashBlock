@@ -63,6 +63,11 @@ object CoreContractor {
 
     // region # aaid
     object DeviceSetting {
+        val aaid: String
+            get() {
+                return SettingPreferenceData.deviceAAID
+            }
+
         fun fetchAAID(callback: (success: Boolean) -> Unit) {
             retrieveAAID { result ->
                 if (SettingPreferenceData.deviceAAID != result.aaid) {

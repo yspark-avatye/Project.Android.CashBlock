@@ -301,8 +301,8 @@
 
 
                 <!-- region { reward banner } -->
-                <com.avatye.cashblock.feature.roulette.component.widget.banner.BannerLinearRewardView
-                    android:id="@+id/banner_reward_view"
+                <com.avatye.cashblock.feature.roulette.component.widget.banner.reward.BannerLinearRewardMediationView
+                    android:id="@+id/banner_linear_reward_mediation_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -310,17 +310,19 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
+                    android:visibility="gone"
                     tools:background="#4CFFFF00"
-                    tools:layout_height="55dp" />
+                    tools:layout_height="55dp"
+                    tools:visibility="visible" />
                 <!-- endregion -->
 
 
                 <!-- region { ticket box banner } -->
-                <com.avatye.cashblock.feature.roulette.component.widget.banner.BannerTicketBoxView
+                <com.avatye.cashblock.feature.roulette.component.widget.banner.ticketbox.BannerTicketBoxView
                     android:id="@+id/ticket_box_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/banner_reward_view"
+                    android:layout_below="@+id/banner_linear_reward_mediation_view"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
