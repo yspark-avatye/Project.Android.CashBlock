@@ -15,4 +15,19 @@
     <!-- endregion -->
 
 
+    <!-- region # progress circle -->
+    <declare-styleable name="CircleProgressView">
+        <attr name="acbsr_widget_progress_border_width" format="dimension" />
+        <attr name="acbsr_widget_progress_border_color" format="color" />
+        <attr name="acbsr_widget_progress_thickness" format="dimension" />
+        <attr name="acbsr_widget_progress_foreground_color" format="color" />
+        <attr name="acbsr_widget_progress_background_color" format="color" />
+        <attr name="acbsr_widget_progress_center_color" format="color" />
+        <attr name="acbsr_widget_progress_value" format="integer" />
+        <attr name="acbsr_widget_progress_max" format="integer" />
+        <attr name="acbsr_widget_progress_min" format="integer" />
+    </declare-styleable>
+    <!-- endregion -->
+
+
 </resources>

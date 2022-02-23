@@ -111,4 +111,8 @@
     <string name="acbsr_string_notification_setting_help_section_2_title"><![CDATA[애플리케이션 정보에서 <strong>알림</strong>을 선택합니다.]]></string>
     <string name="acbsr_string_notification_setting_help_section_3_title"><![CDATA[알림에서 <strong>알림표시</strong>와 <strong>알림창 상태바</strong>를 켜주세요]]></string>
     <!-- endregion -->
+    <!-- region # quantum bit -->
+    <string name="acbsr_string_quantum_bit_reward_time_message">7초 이상 화면에 머무르면 \n적립이 시작됩니다.</string>
+    <string name="acbsr_string_quantum_bit_reward_complete_message">적립이 완료되었습니다.</string>
+    <!-- endregion -->
 </resources>

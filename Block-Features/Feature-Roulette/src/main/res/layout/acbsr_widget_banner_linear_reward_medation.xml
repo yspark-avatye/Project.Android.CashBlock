@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/acb_common_outline_f8b2b2_r10"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <!-- region # quantum bit banner -->
+    <com.avatye.cashblock.feature.roulette.component.widget.banner.reward.BannerLinearRewardQBView
+        android:id="@+id/reward_banner_qb"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:background="#4C99CCFF"
+        tools:layout_width="100dp"
+        tools:visibility="visible" />
+    <!-- endregion -->
+
+
+    <!-- region # ace enter banner -->
+    <com.avatye.cashblock.feature.roulette.component.widget.banner.reward.BannerLinearRewardACEView
+        android:id="@+id/reward_banner_ace"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+    <!-- endregion -->
+
+</FrameLayout>

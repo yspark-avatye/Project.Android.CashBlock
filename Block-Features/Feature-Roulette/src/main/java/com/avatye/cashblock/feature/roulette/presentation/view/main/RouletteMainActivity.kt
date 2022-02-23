@@ -27,10 +27,9 @@ import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.controller.MissionController
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
-import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 import com.avatye.cashblock.feature.roulette.component.model.parcel.RoulettePlayParcel
-import com.avatye.cashblock.feature.roulette.component.widget.banner.BannerLinearRewardView
+import com.avatye.cashblock.feature.roulette.component.widget.banner.reward.IBannerLinearRewardCallback
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivityRouletteMainBinding
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrItemRouletteBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
@@ -239,7 +238,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         // winner board
         vb.winnerMessageBoard.onResume()
         // banners
-        vb.bannerRewardView.onResume()
+        vb.bannerLinearRewardMediationView.onResume()
         vb.ticketBoxBanner.onResume()
         vb.bannerLinearView.onResume()
         // popup notice polling
@@ -251,14 +250,14 @@ internal class RouletteMainActivity : AppBaseActivity() {
         // winner board
         vb.winnerMessageBoard.onPause()
         // banners
-        vb.bannerRewardView.onPause()
+        vb.bannerLinearRewardMediationView.onPause()
         vb.bannerLinearView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         vb.bannerLinearView.onDestroy()
-        vb.bannerRewardView.onDestroy()
+        vb.bannerLinearRewardMediationView.onDestroy()
     }
 
     private fun popupPolling() {
@@ -281,29 +280,27 @@ internal class RouletteMainActivity : AppBaseActivity() {
     }
 
     private fun initViewRewardBanner() {
-        vb.bannerRewardPointContainer.isVisible = vb.bannerRewardView.hasReward
-        vb.bannerRewardView.rewardCallback = object : BannerLinearRewardView.RewardCallback {
-            override fun onReward(hasReward: Boolean) {
-                logger.i(viewName = viewTag) { "initViewRewardBanner -> onReward { hasReward: $hasReward }" }
-                val visible = vb.bannerRewardView.isVisible && hasReward
-                if (visible) {
-                    with(vb.bannerRewardPoint) {
-                        text = context.getString(R.string.acbsr_string_linear_reward_banner_point)
-                            .format(
-                                "${appInfo.rouletteName} 티켓",
-                                PreferenceData.BannerReward.amount
-                            ).toHtml
-                    }
-                }
-                vb.bannerRewardPointContainer.isVisible = visible
+        vb.bannerLinearRewardMediationView.ownerActivity = this@RouletteMainActivity
+        vb.bannerLinearRewardMediationView.rewardCallback = object : IBannerLinearRewardCallback {
+            override fun onReward(rewardAmount: Int) {
+                vb.bannerLinearRewardMediationView.isVisible = true
+                bindViewRewardBannerPoint(rewardAmount = rewardAmount)
             }
 
             override fun onAdFail() {
-                logger.i(viewName = viewTag) { "initViewRewardBanner -> onAdFail" }
-                vb.bannerRewardView.isVisible = false
-                vb.bannerRewardPointContainer.isVisible = false
+                vb.bannerLinearRewardMediationView.isVisible = false
+                bindViewRewardBannerPoint(rewardAmount = 0)
             }
         }
+    }
+
+    private fun bindViewRewardBannerPoint(rewardAmount: Int = 0) {
+        logger.i(viewName = viewTag) { "bindViewRewardBannerPoint -> onReward { rewardAmount: $rewardAmount }" }
+        with(vb.bannerRewardPoint) {
+            text = context.getString(R.string.acbsr_string_linear_reward_banner_point)
+                .format("${appInfo.rouletteName} 티켓", rewardAmount).toHtml
+        }
+        vb.bannerRewardPointContainer.isVisible = rewardAmount > 0
     }
 
 
