@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.avatye.cashblock.base.block.BlockController
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
@@ -54,9 +56,11 @@ internal class RouletteMainActivity : AppBaseActivity() {
         }
     }
 
+
     private val appInfo = SettingContractor.appInfoSetting
     private val touchTicketInfo = SettingContractor.touchTicketSetting
     private val videoTicketInfo = SettingContractor.videoTicketSetting
+
 
     private val ticketViewModel: TicketViewModel by lazy {
         TicketViewModel.create(viewModelStoreOwner = this, lifecycleOwner = this)
@@ -68,9 +72,11 @@ internal class RouletteMainActivity : AppBaseActivity() {
         WinnerViewModel.create(viewModelStoreOwner = this)
     }
 
+
     private val vb: AcbsrActivityRouletteMainBinding by lazy {
         AcbsrActivityRouletteMainBinding.inflate(LayoutInflater.from(this))
     }
+
 
     override fun receiveActionInspection() {
         leakHandler.post {
@@ -81,6 +87,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
             )
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,11 +108,11 @@ internal class RouletteMainActivity : AppBaseActivity() {
                 else -> appInfo.rouletteCampaign
             }.format(appInfo.rouletteName).toHtml
         }
-        with(vb.touchTicketPeriod) {
+        with(vb.acquireTouchTicketSubText) {
             text = getString(R.string.acbsr_string_ticket_acquire_period)
                 .format(TicketController.periodText(touchTicketInfo.period), touchTicketInfo.limitCount)
         }
-        with(vb.videoTicketPeriod) {
+        with(vb.acquireVideoTicketSubText) {
             text = getString(R.string.acbsr_string_ticket_acquire_period)
                 .format(TicketController.periodText(videoTicketInfo.period), videoTicketInfo.limitCount)
         }
@@ -155,7 +162,27 @@ internal class RouletteMainActivity : AppBaseActivity() {
                 "CoreContractor.DeviceSetting.fetchAAID { complete: $it }"
             }
         }
+
+        // offerwall
+        bindBlockOfferwall()
     }
+
+
+    private fun bindBlockOfferwall() {
+        val hasBlock = BlockController.hasBlock(blockType = BlockType.OFFERWALL)
+        val allowBlock = SettingContractor.appInfoSetting.allowBlockOfferwall
+        if (hasBlock && allowBlock) {
+            vb.acquireOfferwallTicketContainer.isVisible = true
+            vb.acquireOfferwallTicketContainer.setOnClickListener {
+                BlockController.launchBlock(context = this@RouletteMainActivity, blockType = BlockType.OFFERWALL) {
+                    logger.i(viewName = viewTag) { "${BlockType.OFFERWALL.name} -> BlockController.launchBlock { success: $it }" }
+                }
+            }
+        } else {
+            vb.acquireOfferwallTicketContainer.isVisible = false
+        }
+    }
+
 
     private fun observeRouletteListViewModel() {
         rouletteViewModel.result.observe(this) {
@@ -180,6 +207,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         rouletteViewModel.request()
     }
 
+
     private fun observeTicketViewModel() {
         // balance
         ticketViewModel.balance.observe(this) {
@@ -191,31 +219,42 @@ internal class RouletteMainActivity : AppBaseActivity() {
         }
         // touch ticket
         ticketViewModel.touchTicket.observe(this) {
-            vb.touchTicketInfo.alpha = if (it > 0) 1F else 0.3F
-            vb.touchTicketLimitCount.text = " / ${ticketViewModel.touchTicketLimit}"
-            vb.touchTicketReceivedCount.text = if (it >= 0) it.toString() else "-"
-            vb.touchTicketAction.setOnClickWithDebounce(debounceTime = 1200L) {
-                when (it > 0) {
-                    true -> TouchTicketActivity.open(activity = this@RouletteMainActivity)
-                    false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
+            with(vb.acquireTouchTicketCondition) {
+                val receive = if (it >= 0) it.toString() else "-"
+                val limit = "${ticketViewModel.touchTicketLimit}"
+                text = getString(R.string.acbsr_string_ticket_acquire_condition).format(receive, limit).toHtml
+            }
+            with(vb.acquireTouchTicketContainer) {
+                alpha = if (it > 0) 1F else 0.3F
+                setOnClickWithDebounce(debounceTime = 1200L) {
+                    when (it > 0) {
+                        true -> TouchTicketActivity.open(activity = this@RouletteMainActivity)
+                        false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
+                    }
                 }
             }
         }
         // video ticket
         ticketViewModel.videoTicket.observe(this) {
-            vb.videoTicketInfo.alpha = if (it > 0) 1F else 0.3F
-            vb.videoTicketLimitCount.text = " / ${ticketViewModel.videoTicketLimit}"
-            vb.videoTicketReceivedCount.text = if (it >= 0) it.toString() else "-"
-            vb.videoTicketAction.setOnClickWithDebounce(debounceTime = 1200L) {
-                when (it > 0) {
-                    true -> VideoTicketActivity.open(activity = this@RouletteMainActivity)
-                    false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
+            with(vb.acquireVideoTicketCondition) {
+                val receive = if (it >= 0) it.toString() else "-"
+                val limit = "${ticketViewModel.videoTicketLimit}"
+                text = getString(R.string.acbsr_string_ticket_acquire_condition).format(receive, limit).toHtml
+            }
+            with(vb.acquireVideoTicketContainer) {
+                alpha = if (it > 0) 1F else 0.3F
+                setOnClickWithDebounce(debounceTime = 1200L) {
+                    when (it > 0) {
+                        true -> VideoTicketActivity.open(activity = this@RouletteMainActivity)
+                        false -> CoreUtil.showToast(R.string.acbsr_string_ticket_already_received)
+                    }
                 }
             }
         }
         // synchronization
         ticketViewModel.synchronization()
     }
+
 
     private fun observeWinnerViewMode() {
         winnerViewModel.contents.observe(this) {
@@ -226,12 +265,14 @@ internal class RouletteMainActivity : AppBaseActivity() {
         winnerViewModel.request()
     }
 
+
     override fun receiveActionUnAuthorized() {
         leakHandler.post {
             CoreUtil.showToast(R.string.acb_common_message_session_expire)
             finish()
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -245,6 +286,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         popupPolling()
     }
 
+
     override fun onPause() {
         super.onPause()
         // winner board
@@ -254,11 +296,13 @@ internal class RouletteMainActivity : AppBaseActivity() {
         vb.bannerLinearView.onPause()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         vb.bannerLinearView.onDestroy()
         vb.bannerLinearRewardMediationView.onDestroy()
     }
+
 
     private fun popupPolling() {
         if (!isShowingDialogView) {
@@ -279,6 +323,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
         }
     }
 
+
     private fun initViewRewardBanner() {
         vb.bannerLinearRewardMediationView.ownerActivity = this@RouletteMainActivity
         vb.bannerLinearRewardMediationView.rewardCallback = object : IBannerLinearRewardCallback {
@@ -293,6 +338,7 @@ internal class RouletteMainActivity : AppBaseActivity() {
             }
         }
     }
+
 
     private fun bindViewRewardBannerPoint(rewardAmount: Int = 0) {
         logger.i(viewName = viewTag) { "bindViewRewardBannerPoint -> onReward { rewardAmount: $rewardAmount }" }

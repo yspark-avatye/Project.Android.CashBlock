@@ -13,7 +13,7 @@ object BlockController {
     private const val tagName: String = "BlockController"
 
     /** block module checker */
-    internal fun hasBlock(blockType: BlockType): Boolean {
+    fun hasBlock(blockType: BlockType): Boolean {
         return kotlin.runCatching { Class.forName(blockType.connector) }.isSuccess
     }
 

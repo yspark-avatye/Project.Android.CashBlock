@@ -143,7 +143,8 @@ object SettingContractor {
                 allowLinearAD = config.toBooleanValue("allowLinearAD", d.allowLinearAD),
                 allowMoreMenu = config.toBooleanValue("allowMoreMenu", d.allowMoreMenu),
                 allowTicketBox = config.toBooleanValue("allowTicketBox", d.allowTicketBox),
-                allowAgeVerification = config.toBooleanValue("useAgeVerification", d.allowAgeVerification)
+                allowAgeVerification = config.toBooleanValue("useAgeVerification", d.allowAgeVerification),
+                allowBlockOfferwall = config.toBooleanValue("useBlockOfferwall", d.allowBlockOfferwall)
             )
             RemotePreferenceData.fetchAppInfoSetting(setting = setting)
         }

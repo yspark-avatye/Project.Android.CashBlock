@@ -53,7 +53,8 @@ internal object RemotePreferenceData {
         allowLinearAD = Preference.AppConfig.allowLinearAD,
         allowMoreMenu = Preference.AppConfig.allowMoreMenu,
         allowTicketBox = Preference.AppConfig.allowTicketBox,
-        allowAgeVerification = Preference.AppConfig.appAllowAgeVerification
+        allowAgeVerification = Preference.AppConfig.appAllowAgeVerification,
+        allowBlockOfferwall = Preference.AppConfig.appAllowBlockOfferwall
     )
     val appInfo: AppInfoSettingEntity
         get() {
@@ -270,10 +271,6 @@ internal object RemotePreferenceData {
                 pref.edit { putInt(SDK_VERSION, value) }
             }
 
-        object BlockConfig {
-
-        }
-
 
         object AppConfig {
             private const val APP_NAME = "app:app-name"
@@ -286,6 +283,7 @@ internal object RemotePreferenceData {
             private const val APP_ALLOW_MORE_MENU = "app:allow-more-menu"
             private const val APP_ALLOW_TICKET_BOX = "app:allow-ticket-box"
             private const val APP_ALLOW_AGE_VERIFICATION = "app:allow-age-verification"
+            private const val APP_ALLOW_BLOCK_OFFERWALL = "app:allow-block-offerwall"
             private val D = AppInfoSettingEntity.empty()
 
             val appName: String
@@ -338,6 +336,11 @@ internal object RemotePreferenceData {
                     return pref.getBoolean(APP_ALLOW_AGE_VERIFICATION, D.allowAgeVerification)
                 }
 
+            val appAllowBlockOfferwall: Boolean
+                get() {
+                    return pref.getBoolean(APP_ALLOW_BLOCK_OFFERWALL, D.allowBlockOfferwall)
+                }
+
             fun fetch(setting: AppInfoSettingEntity) {
                 pref.edit {
                     putString(APP_NAME, setting.appName)
@@ -350,6 +353,7 @@ internal object RemotePreferenceData {
                     putBoolean(APP_ALLOW_MORE_MENU, setting.allowMoreMenu)
                     putBoolean(APP_ALLOW_TICKET_BOX, setting.allowTicketBox)
                     putBoolean(APP_ALLOW_AGE_VERIFICATION, setting.allowAgeVerification)
+                    putBoolean(APP_ALLOW_BLOCK_OFFERWALL, setting.allowBlockOfferwall)
                 }
             }
 
@@ -364,7 +368,8 @@ internal object RemotePreferenceData {
                     APP_ALLOW_LINEAR_AD,
                     APP_ALLOW_MORE_MENU,
                     APP_ALLOW_TICKET_BOX,
-                    APP_ALLOW_AGE_VERIFICATION
+                    APP_ALLOW_AGE_VERIFICATION,
+                    APP_ALLOW_BLOCK_OFFERWALL
                 ).forEach {
                     pref.edit { remove(it) }
                 }
