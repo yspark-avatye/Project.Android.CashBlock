@@ -43,6 +43,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$dependency_version_ktx"
     implementation "androidx.appcompat:appcompat:$dependency_version_appcompat"
     implementation "com.google.android.material:material:$dependency_version_material"
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
     // region # api
     api "joda-time:joda-time:$dependency_version_joda_time" // date time
     api "com.android.volley:volley:$dependency_version_volley" // volley

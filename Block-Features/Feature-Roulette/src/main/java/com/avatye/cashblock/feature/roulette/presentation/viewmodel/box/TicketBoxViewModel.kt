@@ -1,4 +1,4 @@
-package com.avatye.cashblock.unit.roulette.viewmodel.box
+package com.avatye.cashblock.feature.roulette.presentation.viewmodel.box
 
 import androidx.lifecycle.*
 import com.avatye.cashblock.base.block.BlockType

@@ -13,6 +13,7 @@ import android.provider.Settings
 import android.text.Html
 import android.text.Spanned
 import android.util.Base64
+import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -360,4 +361,37 @@ fun DateTime.toFeedTimeShort(): String {
     }
     return resultTimeString
 }
+// endregion
+
+
+// region # verify
+val String.verifyName: Boolean
+    get() {
+        return this.isNotEmpty() && this.length in 1..17 && this.matches(Regex("[a-zA-Z가-힣]*"))
+    }
+
+val String.verifyPhoneNumber: Boolean
+    get() {
+        return this.isNotEmpty() && this.matches(Regex("^01(?:0|1|[6-9])(\\d{3}|\\d{4})(\\d{4})$"))
+    }
+
+val String.verifyBirthDay: Boolean
+    get() {
+        return this.isNotEmpty() && this.matches(Regex("^(19[0-9][0-9]|20\\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$"))
+    }
+
+val String.verifyNickname: Boolean
+    get() {
+        return this.isNotEmpty() && this.length in 2..12 && this.matches(Regex("[0-9a-zA-Z가-힣]*"))
+    }
+
+val String.verifyEmail: Boolean
+    get() {
+        return !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    }
+
+val String.verifyInviteCode: Boolean
+    get() {
+        return !isNullOrEmpty() && this.length in 7..20 && this.matches(Regex("[0-9a-zA-Z]*"))
+    }
 // endregion

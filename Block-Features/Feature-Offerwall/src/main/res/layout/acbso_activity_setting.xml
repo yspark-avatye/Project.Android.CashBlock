@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <!-- region { header } -->
+    <com.avatye.cashblock.base.component.widget.header.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:acb_widget_title="@string/acb_common_setting_title"
+        app:acb_widget_view_type="main"
+        app:acb_widget_visible_close="true"
+        app:acb_widget_visible_more="false" />
+    <!-- endregion -->
+
+    <!-- region { contents } -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp" />
+
+            <!-- region { setting } -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="vertical">
+
+                <!-- region { restore_hidden_ad } -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/config_hiddenAd_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/acb_common_setting_config"
+                        android:textColor="#757575"
+                        android:textSize="12dp" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/CashBlock.Widget.TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingTop="9dp"
+                            android:paddingBottom="9dp"
+                            android:text="@string/acb_common_setting_restoration_hidden_AD_title"
+                            android:textColor="#212121"
+                            android:textSize="14dp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/config_restore_ad"
+                            android:layout_width="62dp"
+                            android:layout_height="22dp"
+                            android:background="@drawable/acbso_shape_restore_hidden_ad"
+                            android:gravity="center"
+                            android:text="@string/acb_common_setting_restoration"
+                            android:textColor="#ffffff"
+                            android:textSize="14dp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- endregion -->
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <!-- endregion -->
+
+            <!-- region { cs } -->
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/acb_common_setting_cs"
+                android:textColor="#757575"
+                android:textSize="12dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_notice"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_notice"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_reward_inquiry"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_reward_inquiry"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_cs_inquire"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_inquire"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+            <!-- endregion -->
+
+            <!-- region { app info } -->
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/acb_common_setting_app"
+                android:textColor="#757575"
+                android:textSize="12dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_terms"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_terms"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_license"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_license"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/acb_common_setting_sdk_version"
+                    android:textColor="#212121"
+                    android:textSize="14dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/config_sdk_version"
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:textColor="#757575"
+                    android:textSize="12dp"
+                    tools:text="V1.0.0" />
+
+            </RelativeLayout>
+            <!-- endregion -->
+
+            <!-- region { etc } -->
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/acb_common_setting_etc"
+                android:textColor="#757575"
+                android:textSize="12dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/config_alliance"
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="24dp"
+                android:drawableEnd="@drawable/acb_common_ic_right_empress_6x12"
+                android:gravity="center_vertical"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="@string/acb_common_setting_alliance"
+                android:textColor="#212121"
+                android:textSize="14dp" />
+            <!-- endregion -->
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.core.widget.NestedScrollView>
+    <!-- endregion -->
+
+    <!-- region { banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="#9FA69C"
+        tools:layout_height="50dp" />
+    <!-- endregion -->
+</LinearLayout>

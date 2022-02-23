@@ -44,6 +44,64 @@ internal object PreferenceData {
     }
     // endregion
 
+    // region # Tab
+    object Tab {
+        private var _conditionTime = Preference.Tab.conditionTime
+        val conditionTime: Long
+            get() = _conditionTime
+
+        fun clear() {
+            Preference.Tab.clear()
+            update(
+                conditionTime = Preference.Tab.conditionTime
+            )
+        }
+
+        fun update(
+            conditionTime: Long
+        ) {
+            conditionTime.let {
+                _conditionTime = it
+                Preference.Tab.conditionTime = it
+            }
+        }
+    }
+    // endregion
+
+    // region # Hidden
+    object Hidden {
+        private var _hiddenSections = Preference.Hidden.hiddenSections
+        val hiddenSections: List<String>?
+            get() = _hiddenSections
+
+        private var _hiddenItems = Preference.Hidden.hiddenItems
+        val hiddenItems: List<String>?
+            get() = _hiddenItems
+
+
+        fun clear() {
+            Preference.Hidden.clear()
+            update(
+                hiddenSections = Preference.Hidden.hiddenSections,
+                hiddenItems = Preference.Hidden.hiddenItems
+            )
+        }
+
+        fun update(
+            hiddenSections: List<String>? = null,
+            hiddenItems: List<String>? = null,
+        ) {
+            hiddenSections?.let {
+                _hiddenSections = it
+            }
+            hiddenItems?.let {
+                _hiddenItems = it
+            }
+        }
+    }
+    // endregion
+
+
     // region # Preference
     private object Preference {
         private const val preferenceName = "block:offerwall:local-setting"
@@ -71,5 +129,59 @@ internal object PreferenceData {
             }
         }
         // endregion
+
+        // region # Tab
+        object Tab {
+            private val CONDITION_TIME = "offerwall-tab:condition-time"
+
+            var conditionTime: Long
+                get() {
+                    return pref.getLong(CONDITION_TIME, 0)
+                }
+                set(value) {
+                    pref.edit { putLong(CONDITION_TIME, value) }
+                }
+
+            fun clear() {
+                arrayOf(
+                    CONDITION_TIME
+                ).forEach { element ->
+                    pref.edit { remove(element) }
+                }
+            }
+        }
+        // endregion
+
+        // region # Hidden
+        object Hidden {
+            private val HIDDEN_SECTIONS = "offerwall-hidden:sections"
+            private val HIDDEN_ITEMS = "offerwall-hidden:items"
+            private val HIDDEN_SECIONS_CODE = "offerwall-hidden:sections-code"
+
+            var hiddenSections: List<String>?
+                get() {
+                    return pref.getString(HIDDEN_SECTIONS, "")?.split(",")?.filter { it != "" }
+                }
+                set(value) {
+                    pref.edit { putString(HIDDEN_SECTIONS, value?.joinToString(",")) }
+                }
+
+            var hiddenItems: List<String>?
+                get() {
+                    return pref.getString(HIDDEN_ITEMS, "")?.split(",")?.filter { it != "" }
+                }
+                set(value) {
+                    pref.edit { putString(HIDDEN_ITEMS, value?.joinToString(",")) }
+                }
+
+            fun clear() {
+                arrayOf(
+                    HIDDEN_SECTIONS,
+                    HIDDEN_ITEMS
+                ).forEach { element ->
+                    pref.edit { remove(element) }
+                }
+            }
+        }
     }
 }

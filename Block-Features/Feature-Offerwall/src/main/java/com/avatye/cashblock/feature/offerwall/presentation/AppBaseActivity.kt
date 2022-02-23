@@ -27,5 +27,4 @@ internal abstract class AppBaseActivity : CoreBaseActivity() {
             finish()
         }
     }
-
 }

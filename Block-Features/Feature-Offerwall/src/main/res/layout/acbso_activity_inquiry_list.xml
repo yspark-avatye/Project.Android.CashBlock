@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <com.avatye.cashblock.base.component.widget.header.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:acb_widget_title="더보기"
+        app:acb_widget_view_type="sub"
+        tools:layout_height="50dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:text="미적립 문의"
+        android:textColor="@color/acb_core_color_main_text"
+        android:textSize="24dp" />
+
+    <com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
+        android:id="@+id/place_holder_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
+
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

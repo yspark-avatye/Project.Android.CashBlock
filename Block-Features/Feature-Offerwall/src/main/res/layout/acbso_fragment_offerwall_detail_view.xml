@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- region { description } -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp">
+
+
+            <ImageView
+                android:id="@+id/icon_image"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:scaleType="centerCrop"
+                android:transitionName="@string/acbso_transition_name_offerwall_image"
+                tools:src="@drawable/acbso_ic_coin_blue" />
+
+            <ImageView
+                android:id="@+id/icon_badge"
+                style="@style/CashBlock.Widget.ImageView"
+                android:layout_width="34.5dp"
+                android:layout_height="34.5dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/acbso_ic_participate_badge"
+                android:transitionName="@string/acbso_transition_name_offerwall_badge"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+
+        <!-- region { action type } -->
+        <TextView
+            android:id="@+id/action_type"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_toEndOf="@+id/icon_container"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#757575"
+            android:textSize="10dp"
+            tools:text="실행형" />
+        <!-- endregion -->
+
+
+        <!-- region { title } -->
+        <TextView
+            android:id="@+id/title"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_type"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_toEndOf="@+id/icon_container"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#212121"
+            android:textSize="14dp"
+            android:transitionName="@string/acbso_transition_name_offerwall_name"
+            tools:text="타이틀" />
+        <!-- endregion -->
+
+
+        <!-- region { description } -->
+        <TextView
+            android:id="@+id/description"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="24dp"
+            android:layout_toEndOf="@+id/icon_container"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#757575"
+            android:textSize="12dp"
+            android:transitionName="@string/acbso_transition_name_offerwall_description"
+            tools:text="참여방법이 입력되는 공간입니다.\n참여방법이 입력되는 공간입니다." />
+        <!-- endregion -->
+
+
+        <!-- region { reward cash } -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/reward"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/icon_container"
+            android:drawableEnd="@drawable/acbso_ic_coin_blue"
+            android:drawablePadding="2dp"
+            android:gravity="center_vertical|end"
+            android:textColor="#2196F3"
+            android:textSize="20dp"
+            android:transitionName="@string/acbso_transition_name_offerwall_reward"
+            tools:text="1,000" />
+        <!-- endregion -->
+
+
+        <!-- region { divider } -->
+        <View
+            android:id="@+id/divider_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/reward"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:background="#DFE4E9" />
+        <!-- endregion -->
+
+
+        <!-- region { detail title } -->
+        <TextView
+            android:id="@+id/detail_title"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider_line"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="22dp"
+            android:text="@string/acbso_offerwall_detail_title"
+            android:textColor="#212121"
+            android:textSize="14dp" />
+        <!-- endregion -->
+
+
+        <!-- region { detail content } -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/divider_line"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_toEndOf="@+id/detail_title"
+            android:fillViewport="true"
+            android:paddingTop="22dp"
+            android:paddingBottom="11dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2.5dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/detail_description"
+                    style="@style/CashBlock.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#757575"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+        <!-- endregion -->
+
+
+    </RelativeLayout>
+    <!-- endregion -->
+
+    <!-- region { buttons } -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/confirm_button"
+            style="@style/CashBlock.Widget.Button.c01"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            tools:text="@string/acbso_offerwall_button_confirm" />
+
+
+        <Button
+            android:id="@+id/validate_button"
+            style="@style/CashBlock.Widget.Button.c01"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            tools:text="@string/acbso_offerwall_button_validate" />
+
+    </LinearLayout>
+    <!-- endregion -->
+
+
+    <!-- region { linear bottom Banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/acb_dimen_widget_banner_linear_view_height"
+        android:background="@color/acb_core_color_pale_blue"
+        tools:layout_height="55dp" />
+    <!-- region { linear bottom Banner } -->
+
+
+</LinearLayout>

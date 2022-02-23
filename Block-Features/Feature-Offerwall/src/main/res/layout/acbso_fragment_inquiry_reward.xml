@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/header_title"
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/acbso_offerwall_inquiry_reward"
+        android:textColor="#212121"
+        android:textSize="24dp" />
+
+
+    <TextView
+        style="@style/CashBlock.Widget.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/acbso_offerwall_inquiry_reward_notice"
+        android:textColor="#212121"
+        android:textSize="14dp" />
+
+    <ScrollView
+        android:id="@+id/inquiry_reward_scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/acbso_offerwall_inquiry_reward_description_1"
+                android:textColor="#878787"
+                android:textSize="12dp" />
+
+
+            <TextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/acbso_offerwall_inquiry_reward_description_2"
+                android:textColor="#878787"
+                android:textSize="12dp" />
+
+
+            <TextView
+                style="@style/CashBlock.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/acbso_offerwall_inquiry_reward_description_3"
+                android:textColor="#878787"
+                android:textSize="12dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:background="#F0F9FF"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="이름"
+                        android:textColor="#212121"
+                        android:textSize="12dp" />
+
+
+                    <EditText
+                        android:id="@+id/name"
+                        style="@style/CashBlock.Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/acbso_shape_storke_ccc_rt_fff"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLength="16"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textSize="12dp" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        style="@style/CashBlock.Widget.TextView"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="휴대폰 번호"
+                        android:textColor="#212121"
+                        android:textSize="12dp" />
+
+
+                    <EditText
+                        android:id="@+id/phone_num_front"
+                        style="@style/CashBlock.Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/acbso_shape_storke_ccc_rt_fff"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:nextFocusDown="@id/phone_num_middle"
+                        android:textSize="12dp" />
+
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginRight="6dp"
+                        android:background="#212121" />
+
+
+                    <EditText
+                        android:id="@+id/phone_num_middle"
+                        style="@style/CashBlock.Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/acbso_shape_storke_ccc_rt_fff"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:nextFocusDown="@id/phone_num_back"
+                        android:textSize="12dp" />
+
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginRight="6dp"
+                        android:background="#212121" />
+
+
+                    <EditText
+                        android:id="@+id/phone_num_back"
+                        style="@style/CashBlock.Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/acbso_shape_storke_ccc_rt_fff"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textSize="12dp" />
+
+
+                </LinearLayout>
+
+                <ScrollView
+                    android:id="@+id/contents_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="113dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/acbso_shape_storke_ccc_rt_fff"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <EditText
+                        android:id="@+id/content"
+                        style="@style/CashBlock.Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00ffffff"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="#212121"
+                        android:textSize="12dp"
+                        tools:text="- 가입ID : \n- 차량번호 :" />
+                </ScrollView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="25dp"
+        android:gravity="bottom">
+
+        <CheckBox
+            android:id="@+id/agree_service_checkbox"
+            style="@style/CashBlock.Widget.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/term_agree"
+            android:button="@drawable/acbso_ic_checkbox"
+            android:gravity="center_vertical"
+            android:padding="7dp"
+            android:text="@string/acbso_offerwall_inquiry_reward_term_agree_provide_personal_information"
+            android:textColor="#212121"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/term_agree"
+            style="@style/CashBlock.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingTop="2.5dp"
+            android:paddingBottom="2.5dp"
+            android:text="@string/acbso_offerwall_inquiry_reward_view_terms_and_conditions"
+            android:textColor="#757575"
+            android:textSize="12dp" />
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/inquiry_button"
+        style="@style/CashBlock.Widget.Button"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp"
+        android:enabled="true"
+        android:text="@string/acbso_offerwall_inquiry_reward_button_inquiry" />
+
+
+</LinearLayout>
