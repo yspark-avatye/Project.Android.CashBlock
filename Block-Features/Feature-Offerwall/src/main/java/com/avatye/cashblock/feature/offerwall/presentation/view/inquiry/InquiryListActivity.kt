@@ -129,7 +129,8 @@ internal class InquiryListActivity : AppBaseActivity() {
                         if (entity.state == 8) {
                             InquiryRewardActivity.open(
                                 activity = this@InquiryListActivity,
-                                parcel = InquiryParcel(advertiseId = entity.advertiseID, contactId = entity.contactID, title = entity.title, state = 1)
+                                parcel = InquiryParcel(advertiseId = entity.advertiseID, contactId = entity.contactID, title = entity.title, state = 1),
+                                serviceType = serviceType
                             )
                         }
                     }

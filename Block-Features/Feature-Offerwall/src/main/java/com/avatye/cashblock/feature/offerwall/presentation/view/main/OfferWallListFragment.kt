@@ -15,14 +15,12 @@ import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.*
 import com.avatye.cashblock.base.component.support.CoreUtil.showToast
 import com.avatye.cashblock.base.component.support.compoundDrawablesWithIntrinsicBounds
 import com.avatye.cashblock.base.component.support.toLocale
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
-import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseListController
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
@@ -44,10 +42,6 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
         activity as OfferwallMainActivity
     }
 
-    private val api: OfferwallApiContractor by lazy {
-        OfferwallApiContractor(blockType = OfferwallConfig.blockType)
-    }
-
     internal companion object {
         fun open(position: Int): OfferWallListFragment {
             val args = Bundle()
@@ -62,7 +56,6 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
 
 
     val offerWallAdapter: OfferWallAdapter = OfferWallAdapter()
-    var parentFragment: OfferwallMainFragment? = null
     private lateinit var tab: OfferwallTabEntity
     private var tabPosition = 0
 
@@ -70,11 +63,9 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { tabPosition = it.getInt("position") }
-        parentFragment = getParentFragment() as OfferwallMainFragment
-        parentFragment?.let {
-            if (it.tabList.isNotEmpty()) {
-                tab = it.tabList[tabPosition]
-            }
+
+        if(parentActivity.tabList.isNotEmpty()) {
+            tab = parentActivity.tabList[tabPosition]
         }
     }
 
@@ -89,7 +80,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
             status = PlaceHolderRecyclerView.Status.LOADING
             actionRetry {
                 if (isAvailable) {
-                    parentFragment?.requestOfferWallList()
+                    parentActivity.requestOfferWallList()
                 }
             }
         }
@@ -106,27 +97,20 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
             val resultItem = hiddenSections?.plus(hiddenSectionID)
             PreferenceData.Hidden.update(hiddenSections = resultItem)
         }
-        parentFragment?.offerwallListPagerAdapter?.listRefresh(position, true)
+        parentActivity.offerwallListPagerAdapter.listRefresh(position, true)
     }
 
 
     private fun getItemTitle(entity: OfferwallItemEntity, listType: OfferwallBindItemListType): String {
-        var title: String = ""
-
-        when (listType) {
+        val title = when (listType) {
             OfferwallBindItemListType.SECTION, OfferwallBindItemListType.CATEGORY -> {
-                title = if (entity.displayTitle.isEmpty()) {
+                entity.displayTitle.ifEmpty {
                     entity.sectionTitle
-                } else {
-                    entity.displayTitle
                 }
             }
-
             else -> {
-                title = if (entity.displayTitle.isEmpty()) {
+                entity.displayTitle.ifEmpty {
                     entity.title
-                } else {
-                    entity.displayTitle
                 }
             }
         }

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
+import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.header.HeaderView
@@ -19,14 +21,27 @@ import com.avatye.cashblock.feature.offerwall.presentation.viewmodel.inquiry.Inq
 
 internal class InquiryRewardActivity : AppBaseActivity() {
     companion object {
-        fun open(activity: Activity, parcel: InquiryParcel, close: Boolean = false) {
+        const val REQUEST_CODE = 11002
+
+        fun open(activity: Activity, serviceType:ServiceType, parcel: InquiryParcel, close: Boolean = false) {
             activity.launch(
                 intent = Intent(activity, InquiryRewardActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     putExtra(InquiryParcel.NAME, parcel)
+                    putExtra(ServiceNameParcel.NAME, ServiceNameParcel(serviceType = serviceType))
                 },
                 transition = ActivityTransitionType.NONE.value,
                 close = close
+            )
+        }
+
+        fun openForResult(activity: Activity, serviceType:ServiceType, parcel: InquiryParcel) {
+            activity.launchFortResult(
+                intent = Intent(activity, InquiryRewardActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    putExtra(InquiryParcel.NAME, parcel)
+                    putExtra(ServiceNameParcel.NAME, ServiceNameParcel(serviceType = serviceType))
+                }, transition = ActivityTransitionType.NONE.value, requestCode = REQUEST_CODE, options = null
             )
         }
     }

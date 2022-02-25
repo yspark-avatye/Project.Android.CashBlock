@@ -19,6 +19,7 @@ data class OfferwallImpressionItemEntity(
     val clickID: String? = "",
     val clickDateTime: DateTime? = null,
     val pointName: String = "",
+    val contactState: Int = -1,
 ) {
     data class RewardItem(
         var appRevenue: Int = 0,
