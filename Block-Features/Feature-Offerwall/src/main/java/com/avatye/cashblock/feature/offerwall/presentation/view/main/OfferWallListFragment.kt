@@ -63,7 +63,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
 
     val offerWallAdapter: OfferWallAdapter = OfferWallAdapter()
     var parentFragment: OfferwallMainFragment? = null
-    private lateinit var tab: OfferWallTabEntity
+    private lateinit var tab: OfferwallTabEntity
     private var tabPosition = 0
 
 
@@ -89,14 +89,14 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
             status = PlaceHolderRecyclerView.Status.LOADING
             actionRetry {
                 if (isAvailable) {
-                    parentFragment?.requestOfferWallList(isRetry = true)
+                    parentFragment?.requestOfferWallList()
                 }
             }
         }
     }
 
 
-    private fun syncSectionData(hiddenSectionID: String, position: Int = 0) {
+    private fun foldingData(hiddenSectionID: String, position: Int = 0) {
         val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
 
         if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
@@ -184,8 +184,12 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
         }
 
 
-        fun refreshList(positionStart: Int) {
+        fun refreshList(positionStart: Int, isPositionScroll: Boolean) {
             notifyItemRangeChanged(positionStart, offerwalls.size)
+
+            if (isPositionScroll) {
+                binding.placeHolderRecyclerView.setScrollToPosition(position = positionStart)
+            }
         }
 
 
@@ -194,14 +198,18 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 val entity = offerwalls[adapterPosition]
                 val title = getItemTitle(entity, OfferwallBindItemListType.SECTION)
 
-                bindHiddenSection(adapterPosition)
-                itemBinding.sectionTitle.text = "${title}(${entity.sectionCount})"
+                bindHiddenSection(adapterPosition, entity)
+                itemBinding.sectionTitle.text = "${title}(${entity.sectionPos})"
                 itemBinding.sectionStickyLine.isVisible = adapterPosition != 0
             }
 
-            private fun bindHiddenSection(position: Int) {
+            private fun bindHiddenSection(position: Int, entity: OfferwallItemEntity) {
                 val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
-                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(tabEntity = tab, list = offerwalls)
+                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(
+                    tabEntity = tab,
+                    entity = entity
+                )
+
                 if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
                     itemBinding.sectionFoldingArrow.rotation = 180F
                 } else {
@@ -209,7 +217,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 }
 
                 itemBinding.listItemSectionContainer.setOnClickListener {
-                    syncSectionData(hiddenSectionID, position)
+                    foldingData(hiddenSectionID, position)
                 }
             }
         }
@@ -220,10 +228,10 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 val title = getItemTitle(entity, OfferwallBindItemListType.CATEGORY)
 
                 when (tab.listType) {
-                    OfferWallListType.ONLY_CATEGORY.value -> {
+                    OfferwallListType.ONLY_CATEGORY.value -> {
                         itemBinding.categoryFoldingArrow.isVisible = true
-                        itemBinding.categoryTitle.text = "${title}(${entity.categoryCount})"
-                        bindHiddenCategory(adapterPosition)
+                        itemBinding.categoryTitle.text = "${title}(${entity.categoryPos})"
+                        bindHiddenCategory(adapterPosition,entity)
                     }
                     else -> {
                         itemBinding.categoryFoldingArrow.isVisible = false
@@ -232,9 +240,12 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 }
             }
 
-            private fun bindHiddenCategory(position: Int) {
+            private fun bindHiddenCategory(position: Int, entity: OfferwallItemEntity) {
                 val hiddenSections: List<String>? = PreferenceData.Hidden.hiddenSections
-                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(tabEntity = tab, list = offerwalls)
+                val hiddenSectionID = AdvertiseListController.getHiddenSectionID(
+                    tabEntity = tab,
+                    entity = entity
+                )
 
                 if ((hiddenSections ?: listOf()).contains(hiddenSectionID)) {
                     itemBinding.categoryFoldingArrow.rotation = 180F
@@ -243,7 +254,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
                 }
 
                 itemBinding.listItemCategoryContainer.setOnClickListener {
-                    syncSectionData(hiddenSectionID, position)
+                    foldingData(hiddenSectionID, position)
                 }
             }
         }

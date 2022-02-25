@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:id="@+id/tab_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:background="#CFD1CF" />-->
 
     <LinearLayout
         android:id="@+id/tab_button"
@@ -18,27 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
-        tools:layout_height="48dp"
-        tools:background="@color/acb_core_color_light_blue"/>
+        tools:background="@color/acb_core_color_light_blue"
+        tools:layout_height="48dp" />
 
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_viewpager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/banner_linear_view"
         android:layout_below="@+id/tab_button" />
-
-
-    <!-- region { linear bottom Banner } -->
-    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
-        android:id="@+id/banner_linear_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/acb_core_color_pale_blue"
-        tools:layout_height="50dp" />
-    <!-- region { linear bottom Banner } -->
 
 
 </RelativeLayout>

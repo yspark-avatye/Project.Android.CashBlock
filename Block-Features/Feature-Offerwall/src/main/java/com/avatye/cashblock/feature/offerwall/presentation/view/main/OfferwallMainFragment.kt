@@ -1,8 +1,6 @@
 package com.avatye.cashblock.feature.offerwall.presentation.view.main
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
@@ -17,9 +15,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferWallTabEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallItemEntity
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallSectionEntity
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallTabEntity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.toPX
@@ -28,13 +27,10 @@ import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.feature.offerwall.MODULE_NAME
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
-import com.avatye.cashblock.feature.offerwall.component.controller.ADController
-import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseListController
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
-import com.avatye.cashblock.feature.offerwall.presentation.view.detail.OfferwallDetailViewActivity
 import org.joda.time.DateTime
 
 internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMainBinding>(AcbsoFragmentOfferwallMainBinding::inflate) {
@@ -54,68 +50,30 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
     lateinit var offerwallListPagerAdapter: OfferwallListPagerAdapter
 
     var sectionList = mutableListOf<OfferwallSectionEntity>()
-    var tabList = mutableListOf<OfferWallTabEntity>()
-
+    var tabList = mutableListOf<OfferwallTabEntity>()
 
     private var sectionButtonList = mutableListOf<Button>()
-
     private var currentPagePosition: Int = 0
 
 
     override fun onResume() {
         super.onResume()
-        binding.bannerLinearView.onResume()
+        if (AdvertiseListController.needRefreshList) {
+            offerwallListPagerAdapter.listRefresh()
+            AdvertiseListController.needRefreshList = false
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        binding.bannerLinearView.onPause()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_CANCELED) {
-            return
-        }
-
-        if (requestCode == OfferwallDetailViewActivity.REQUEST_CODE) {
-//            data?.extras?.getParcelable<OfferWallActionParcel>(OfferWallActionParcel.NAME)?.let {
-//                if (it.journeyType == OfferWallJourneyType.NONE) {
-//                    if (it.forceRefresh) {
-//                        requestOfferWalls(isRetry = false, isLanding = false)
-//                    }
-//                } else {
-//                    offerWallListPagerAdapter.changeSection(it.currentPosition, it.journeyType)
-//                }
-//            }
-        }
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         offerwallListPagerAdapter = OfferwallListPagerAdapter()
-
-        // region # Tab
         requestOfferwallTabs {
             initOfferwallList()
-        }
-        //endregion
-
-        // region # banner
-        binding.bannerLinearView.bannerData = ADController.createBannerData()
-        binding.bannerLinearView.requestBanner()
-        // endregion
-    }
-
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        // 숨김광고 복구하기 시 특정 프래그먼트의 hidden 상태 여부
-        super.onHiddenChanged(hidden)
-        if (!hidden && isRefreshOfferwallList) {
-            offerwallListPagerAdapter.listRefresh()
-            isRefreshOfferwallList = false
         }
     }
 
@@ -130,7 +88,6 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                         DateTime().toString("yyyyMMdd12")
                     }.toLong()
                     PreferenceData.Tab.update(conditionTime = conditionTime)
-
                     tabList = it.contract
                     callback()
                 }
@@ -148,9 +105,8 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
     }
 
 
-    fun requestOfferWallList(isRetry: Boolean = false, callback: () -> Unit = {}) {
+    fun requestOfferWallList(callback: () -> Unit = {}) {
         loadingView?.show(cancelable = false)
-
         CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
             api.retrieveList(deviceADID = aaidEntity.aaid, serviceID = serviceType ?: ServiceType.OFFERWALL) {
                 when (it) {
@@ -158,19 +114,17 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                         if (isAvailable) {
                             callback()
                             sectionList = it.contract
-
                             it.contract.forEach { sectionEntity ->
-                                sectionEntity.items.forEach { items ->
-                                    offerwallListPagerAdapter.setData(isRetry = isRetry)
+                                sectionEntity.items.forEach { item ->
+                                    offerwallListPagerAdapter.setData()
                                 }
                             }
-
-
                             loadingView?.dismiss()
                         }
                     }
                     is ContractResult.Failure -> {
                         if (isAvailable) {
+                            callback()
                             offerwallListPagerAdapter.setStatusView(PlaceHolderRecyclerView.Status.ERROR)
                             loadingView?.dismiss()
                         }
@@ -308,12 +262,16 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
         }
 
 
-        fun setData(isRetry: Boolean = false) {
+        fun setStatusView(status: PlaceHolderRecyclerView.Status) {
+            currentFragment?.binding?.placeHolderRecyclerView?.status = status
+        }
+
+
+        fun setData() {
             offerwalls = AdvertiseListController.makeOfferwallList(
                 sectionList = sectionList,
                 tabEntity = tabList[currentPagePosition]
             )
-
             currentFragment?.let {
                 it.offerWallAdapter.offerwalls = offerwalls
                 it.offerWallAdapter.notifyDataSetChanged()
@@ -322,20 +280,28 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
 
         fun listRefresh(position: Int = 0, isPositionScroll: Boolean = false) {
+            offerwalls = AdvertiseListController.makeOfferwallList(
+                sectionList = sectionList,
+                tabEntity = tabList[currentPagePosition]
+            )
             currentFragment?.let {
-                offerwalls = AdvertiseListController.makeOfferwallList(
-                    sectionList = sectionList,
-                    tabEntity = tabList[currentPagePosition]
-                )
                 it.offerWallAdapter.offerwalls = offerwalls
-                it.offerWallAdapter.refreshList(position)
-
+                it.offerWallAdapter.refreshList(position, isPositionScroll)
             }
         }
 
 
-        fun setStatusView(status: PlaceHolderRecyclerView.Status) {
-            currentFragment?.binding?.placeHolderRecyclerView?.status = status
+        fun changeAllList(currentPosition: Int, journeyStateType: OfferwallJourneyStateType) {
+            if (offerwalls.size - 1 < currentPosition) {
+                requestOfferWallList()
+                return
+            }
+            AdvertiseListController.changeAllList(
+                sections = sectionList,
+                entity = offerwalls[currentPosition],
+                journeyStateType = journeyStateType
+            )
+            listRefresh()
         }
     }
 }

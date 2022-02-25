@@ -62,6 +62,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
     fun postClick(
         deviceADID: String,
         advertiseID: String,
+        impressionID: String,
         deviceID: String? = null,
         deviceModel: String? = null,
         deviceNetwork: String? = null,
@@ -75,6 +76,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             blockType = blockType,
             deviceADID = deviceADID,
             advertiseID = advertiseID,
+            impressionID = impressionID,
             deviceID = deviceID,
             deviceModel = deviceModel,
             deviceNetwork = deviceNetwork,
@@ -161,7 +163,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             })
     }
 
-    fun retrieveTabs(response: (contract: ContractResult<MutableList<OfferWallTabEntity>>) -> Unit) {
+    fun retrieveTabs(response: (contract: ContractResult<MutableList<OfferwallTabEntity>>) -> Unit) {
         APIOfferwall.getOfferwallTabs(
             blockType = blockType,
             response = object : ServeResponse<ResOfferwallTabs> {

@@ -13,8 +13,6 @@ internal object ADController {
 
     private val placementADSize = LinearADSize.W320XH100
 
-    var impressionItemEntity = OfferwallImpressionItemEntity()
-
     private val verifier = object : IADAgeVerifier {
         override fun isVerified(): Boolean {
             return AccountContractor.ageVerified == AgeVerifiedType.VERIFIED

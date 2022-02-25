@@ -30,7 +30,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adHide"
+                android:id="@+id/ad_hide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -47,7 +47,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adClose"
+                android:id="@+id/ad_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -65,7 +65,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adRewardInquiry"
+                android:id="@+id/ad_reward_inquiry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -85,9 +85,21 @@
     </LinearLayout>
     <!-- endregion -->
 
+
     <FrameLayout
         android:id="@+id/ad_detail_view_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+
+    <!-- region { linear bottom Banner } -->
+    <com.avatye.cashblock.base.component.widget.banner.BannerLinearView
+        android:id="@+id/banner_linear_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/acb_core_color_pale_blue"
+        tools:layout_height="55dp" />
+    <!-- region { linear bottom Banner } -->
+
 </LinearLayout>

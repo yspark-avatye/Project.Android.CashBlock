@@ -1,6 +1,5 @@
 package com.avatye.cashblock.base.internal.server.entity.offerwall
 
-import android.util.Log
 import com.avatye.cashblock.base.component.domain.entity.offerwall.*
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
 import com.avatye.cashblock.base.library.miscellaneous.toIntValue
@@ -32,7 +31,6 @@ internal class ResOfferwallList : ServeSuccess() {
     var viewType: OfferwallViewStateType = OfferwallViewStateType.VIEW_TYPE_ITEM
 
     val sections: MutableList<OfferwallSectionEntity> = mutableListOf()
-    private val joinCompleteItems: MutableList<OfferwallItemEntity> = mutableListOf()
 
 
     private fun getTypeFirstItem(listType: OfferwallBindItemListType): OfferwallItemEntity {
@@ -43,8 +41,9 @@ internal class ResOfferwallList : ServeSuccess() {
                     sectionName = sectionEntity.sectionName,
                     viewType = OfferwallViewStateType.VIEW_TYPE_SECTION,
                     sectionTitle = sectionEntity.sectionTitle,
+                    sectionPos = sectionPos,
+                    categoryPos = -1
                 )
-                // TODO sectionPOS,categoryPos
             }
 
             OfferwallBindItemListType.CATEGORY -> {
@@ -52,8 +51,9 @@ internal class ResOfferwallList : ServeSuccess() {
                     sectionID = categoryEntity.categoryID,
                     viewType = OfferwallViewStateType.VIEW_TYPE_CATEGORY,
                     sectionTitle = categoryEntity.categoryName,
+                    sectionPos = sectionPos,
+                    categoryPos = categoryPos
                 )
-                // TODO sectionPOS,categoryPos
             }
 
             else -> return OfferwallItemEntity()
@@ -87,7 +87,7 @@ internal class ResOfferwallList : ServeSuccess() {
                             categoryPos = -1
 
                             if (item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
-                                joinCompleteItems.add(item)
+                                sectionEntity.joinCompleteItems.add(item)
                             } else {
                                 sectionEntity.items.add(item)
                             }
@@ -119,7 +119,7 @@ internal class ResOfferwallList : ServeSuccess() {
                                 viewType = OfferwallViewStateType.VIEW_TYPE_CATEGORY_ITEM
 
                                 if (item.journeyState == OfferwallJourneyStateType.COMPLETED_REWARDED) {
-                                    joinCompleteItems.add(item)
+                                    sectionEntity.joinCompleteItems.add(item)
                                 } else {
                                     categoryEntity.items.add(item)
                                 }
@@ -139,19 +139,27 @@ internal class ResOfferwallList : ServeSuccess() {
                 }
                 // endregion
 
-                // item add
+                // region # item add
                 if (sectionEntity.items.size > 0 || sectionEntity.categories.size > 0) {
                     sectionEntity.items.add(0, sectionFirstItem)
                     sections.add(sectionEntity)
                     sectionPos++
                 }
                 // endregion
-
-                // region # w 적립완료 및 참여 불가
-                viewType = OfferwallViewStateType.VIEW_TYPE_SECTION
-                // endregion
-
             }
+            // endregion
+
+            // region # w 적립완료 및 참여 불가
+            val completeItem = OfferwallItemEntity(
+                sectionID = "",
+                sectionName = "section_complete",
+                viewType = OfferwallViewStateType.VIEW_TYPE_SECTION,
+                sectionPos = -1,
+                categoryPos = -1,
+                sectionTitle = "적립완료 및 참여 불가",
+                progressType = OfferwallProgressType.COMPLETED
+            )
+            sectionEntity.joinCompleteItems.add(0, completeItem)
             // endregion
         }
     }

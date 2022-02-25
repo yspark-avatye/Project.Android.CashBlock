@@ -19,8 +19,10 @@ import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launchFortResult
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
+import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallDetailViewBinding
@@ -60,32 +62,72 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         AcbsoActivityOfferwallDetailViewBinding.inflate(LayoutInflater.from(this))
     }
 
+    var advertiseStatus: OfferwallJourneyStateType = OfferwallJourneyStateType.NONE
+        set(value) {
+            field = value
+            when (field) {
+                OfferwallJourneyStateType.PARTICIPATE,
+                OfferwallJourneyStateType.COMPLETED_NOT_REWARDED -> {
+                    vb.adHide.isVisible = false
+                    vb.adClose.isVisible = true
+                    vb.adRewardInquiry.isVisible = true
+                }
+                else -> {
+                    vb.adHide.isVisible = true
+                    vb.adClose.isVisible = false
+                    vb.adRewardInquiry.isVisible = false
+                }
+            }
+        }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 
     override fun onBackPressed() {
         supportFinishAfterTransition()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // banners
+        vb.bannerLinearView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // banners
+        vb.bannerLinearView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // banner
+        vb.bannerLinearView.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
-
         parcel = extraParcel(OfferWallViewParcel.NAME)
-
         // header
         vb.headerView.actionBack { finish() }
-
         // onClick
         vb.adRewardInquiry.setOnClickListener(this)
         vb.adClose.setOnClickListener(this)
         vb.adHide.setOnClickListener(this)
-
-
         transactionFragment(fragment = OfferwallDetailViewFragment().apply {
             val bundle = Bundle()
-            bundle.putParcelable(OfferWallViewParcel.NAME, parcel)
+            bundle.putParcelable(OfferWallViewParcel.NAME, this@OfferwallDetailViewActivity.parcel)
             arguments = bundle
         })
+        // region { banner }
+        vb.bannerLinearView.bannerData = ADController.createBannerData()
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.OFFERWALL
+        vb.bannerLinearView.requestBanner()
+        // endregion
     }
 
 
@@ -104,15 +146,20 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                 deviceADID = aaidEntity.aaid,
                 advertiseID = parcel?.advertiseID ?: "",
             ) {
-                when(it) {
+                when (it) {
                     is ContractResult.Success -> {
                         loadingView?.dismiss()
-                        setResult(Activity.RESULT_OK, Intent().putExtra( OfferWallActionParcel.NAME,
-                            OfferWallActionParcel(
-                                currentPosition = parcel?.currentPos ?: 0,
-                                journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
-                            )
-                        ))
+                        setResult(
+                            Activity.RESULT_OK, Intent().apply {
+                                putExtra(
+                                    OfferWallActionParcel.NAME,
+                                    OfferWallActionParcel(
+                                        currentPosition = parcel?.currentPos ?: 0,
+                                        journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
+                                    )
+                                )
+                            }
+                        )
                         finish()
                     }
                     is ContractResult.Failure -> {
@@ -126,21 +173,10 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
 
 
     private fun startRewardInquiry(entity: OfferwallImpressionItemEntity) {
-
     }
 
 
-    private fun startCloseAdvertise(entity: OfferwallImpressionItemEntity) {
-        when (entity.journeyState) {
-            OfferwallJourneyStateType.PARTICIPATE,
-            OfferwallJourneyStateType.COMPLETED_NOT_REWARDED -> {
-                vb.adHide.isVisible = false
-                vb.adClose.isVisible = true
-                requestOfferWallClose()
-            }
-            else -> vb.adClose.isVisible = false
-        }
-    }
+    fun startCloseAdvertise() = requestOfferWallClose()
 
 
     private fun startHideAdvertise(entity: OfferwallImpressionItemEntity) {
@@ -161,7 +197,9 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                         forceRefresh = true
                     )
                 }
-                setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(OfferWallActionParcel.NAME, actionParcel)
+                })
                 finish()
             }
         }
@@ -181,7 +219,7 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                     activity = this@OfferwallDetailViewActivity,
                     message = R.string.acbso_offerwall_do_you_want_to_remove_from_the_participating_list,
                     onPositive = {
-                        startCloseAdvertise(impressionItemEntity)
+                        startCloseAdvertise()
                     }
                 ).show(false)
             }

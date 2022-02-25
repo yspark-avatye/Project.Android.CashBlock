@@ -12,8 +12,6 @@ internal abstract class AppBaseFragment<VB : ViewBinding>(inflate: Inflate<VB>) 
 
     private var isDestroyed: Boolean = false
 
-    internal var isRefreshOfferwallList: Boolean = false
-
     protected val serviceType: ServiceType? by lazy {
         activity?.extraParcel<ServiceNameParcel>(ServiceNameParcel.NAME)?.serviceType
     }

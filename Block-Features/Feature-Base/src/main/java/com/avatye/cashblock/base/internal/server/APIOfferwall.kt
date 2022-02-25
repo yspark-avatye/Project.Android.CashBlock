@@ -82,6 +82,7 @@ internal object APIOfferwall {
         blockType: BlockType,
         deviceADID: String,
         advertiseID: String,
+        impressionID: String,
         deviceID: String? = null,
         deviceModel: String? = null,
         deviceNetwork: String? = null,
@@ -95,6 +96,7 @@ internal object APIOfferwall {
         val bodyArgs = hashMapOf<String, Any>(
             "deviceADID" to deviceADID,
             "advertiseID" to advertiseID,
+            "impressionID" to impressionID,
             "serviceID" to service.value,
         ).apply {
             deviceID?.let {

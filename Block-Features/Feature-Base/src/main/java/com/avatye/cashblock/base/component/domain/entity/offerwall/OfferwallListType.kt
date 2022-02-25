@@ -7,7 +7,7 @@ package com.avatye.cashblock.base.component.domain.entity.offerwall
  * 3: 목돈적립 (Only-Category)
  */
 
-enum class OfferWallListType(val value:Int) {
+enum class OfferwallListType(val value:Int) {
     MIX(1),
     ONLY_SECTION(2),
     ONLY_CATEGORY(3);
@@ -16,6 +16,6 @@ enum class OfferWallListType(val value:Int) {
     fun equals(other: Int): Boolean = this.value == other
 
     internal companion object {
-        fun from(value: Int): OfferWallListType = values().find { it.value == value } ?: MIX
+        fun from(value: Int): OfferwallListType = values().find { it.value == value } ?: MIX
     }
 }
