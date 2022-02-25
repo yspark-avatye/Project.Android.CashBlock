@@ -325,6 +325,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
+                    tools:visibility="gone"
                     tools:layout_height="250dp" />
                 <!-- endregion -->
 
