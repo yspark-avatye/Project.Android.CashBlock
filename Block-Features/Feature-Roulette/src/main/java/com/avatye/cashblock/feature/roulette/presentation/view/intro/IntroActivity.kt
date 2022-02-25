@@ -137,7 +137,6 @@ internal class IntroActivity : AppBaseActivity() {
 
     private fun moveToMain() {
         RouletteMainActivity.open(activity = this@IntroActivity, close = true)
-        finish()
     }
 
     private class IntroPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

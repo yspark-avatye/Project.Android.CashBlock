@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <!-- region # intro -->
     <string name="acbsr_intro_1_1">%s에서는</string>
     <string name="acbsr_intro_1_2">티켓을 모아</string>
     <string name="acbsr_intro_1_3"><![CDATA[<font color="#ef5350"><strong>%s</strong></font><font color="#212121">를 획득할 수 있어요</font>]]></string>
@@ -11,16 +10,17 @@
     <string name="acbsr_intro_3_2">다양한 %s 게임에 참여하여</string>
     <string name="acbsr_intro_3_3"><![CDATA[<font color="#212121">더 많은</font> <font color="#ef5350">%s</font><font color="#212121">를 모아보세요</font>]]></string>
     <string name="acbsr_intro_start">%s 시작</string>
-    <!-- region # setting -->
     <string name="acbsr_setting_title">더보기</string>
-    <!-- endregion -->
-    <!-- endregion -->
     <string name="acbsr_string_winner_null">지금 응모하세요!</string>
     <string name="acbsr_string_winner_datetime">\u2022 %s</string>
     <string name="acbsr_string_ticket_acquire">티켓얻기</string>
-    <string name="acbsr_string_touch_ticket_action_name">터치해서</string>
-    <string name="acbsr_string_video_ticket_action_name">영상보고</string>
+    <string name="acbsr_string_touch_ticket_action_name">터치해서 티켓얻기</string>
+    <string name="acbsr_string_video_ticket_action_name">영상보고 티켓얻기</string>
+    <string name="acbsr_string_offerwall_ticket_action_name">참여하고 티켓얻기</string>
+    <string name="acbsr_string_offerwall_ticket_action_desc">광고 참여할 때마다 티켓 획득</string>
+    <string name="acbsr_string_offerwall_ticket_action_go">바로가기</string>
     <string name="acbsr_string_ticket_acquire_period">%1$s 마다 %2$s장 획득</string>
+    <string name="acbsr_string_ticket_acquire_condition"><![CDATA[<font color="#FFFFFF">%1$s</font>&nbsp;<font color="#A4A4A4">/&nbsp;%2$s</font>]]></string>
     <string name="acbsr_string_roulette_campaign_text"><![CDATA[<font color="#ef5350">꽝없는</font> <font color="#212121">%1$s에서</font> <font color="#ef5350">대박</font><font color="#212121">을 노려보세요!</font>]]></string>
     <string name="acbsr_string_roulette_ticket_quantity"><![CDATA[<font color="#212121">내 보유티켓</font> <font color="#ef5350"><strong>%s장</strong></font>]]></string>
     <string name="acbsr_string_roulette_play">%s 돌리기</string>
@@ -110,5 +110,9 @@
     <string name="acbsr_string_notification_setting_help_section_1_title">바탕 화면에서 사용하고 있는 앱 아이콘을 길게 눌러 앱 정보를 선택해주세요</string>
     <string name="acbsr_string_notification_setting_help_section_2_title"><![CDATA[애플리케이션 정보에서 <strong>알림</strong>을 선택합니다.]]></string>
     <string name="acbsr_string_notification_setting_help_section_3_title"><![CDATA[알림에서 <strong>알림표시</strong>와 <strong>알림창 상태바</strong>를 켜주세요]]></string>
+    <!-- endregion -->
+    <!-- region # quantum bit -->
+    <string name="acbsr_string_quantum_bit_reward_time_message">7초 이상 화면에 머무르면 \n적립이 시작됩니다.</string>
+    <string name="acbsr_string_quantum_bit_reward_complete_message">적립이 완료되었습니다.</string>
     <!-- endregion -->
 </resources>

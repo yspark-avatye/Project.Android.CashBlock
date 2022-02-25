@@ -12,6 +12,7 @@
     <string name="acb_common_button_close_today">오늘 하루 보지 않기</string>
     <string name="acb_common_button_close_never">다시 보지 않기</string>
     <string name="acb_common_button_close_week">일주일간 보지 않기</string>
+    <string name="acb_common_button_setting_off">해제하기</string>
     <!-- endregion -->
     <!-- region #common -->
     <string name="acb_common_hh">%s시간</string>
@@ -30,6 +31,11 @@
     <string name="acb_common_message_always_activity_finished">사용하고 있는 폰에 오동작을 일으킬 수 있는 개발자용 옵션이 설정되어있어, 요청하신 작업을 수행할 수 없습니다.\n\n해당 옵션 설정을 해제한 후, 다시 시도해 주세요.\n\n(환경설정 > 개발자 옵션 > 액티비티 유지 안 함(활동보관안함))</string>
     <string name="acb_common_message_advertise_blocked">네트워크 연결이 불안정하거나 광고 차단 기능이 설정되어 있습니다.\n설정을 확인하시고 다시 시도해주세요</string>
     <string name="acb_common_message_ad_age_not_support">해당 연령은 서비스를 이용할 수 없습니다.</string>
+    <string name="acb_common_message_is_not_available_name">올바른 이름을 적어주세요</string>
+    <string name="acb_common_message_is_not_available_phone_num">휴대폰 번호를 정확히 입력해주세요</string>
+    <string name="acb_common_message_is_not_agree_service">개인정보 제공에 동의해주세요</string>
+    <string name="acb_common_message_limit_ad_tracking">광고 참여를 위해서는 광고ID 수집을 위해 \'광고 개인 최적화 선택 해제\'를 끄고 다시 시도해주세요.</string>
+
     <!-- endregion -->
     <!-- region # session -->
     <string name="acb_common_message_profile_not_set">사용자 정보가 존재하지 않습니다.</string>

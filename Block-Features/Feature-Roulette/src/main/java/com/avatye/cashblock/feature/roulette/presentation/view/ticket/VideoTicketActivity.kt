@@ -18,6 +18,7 @@ import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
 import com.avatye.cashblock.base.library.ad.curator.queue.ICuratorQueueCallback
@@ -25,7 +26,7 @@ import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
-import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
 import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
@@ -198,15 +199,16 @@ internal class VideoTicketActivity : AppBaseActivity() {
         // endregion
 
         // region # banner-linear
-        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.VIDEO_TICKET)
+        vb.bannerLinearView.bannerData = ADController.createBannerData(BannerLinearPlacementType.VIDEO_TICKET)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         // endregion
 
 
         // region # view-model observe
-        ticketTransactionViewModel.transaction.observe(this, { observeTransaction(it) })
-        ticketTransactionViewModel.ticketing.observe(this, { observeTicketing(it) })
-        ticketViewModel.videoTicket.observe(this, { receivableCount = it })
+        ticketTransactionViewModel.transaction.observe(this) { observeTransaction(it) }
+        ticketTransactionViewModel.ticketing.observe(this) { observeTicketing(it) }
+        ticketViewModel.videoTicket.observe(this) { receivableCount = it }
         // endregion
 
 
@@ -296,7 +298,7 @@ internal class VideoTicketActivity : AppBaseActivity() {
 
     private fun requestOpenAdvertise() {
         loadingAnimation?.start()
-        openADCurator = AdvertiseController.createADCuratorQueue(
+        openADCurator = ADController.createADCuratorQueue(
             activity = this@VideoTicketActivity,
             adQueueType = ADQueueType.VIDEO_TICKET_OPEN,
             callback = object : ICuratorQueueCallback {
@@ -380,7 +382,7 @@ internal class VideoTicketActivity : AppBaseActivity() {
         if (isCloseable) {
             // load & show close advertise(interstitial)
             loadingView?.show(cancelable = false)
-            closeADCurator = AdvertiseController.createADCuratorQueue(
+            closeADCurator = ADController.createADCuratorQueue(
                 activity = this,
                 adQueueType = ADQueueType.VIDEO_TICKET_CLOSE,
                 callback = object : ICuratorQueueCallback {

@@ -12,7 +12,7 @@ import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 
 internal abstract class AppBaseActivity : CoreBaseActivity() {
 
-    override val blockType: BlockType = OfferwallConfig.blockType
+    override fun getBlockType(): BlockType = OfferwallConfig.blockType
 
     private val _serviceType: ServiceType? by lazy {
         extraParcel<ServiceNameParcel>(ServiceNameParcel.NAME)?.serviceType
@@ -27,5 +27,4 @@ internal abstract class AppBaseActivity : CoreBaseActivity() {
             finish()
         }
     }
-
 }

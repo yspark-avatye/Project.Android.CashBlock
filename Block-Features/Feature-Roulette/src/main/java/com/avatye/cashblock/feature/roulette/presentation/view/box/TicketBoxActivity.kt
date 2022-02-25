@@ -17,6 +17,7 @@ import com.avatye.cashblock.base.component.domain.entity.box.BoxAvailableEntity
 import com.avatye.cashblock.base.component.domain.entity.box.BoxUseEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.popup.CuratorPopup
@@ -27,11 +28,12 @@ import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
-import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADPlacementType
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
+import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrActivityTicketBoxBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
 import com.avatye.cashblock.feature.roulette.presentation.viewmodel.box.TicketBoxViewModel
@@ -192,7 +194,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
             message.show(cancelable = false)
             return
         }
-        // BINDING
+        // binding
         vb.ticketBoxLoadingImage.apply {
             advertisingLoadAnimation = background as AnimationDrawable
             advertisingLoadAnimation?.let {
@@ -224,7 +226,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         currentStatus = TicketBoxStatus.LOADING
 
         // region # view model
-        ticketBoxViewModel.boxAvailable.observe(this, {
+        ticketBoxViewModel.boxAvailable.observe(this) {
             vb.ticketBoxLoadingContainer.post {
                 // animation
                 advertisingLoadAnimationPlay = true
@@ -244,8 +246,8 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     }
                 }
             }
-        })
-        ticketBoxViewModel.boxUse.observe(this, {
+        }
+        ticketBoxViewModel.boxUse.observe(this) {
             when (it) {
                 is ViewModelResult.InProgress -> {
                     loadingView?.show(cancelable = false)
@@ -260,10 +262,16 @@ internal class TicketBoxActivity : AppBaseActivity() {
                     observeTicketBoxUse(it.result)
                 }
             }
-        })
+        }
+        // endregion
+
+        // banner
+        vb.bannerLinearView.bannerData = ADController.createBannerData(BannerLinearPlacementType.COMMON_320X100)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
+        vb.bannerLinearView.requestBanner()
+
         // request box available
         ticketBoxViewModel.requestBoxAvailable()
-        // endregion
     }
 
     // region 'ticket box' - box available result
@@ -325,7 +333,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
     }
 
     private fun requestOpenAdvertise() {
-        openADCurator = AdvertiseController.createADCuratorQueue(
+        openADCurator = ADController.createADCuratorQueue(
             activity = this@TicketBoxActivity,
             adQueueType = ADQueueType.TICKET_BOX_OPEN,
             callback = object : ICuratorQueueCallback {
@@ -373,7 +381,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         val popupCallback = object : ICuratorPopupCallback {
             override fun oSuccess(adView: View, network: ADNetworkType) {
                 logger.i(viewName = viewTag) { "#POPUP -> CuratorPopup -> oSuccess" }
-                this@TicketBoxActivity.isExcludeADNetwork = AdvertiseController.allowExcludeADNetwork(
+                this@TicketBoxActivity.isExcludeADNetwork = ADController.allowExcludeADNetwork(
                     placementType = ADPlacementType.TICKET_BOX,
                     networkNo = network.value
                 )
@@ -413,7 +421,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
 
         // region popup advertise request
         advertisingLoadAnimationPlay = true
-        popupADCurator = AdvertiseController.createADCuratorPopup(
+        popupADCurator = ADController.createADCuratorPopup(
             context = this@TicketBoxActivity,
             ADPlacementType.TICKET_BOX,
             callback = popupCallback
@@ -489,7 +497,7 @@ internal class TicketBoxActivity : AppBaseActivity() {
         }
         // load & show close advertise(interstitial)
         loadingView?.show(cancelable = false)
-        closeADCurator = AdvertiseController.createADCuratorQueue(
+        closeADCurator = ADController.createADCuratorQueue(
             activity = this@TicketBoxActivity,
             adQueueType = ADQueueType.TICKET_BOX_CLOSE,
             callback = object : ICuratorQueueCallback {

@@ -208,12 +208,16 @@ object MessageDialogHelper {
         }
     }
 
-
     fun requestAlliance(activity: Activity, blockType: BlockType) {
         try {
+            val subject = when (blockType) {
+                BlockType.ROULETTE -> "[캐시블록-룰렛] 제휴 문의"
+                BlockType.OFFERWALL -> "[캐시블록-오퍼월] 제휴 문의"
+                else -> "[캐시블록] 제휴 문의"
+            }
             val appInfoSetting = SettingContractor.appInfoSetting
             val suggestionText = "mailto:business@avatye.com"
-                .plus("?subject=${Uri.encode("[캐시룰렛] 제휴 문의")}")
+                .plus("?subject=${Uri.encode(subject)}")
                 .plus("&body=")
                 .plus(Uri.encode("\n\n\n\n\n\n\n\n\n"))
                 .plus(Uri.encode("\n--------------------"))
@@ -235,7 +239,6 @@ object MessageDialogHelper {
             CoreUtil.showToast(R.string.acb_common_message_error)
         }
     }
-
 
     fun showSystemSettingDialog(activity: Activity) {
         activity.startActivity(Intent().apply {

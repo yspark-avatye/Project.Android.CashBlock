@@ -15,10 +15,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallTabEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallItemEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallSectionEntity
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallTabEntity
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.toPX
@@ -27,7 +27,6 @@ import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.feature.offerwall.MODULE_NAME
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
-import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseListController
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallMainBinding
@@ -53,15 +52,12 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
     var sectionList = mutableListOf<OfferwallSectionEntity>()
     var tabList = mutableListOf<OfferwallTabEntity>()
 
-
     private var sectionButtonList = mutableListOf<Button>()
-
     private var currentPagePosition: Int = 0
 
 
     override fun onResume() {
         super.onResume()
-        binding.bannerLinearView.onResume()
         if (AdvertiseListController.needRefreshList) {
             offerwallListPagerAdapter.listRefresh()
             AdvertiseListController.needRefreshList = false
@@ -70,25 +66,15 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
 
     override fun onPause() {
         super.onPause()
-        binding.bannerLinearView.onPause()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         offerwallListPagerAdapter = OfferwallListPagerAdapter()
-
-        // region # Tab
         requestOfferwallTabs {
             initOfferwallList()
         }
-        //endregion
-
-        // region # banner
-        binding.bannerLinearView.bannerData = AdvertiseController.createBannerData()
-        binding.bannerLinearView.requestBanner()
-        // endregion
     }
 
 
@@ -102,7 +88,6 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                         DateTime().toString("yyyyMMdd12")
                     }.toLong()
                     PreferenceData.Tab.update(conditionTime = conditionTime)
-
                     tabList = it.contract
                     callback()
                 }
@@ -120,9 +105,8 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
     }
 
 
-    fun  requestOfferWallList(callback: () -> Unit = {}) {
+    fun requestOfferWallList(callback: () -> Unit = {}) {
         loadingView?.show(cancelable = false)
-
         CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
             api.retrieveList(deviceADID = aaidEntity.aaid, serviceID = serviceType ?: ServiceType.OFFERWALL) {
                 when (it) {
@@ -130,14 +114,11 @@ internal class OfferwallMainFragment : AppBaseFragment<AcbsoFragmentOfferwallMai
                         if (isAvailable) {
                             callback()
                             sectionList = it.contract
-
                             it.contract.forEach { sectionEntity ->
                                 sectionEntity.items.forEach { item ->
                                     offerwallListPagerAdapter.setData()
                                 }
                             }
-
-
                             loadingView?.dismiss()
                         }
                     }

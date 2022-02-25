@@ -17,6 +17,7 @@
     <string name="acbso_offerwall_do_you_want_to_hide_from_the_participating_list">광고를 숨기시겠습니까?\n\n숨긴 광고는 \'설정\'에서 다시\n복구할 수 있습니다.</string>
     <string name="acbso_offerwall_failed_to_remove_please_try_again">광고 제거에 실패했습니다.\n잠시 후 다시 시도해주세요.</string>
     <string name="acbso_offerwall_failed_to_participate_please_try_again">광고 참여에 실패하였습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="acbso_inquiry_message_complete"><![CDATA[<strong>미적립 문의가 접수되었습니다.</strong><br/><br/>진행 상황은 <strong>더보기>미적립문의</strong> 메뉴를 통해 확인 가능합니다.<br/></br>광고주 확인이 필요할 경우 처리가 다소 길어질 수 있는 점 양해 부탁드립니다.]]></string>
     <!-- endregion -->
 
     <!-- region # Inquiry Reward -->

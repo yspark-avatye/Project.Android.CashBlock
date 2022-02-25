@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.avatye.cashblock.R
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launch
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.presentation.AppBaseActivity
+import com.avatye.cashblock.base.presentation.controller.ADController
 import com.avatye.cashblock.base.presentation.parcel.NoticeParcel
 import com.avatye.cashblock.base.presentation.viewmodel.notice.NoticeViewViewModel
 import com.avatye.cashblock.databinding.AcbCommonActivityNoticeViewBinding
@@ -28,6 +31,10 @@ internal class NoticeViewActivity : AppBaseActivity() {
                 close = close
             )
         }
+    }
+
+    override fun getBlockType(): BlockType {
+        return extraParcel<NoticeParcel>(NoticeParcel.NAME)?.blockType ?: BlockType.CORE
     }
 
     private val vb: AcbCommonActivityNoticeViewBinding by lazy {
@@ -62,7 +69,7 @@ internal class NoticeViewActivity : AppBaseActivity() {
                 viewModelStoreOwner = this@NoticeViewActivity
             )
             // view-model -> observe
-            viewModel.result.observe(this, {
+            viewModel.result.observe(this) {
                 when (it) {
                     is ViewModelResult.InProgress -> loadingView?.show(cancelable = false)
                     is ViewModelResult.Error -> {
@@ -81,7 +88,16 @@ internal class NoticeViewActivity : AppBaseActivity() {
                         )
                     }
                 }
-            })
+            }
+            // banner
+            vb.bannerLinearView.bannerData = ADController.createBannerData()
+            vb.bannerLinearView.sourceType = when (getBlockType()) {
+                BlockType.ROULETTE -> BannerLinearView.SourceType.ROULETTE
+                BlockType.OFFERWALL -> BannerLinearView.SourceType.OFFERWALL
+                else -> null
+            }
+            vb.bannerLinearView.requestBanner()
+            // request
             parcel.noticeId?.let { viewModel.request(noticeId = it) }
         } ?: run {
             CoreUtil.showToast(R.string.acb_common_message_error)

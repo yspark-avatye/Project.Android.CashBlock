@@ -1,4 +1,4 @@
-package com.avatye.cashblock.feature.roulette.component.widget.banner
+package com.avatye.cashblock.feature.roulette.component.widget.banner.ticketbox
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,24 +11,19 @@ import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
 import com.avatye.cashblock.feature.roulette.component.controller.NotificationController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketBoxController
+import com.avatye.cashblock.feature.roulette.component.widget.banner.IBannerLinearLifeCycle
 import com.avatye.cashblock.feature.roulette.databinding.AcbsrWidgetBannerTicketBoxBinding
 import com.avatye.cashblock.feature.roulette.presentation.AppBaseActivity
 
-internal class BannerTicketBoxView(context: Context, attrs: AttributeSet? = null) : RelativeLayout(context, attrs) {
+internal class BannerTicketBoxView(
+    context: Context,
+    attrs: AttributeSet? = null
+) : RelativeLayout(context, attrs), IBannerLinearLifeCycle {
 
     var ownerActivity: AppBaseActivity? = null
 
     private val vb: AcbsrWidgetBannerTicketBoxBinding by lazy {
         AcbsrWidgetBannerTicketBoxBinding.inflate(LayoutInflater.from(context), this, true)
-    }
-
-    fun onResume() {
-        if (SettingContractor.appInfoSetting.allowTicketBox) {
-            isVisible = TicketBoxController.hasTicketBox
-            EventContractor.postBoxConditionUpdate(blockType = BlockType.ROULETTE)
-        } else {
-            isVisible = false
-        }
     }
 
     init {
@@ -45,5 +40,20 @@ internal class BannerTicketBoxView(context: Context, attrs: AttributeSet? = null
         } else {
             isVisible = false
         }
+    }
+
+    override fun onResume() {
+        if (SettingContractor.appInfoSetting.allowTicketBox) {
+            isVisible = TicketBoxController.hasTicketBox
+            EventContractor.postBoxConditionUpdate(blockType = BlockType.ROULETTE)
+        } else {
+            isVisible = false
+        }
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
     }
 }

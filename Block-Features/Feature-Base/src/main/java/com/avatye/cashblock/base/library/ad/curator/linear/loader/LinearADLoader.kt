@@ -14,6 +14,7 @@ internal class LinearADLoader(
     private val context: Context,
     private val placementAppKey: String,
     private val placementID: String,
+    private val placementADSize: LinearADSize,
     private val mediationExtraData: HashMap<String, Any>? = null,
     private val callback: ILinearADCallback
 ) : IBannerEventCallbackListener {
@@ -33,7 +34,7 @@ internal class LinearADLoader(
                 this.autoBgColor = false
                 this.placementId = placementID
                 this.setPlacementAppKey(placementAppKey)
-                this.setAdSize(com.igaworks.ssp.AdSize.BANNER_320x50)
+                this.setAdSize(convertADSize(placementADSize))
                 this.setBannerAnimType(BannerAnimType.NONE)
                 this.setRefreshTime(Curator.RefreshTime)
                 this.setNetworkScheduleTimeout(Curator.NetworkScheduleTimeout)
@@ -47,6 +48,13 @@ internal class LinearADLoader(
         Curator.initSSP(context = context, appKey = placementAppKey) {
             createAdvertiseInstance()
             actionCompleteInitialize()
+        }
+    }
+
+    private fun convertADSize(linearADSize: LinearADSize): com.igaworks.ssp.AdSize {
+        return when (linearADSize) {
+            LinearADSize.W320XH50 -> com.igaworks.ssp.AdSize.BANNER_320x50
+            LinearADSize.W320XH100 -> com.igaworks.ssp.AdSize.BANNER_320x100
         }
     }
 

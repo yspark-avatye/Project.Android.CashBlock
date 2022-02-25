@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdk rootProject.ext.config_version_sdk_min
         targetSdk rootProject.ext.config_version_sdk_target
-        versionCode rootProject.ext.app_version_code
-        versionName rootProject.ext.app_version_name
         // obfuscation
         consumerProguardFiles "consumer-rules.pro"
         // buildConfigField

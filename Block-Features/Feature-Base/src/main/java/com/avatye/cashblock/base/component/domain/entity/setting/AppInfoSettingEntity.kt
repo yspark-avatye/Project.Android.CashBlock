@@ -10,7 +10,8 @@ data class AppInfoSettingEntity(
     val allowLinearAD: Boolean,
     val allowMoreMenu: Boolean,
     val allowTicketBox: Boolean,
-    val allowAgeVerification: Boolean
+    val allowAgeVerification: Boolean,
+    val allowBlockOfferwall: Boolean
 ) {
     companion object {
         fun empty() = AppInfoSettingEntity(
@@ -23,7 +24,8 @@ data class AppInfoSettingEntity(
             allowLinearAD = false,
             allowMoreMenu = false,
             allowTicketBox = false,
-            allowAgeVerification = false
+            allowAgeVerification = false,
+            allowBlockOfferwall = true
         )
     }
 
@@ -37,6 +39,7 @@ data class AppInfoSettingEntity(
                 && allowLinearAD == setting.allowLinearAD
                 && allowMoreMenu == setting.allowMoreMenu
                 && allowTicketBox == setting.allowTicketBox
-                && allowAgeVerification == setting.allowAgeVerification)
+                && allowAgeVerification == setting.allowAgeVerification
+                && allowBlockOfferwall == setting.allowBlockOfferwall)
     }
 }

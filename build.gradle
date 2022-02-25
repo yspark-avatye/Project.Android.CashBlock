@@ -19,8 +19,8 @@ buildscript {
     ext.dependency_version_ads_vungle = '6.10.2'
     ext.dependency_version_ads_fan = '6.8.0'
     // config
-    ext.config_version_sdk_compile = 30
-    ext.config_version_sdk_target = 30
+    ext.config_version_sdk_compile = 31
+    ext.config_version_sdk_target = 31
     ext.config_version_sdk_min = 21
     ext.app_version_code = 1
     ext.app_version_name = "22.0.3"
@@ -36,7 +36,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools:r8:3.0.77"
-        classpath "com.android.tools.build:gradle:7.0.4"
+        classpath 'com.android.tools.build:gradle:7.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$dependency_version_kotlin"
     }
 }

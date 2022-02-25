@@ -11,11 +11,12 @@ import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
 
 internal class OfferwallSettingFragment : AppBaseFragment<AcbsoFragmentSettingBinding>(AcbsoFragmentSettingBinding::inflate), View.OnClickListener {
 
+    private val parentActivity: SettingActivity by lazy {
+        activity as SettingActivity
+    }
+
     private var hiddenItems: List<String>? = null
 
-    private val parentActivity: OfferwallSettingActivity by lazy {
-        activity as OfferwallSettingActivity
-    }
 
     override fun onResume() {
         super.onResume()

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avatye.cashblock.R
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.support.NoticeEntity
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
@@ -16,15 +17,16 @@ import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.base.component.support.setOnClickWithDebounce
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.header.HeaderView
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
 import com.avatye.cashblock.base.component.widget.miscellaneous.RecyclerViewScroller
 import com.avatye.cashblock.base.presentation.AppBaseActivity
+import com.avatye.cashblock.base.presentation.controller.ADController
 import com.avatye.cashblock.base.presentation.parcel.NoticeParcel
 import com.avatye.cashblock.base.presentation.viewmodel.notice.NoticeListViewModel
 import com.avatye.cashblock.databinding.AcbCommonActivityNoticeListBinding
 import com.avatye.cashblock.databinding.AcbCommonItemNoticeBinding
-import java.util.*
 
 internal class NoticeListActivity : AppBaseActivity() {
 
@@ -39,6 +41,10 @@ internal class NoticeListActivity : AppBaseActivity() {
                 close = close
             )
         }
+    }
+
+    override fun getBlockType(): BlockType {
+        return extraParcel<NoticeParcel>(NoticeParcel.NAME)?.blockType ?: BlockType.CORE
     }
 
     private val vb: AcbCommonActivityNoticeListBinding by lazy {
@@ -110,7 +116,7 @@ internal class NoticeListActivity : AppBaseActivity() {
         // endregion
 
         // region # observe
-        viewModel.result.observe(this, {
+        viewModel.result.observe(this) {
             when (it) {
                 is ViewModelResult.InProgress -> {
                     if (offset == 0) {
@@ -131,8 +137,17 @@ internal class NoticeListActivity : AppBaseActivity() {
                     loadingView?.dismiss()
                 }
             }
-        })
+        }
         // endregion
+
+        // banner
+        vb.bannerLinearView.bannerData = ADController.createBannerData()
+        vb.bannerLinearView.sourceType = when (getBlockType()) {
+            BlockType.ROULETTE -> BannerLinearView.SourceType.ROULETTE
+            BlockType.OFFERWALL -> BannerLinearView.SourceType.OFFERWALL
+            else -> null
+        }
+        vb.bannerLinearView.requestBanner()
 
         // request
         viewModel.request(offset = offset, limit = limit)

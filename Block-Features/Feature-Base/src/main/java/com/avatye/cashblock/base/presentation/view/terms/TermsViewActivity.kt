@@ -5,11 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.webkit.WebView
+import com.avatye.cashblock.base.block.BlockType
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launch
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.miscellaneous.ScrollWebView
 import com.avatye.cashblock.base.presentation.AppBaseActivity
+import com.avatye.cashblock.base.presentation.controller.ADController
 import com.avatye.cashblock.base.presentation.parcel.TermsParcel
 import com.avatye.cashblock.databinding.AcbCommonActivityTermsViewBinding
 
@@ -29,6 +32,10 @@ internal class TermsViewActivity : AppBaseActivity() {
     }
 
     private lateinit var parcel: TermsParcel
+
+    override fun getBlockType(): BlockType {
+        return extraParcel<TermsParcel>(TermsParcel.NAME)?.blockType ?: BlockType.CORE
+    }
 
     private val vb: AcbCommonActivityTermsViewBinding by lazy {
         AcbCommonActivityTermsViewBinding.inflate(LayoutInflater.from(this))
@@ -65,6 +72,14 @@ internal class TermsViewActivity : AppBaseActivity() {
             vb.termsContent.scrollCallback = callbackScroll
             vb.termsContent.loadUrl(it.url)
             // endregion
+            // banner
+            vb.bannerLinearView.bannerData = ADController.createBannerData()
+            vb.bannerLinearView.sourceType = when (getBlockType()) {
+                BlockType.ROULETTE -> BannerLinearView.SourceType.ROULETTE
+                BlockType.OFFERWALL -> BannerLinearView.SourceType.OFFERWALL
+                else -> null
+            }
+            vb.bannerLinearView.requestBanner()
         } ?: run {
             finish()
         }

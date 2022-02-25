@@ -245,8 +245,11 @@
                         android:textSize="12dp"
                         tools:text="- 가입ID : \n- 차량번호 :" />
                 </ScrollView>
+
             </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
 
 

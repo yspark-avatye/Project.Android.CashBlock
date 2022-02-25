@@ -8,6 +8,7 @@ import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.IADAgeVerifier
+import com.avatye.cashblock.base.library.ad.curator.linear.loader.LinearADSize
 import com.avatye.cashblock.base.library.ad.curator.popup.CuratorPopup
 import com.avatye.cashblock.base.library.ad.curator.popup.ICuratorPopupCallback
 import com.avatye.cashblock.base.library.ad.curator.queue.CuratorQueue
@@ -19,7 +20,7 @@ import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
 import com.avatye.cashblock.feature.roulette.component.model.entity.BannerLinearPlacementType
 
 
-internal object AdvertiseController {
+internal object ADController {
 
     fun allowExcludeADNetwork(placementType: ADPlacementType, networkNo: Int): Boolean {
         if (networkNo == ADNetworkType.ADFIT.value) {
@@ -47,18 +48,28 @@ internal object AdvertiseController {
 
     fun createBannerData(placementType: BannerLinearPlacementType): BannerLinearView.BannerData {
         val placementAppKey = SettingContractor.advertiseNetworkSetting.igaWorks.appKey
-        val nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative
         val mezzo = BannerLinearView.MediationMezzoData(
             storeUrl = SettingContractor.appInfoSetting.storeUrl,
             allowBackground = false
         )
 
         return when (placementType) {
-            BannerLinearPlacementType.COMMON -> {
+            BannerLinearPlacementType.COMMON_320X50 -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = SettingContractor.inAppSetting.main.pid.linearSSP,
-                    nativePlacementID = nativePlacementID,
+                    placementADSize = LinearADSize.W320XH50,
+                    sspPlacementID = SettingContractor.inAppSetting.main.pid.linearSSP_320x50,
+                    nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative_320x50,
+                    mezzo = mezzo,
+                    verifier = verifier
+                )
+            }
+            BannerLinearPlacementType.COMMON_320X100 -> {
+                BannerLinearView.BannerData(
+                    placementAppKey = placementAppKey,
+                    placementADSize = LinearADSize.W320XH100,
+                    sspPlacementID = SettingContractor.inAppSetting.main.pid.linearSSP_320x100,
+                    nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative_320x100,
                     mezzo = mezzo,
                     verifier = verifier
                 )
@@ -66,8 +77,9 @@ internal object AdvertiseController {
             BannerLinearPlacementType.TOUCH_TICKET -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = SettingContractor.touchTicketSetting.pid.linearSSP,
-                    nativePlacementID = nativePlacementID,
+                    placementADSize = LinearADSize.W320XH100,
+                    sspPlacementID = SettingContractor.touchTicketSetting.pid.linearSSP_320x100,
+                    nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative_320x100,
                     mezzo = mezzo,
                     verifier = verifier
                 )
@@ -75,8 +87,9 @@ internal object AdvertiseController {
             BannerLinearPlacementType.VIDEO_TICKET -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = SettingContractor.videoTicketSetting.pid.linearSSP,
-                    nativePlacementID = nativePlacementID,
+                    placementADSize = LinearADSize.W320XH100,
+                    sspPlacementID = SettingContractor.videoTicketSetting.pid.linearSSP_320x100,
+                    nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative_320x100,
                     mezzo = mezzo,
                     verifier = verifier
                 )
@@ -84,8 +97,9 @@ internal object AdvertiseController {
             BannerLinearPlacementType.TICKET_BOX -> {
                 BannerLinearView.BannerData(
                     placementAppKey = placementAppKey,
-                    sspPlacementID = SettingContractor.ticketBoxSetting.pid.linearSSP,
-                    nativePlacementID = nativePlacementID,
+                    placementADSize = LinearADSize.W320XH100,
+                    sspPlacementID = SettingContractor.ticketBoxSetting.pid.linearSSP_320x100,
+                    nativePlacementID = SettingContractor.inAppSetting.main.pid.linearNative_320x100,
                     mezzo = mezzo,
                     verifier = verifier
                 )

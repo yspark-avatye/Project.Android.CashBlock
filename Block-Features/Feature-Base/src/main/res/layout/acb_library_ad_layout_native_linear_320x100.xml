@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sspNativeAdView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    tools:background="#99CCFF">
+
+    <!-- region { ssp native } -->
+    <LinearLayout
+        android:id="@+id/native_linear_ssp_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:minWidth="320dp"
+        android:orientation="horizontal"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/native_linear_ssp_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="#FF0000"
+            tools:layout_height="100dp"
+            tools:layout_width="100dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp">
+
+            <ImageView
+                android:id="@+id/native_linear_ssp_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:background="#FF0000" />
+
+            <TextView
+                android:id="@+id/native_linear_ssp_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toEndOf="@+id/native_linear_ssp_icon"
+                android:layout_toRightOf="@+id/native_linear_ssp_icon"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#212121"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                tools:text="native ad title" />
+
+            <TextView
+                android:id="@+id/native_linear_ssp_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/native_linear_ssp_title"
+                android:layout_marginStart="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toEndOf="@+id/native_linear_ssp_icon"
+                android:layout_toRightOf="@+id/native_linear_ssp_icon"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#212121"
+                android:textSize="10dp"
+                tools:text="native ad description" />
+
+            <TextView
+                android:id="@+id/native_linear_ssp_cta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/native_linear_ssp_icon"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/acb_library_ad_frame_cta"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:padding="5dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#d8d8d8"
+                android:textSize="12dp"
+                tools:text="call to action" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <!-- endregion -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100" />
+
+</com.igaworks.ssp.part.nativead.AdPopcornSSPNativeAd>

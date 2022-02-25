@@ -1,4 +1,4 @@
-package com.avatye.cashblock.feature.roulette.component.widget.banner
+package com.avatye.cashblock.feature.roulette.component.widget.banner.reward
 
 import android.app.Activity
 import android.content.Context
@@ -9,11 +9,12 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import com.avatye.cashblock.base.component.contract.api.RewardBannerApiContractor
 import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.contract.business.SettingContractor
+import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.support.CoreUtil
@@ -23,7 +24,8 @@ import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
 import com.avatye.cashblock.feature.roulette.component.data.PreferenceData
 import com.avatye.cashblock.feature.roulette.component.livedata.TicketBalanceLiveData
-import com.avatye.cashblock.feature.roulette.databinding.AcbsrWidgetBannerLinearRewardBinding
+import com.avatye.cashblock.feature.roulette.component.widget.banner.IBannerLinearLifeCycle
+import com.avatye.cashblock.feature.roulette.databinding.AcbsrWidgetBannerLinearRewardAceBinding
 import com.mmc.man.AdConfig
 import com.mmc.man.AdEvent
 import com.mmc.man.AdListener
@@ -33,14 +35,12 @@ import com.mmc.man.view.AdManView
 import org.joda.time.DateTime
 import java.lang.ref.WeakReference
 
-internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs), AdListener {
+internal class BannerLinearRewardACEView(
+    context: Context,
+    attrs: AttributeSet? = null
+) : FrameLayout(context, attrs), IBannerLinearLifeCycle, AdListener {
 
-    internal interface RewardCallback {
-        fun onReward(hasReward: Boolean)
-        fun onAdFail()
-    }
-
-    private val tagName: String = "BannerLinearRewardView"
+    private val tagName: String = "BannerLinearRewardACEView"
 
     private val leakHandler = LeakHandler()
 
@@ -50,29 +50,47 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
         }
     }
 
-    private val binding: AcbsrWidgetBannerLinearRewardBinding by lazy {
-        AcbsrWidgetBannerLinearRewardBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: AcbsrWidgetBannerLinearRewardAceBinding by lazy {
+        AcbsrWidgetBannerLinearRewardAceBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    var rewardCallback: RewardCallback? = null
+    var ownerActivity: Activity? = null
+    var rewardCallback: IBannerLinearRewardCallback? = null
 
-    var hasReward: Boolean = false
+    private var hasReward: Boolean = false
         set(value) {
             field = value
-            rewardCallback?.onReward(field)
+            rewardCallback?.onReward(
+                rewardAmount = when (field) {
+                    true -> PreferenceData.BannerReward.amount
+                    false -> 0
+                }
+            )
         }
 
     private val api: RewardBannerApiContractor by lazy {
-        RewardBannerApiContractor(blockType = RouletteConfig.blockType)
+        RewardBannerApiContractor(blockType = RouletteConfig.blockType, serviceType = ServiceType.ROULETTE)
     }
     private val hostPackageName = context.hostPackageName
     private val hostAppName = SettingContractor.appInfoSetting.appName
     private val hostStoreUrl = SettingContractor.appInfoSetting.storeUrl
 
-    private var lastClickTime: Long = 0
-    private val frequency: Long = (10 * 60 * 1000)
-    private val messageDelay: Long get() = SettingContractor.inAppSetting.main.rewardBannerDelay
+    private val allowAd: Boolean
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.allowAd
+        }
 
+    private val frequency: Long
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.rewardFrequency
+        }
+
+    private val messageDelay: Long
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.rewardDelay
+        }
+
+    private var lastClickTime: Long = 0
     private val weakContext = WeakReference(context)
     private var bannerView: AdManView? = null
     private val publisherCode: Int by lazy { SettingContractor.advertiseNetworkSetting.manPlus.publisherCode }
@@ -93,8 +111,9 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
     }
 
     private fun requestLinearRewardView() {
-        if (!ageVerified) {
-            this@BannerLinearRewardView.isVisible = false
+        if (!ageVerified || !allowAd) {
+            this@BannerLinearRewardACEView.isVisible = false
+            rewardCallback?.onAdFail()
             return
         }
 
@@ -102,7 +121,7 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
             logger.i(viewName = tagName) { "bannerView -> create" }
             bannerView = AdManView(weakContext.get())
             AdManView.init(context, leakHandler)
-            this@BannerLinearRewardView.isVisible = false
+            this@BannerLinearRewardACEView.isVisible = false
         }
 
         // make instance
@@ -137,17 +156,17 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
         }
     }
 
-    fun onResume() {
+    override fun onResume() {
         logger.i(viewName = tagName) { "onResume -> requestLinearRewardView" }
         requestLinearRewardView()
     }
 
-    fun onPause() {
+    override fun onPause() {
         logger.i(viewName = tagName) { "onPause -> finishLinearRewardBanner" }
         destroyLinearRewardView()
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
         try {
             bannerView?.removeAllViews()
             bannerView = null
@@ -159,13 +178,13 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
     }
 
     override fun onAdSuccessCode(v: Any?, id: String?, type: String?, status: String?, jsonDataString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         (context as Activity).runOnUiThread {
             logger.i(viewName = tagName) { "onAdSuccessCode -> AdResponseCode { status: $status, type: $type }" }
             if (status == AdResponseCode.Status.SUCCESS) {
-                this@BannerLinearRewardView.visibility = View.VISIBLE
+                this@BannerLinearRewardACEView.visibility = View.VISIBLE
                 bannerView?.addBannerView(binding.linearRewardBannerFrame)
                 // reward
                 if (type == AdResponseCode.Type.GUARANTEE) {
@@ -186,31 +205,31 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
     }
 
     override fun onAdFailCode(v: Any?, id: String?, type: String?, status: String?, jsonString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         post {
             logger.e(viewName = tagName) { "onAdFailCode($status)" }
-            this@BannerLinearRewardView.visibility = View.GONE
+            this@BannerLinearRewardACEView.visibility = View.GONE
             destroyLinearRewardView()
             rewardCallback?.onAdFail()
         }
     }
 
     override fun onAdErrorCode(v: Any?, id: String?, type: String?, status: String?, failingUrl: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         post {
             logger.e(viewName = tagName) { "onAdErrorCode($status)" }
-            this@BannerLinearRewardView.visibility = View.GONE
+            this@BannerLinearRewardACEView.visibility = View.GONE
             destroyLinearRewardView()
             rewardCallback?.onAdFail()
         }
     }
 
     override fun onAdEvent(v: Any?, id: String?, type: String?, status: String?, jsonDataString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         if (type == AdEvent.Type.CLICK) {
@@ -234,7 +253,7 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
     }
 
     private fun requestReward() {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         api.retrieveDirectReward {
@@ -257,7 +276,7 @@ internal class BannerLinearRewardView(context: Context, attrs: AttributeSet? = n
     }
 
     private fun postReward(transactionID: String) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         try {

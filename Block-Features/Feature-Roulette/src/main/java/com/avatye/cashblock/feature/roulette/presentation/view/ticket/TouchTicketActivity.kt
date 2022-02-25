@@ -17,6 +17,7 @@ import com.avatye.cashblock.base.component.domain.entity.ticket.TicketRequestEnt
 import com.avatye.cashblock.base.component.domain.entity.ticket.TicketType
 import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.dialog.DialogPopupAgeVerifyView
 import com.avatye.cashblock.base.library.ad.curator.ADNetworkType
 import com.avatye.cashblock.base.library.ad.curator.popup.CuratorPopup
@@ -27,7 +28,7 @@ import com.avatye.cashblock.base.library.ad.curator.queue.loader.ADLoaderBase
 import com.avatye.cashblock.feature.roulette.R
 import com.avatye.cashblock.feature.roulette.RouletteConfig
 import com.avatye.cashblock.feature.roulette.RouletteConfig.logger
-import com.avatye.cashblock.feature.roulette.component.controller.AdvertiseController
+import com.avatye.cashblock.feature.roulette.component.controller.ADController
 import com.avatye.cashblock.feature.roulette.component.controller.TicketController
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADPlacementType
 import com.avatye.cashblock.feature.roulette.component.model.entity.ADQueueType
@@ -245,7 +246,8 @@ internal class TouchTicketActivity : AppBaseActivity() {
         // endregion
 
         // region # banner-linear
-        vb.bannerLinearView.bannerData = AdvertiseController.createBannerData(BannerLinearPlacementType.TOUCH_TICKET)
+        vb.bannerLinearView.bannerData = ADController.createBannerData(BannerLinearPlacementType.TOUCH_TICKET)
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.ROULETTE
         vb.bannerLinearView.requestBanner()
         // endregion
 
@@ -331,7 +333,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
 
     private fun requestOpenAdvertise() {
         loadingAnimation?.start()
-        openADCurator = AdvertiseController.createADCuratorQueue(
+        openADCurator = ADController.createADCuratorQueue(
             activity = this@TouchTicketActivity,
             adQueueType = ADQueueType.TOUCH_TICKET_OPEN,
             callback = object : ICuratorQueueCallback {
@@ -380,7 +382,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
             override fun oSuccess(adView: View, network: ADNetworkType) {
                 logger.i(viewName = viewTag) { "CuratorPopup -> oSuccess" }
                 loadingAnimation?.stop()
-                this@TouchTicketActivity.isExcludeADNetwork = AdvertiseController.allowExcludeADNetwork(ADPlacementType.TOUCH_TICKET, network.value)
+                this@TouchTicketActivity.isExcludeADNetwork = ADController.allowExcludeADNetwork(ADPlacementType.TOUCH_TICKET, network.value)
                 vb.touchTicketAdContainer.isVisible = false
                 vb.touchTicketAdContent.removeAllViews()
                 vb.touchTicketAdContent.addView(adView)
@@ -417,7 +419,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
                 }
             }
         }
-        popupADCurator = AdvertiseController.createADCuratorPopup(context = this@TouchTicketActivity, placementType = ADPlacementType.TOUCH_TICKET, callback = curatorPopupCallback)
+        popupADCurator = ADController.createADCuratorPopup(context = this@TouchTicketActivity, placementType = ADPlacementType.TOUCH_TICKET, callback = curatorPopupCallback)
         popupADCurator?.requestAD()
     }
 
@@ -486,7 +488,7 @@ internal class TouchTicketActivity : AppBaseActivity() {
         if (isCloseable) {
             // load & show close advertise(interstitial)
             loadingView?.show(cancelable = false)
-            closeADCurator = AdvertiseController.createADCuratorQueue(
+            closeADCurator = ADController.createADCuratorQueue(
                 activity = this,
                 adQueueType = ADQueueType.TOUCH_TICKET_CLOSE,
                 callback = object : ICuratorQueueCallback {

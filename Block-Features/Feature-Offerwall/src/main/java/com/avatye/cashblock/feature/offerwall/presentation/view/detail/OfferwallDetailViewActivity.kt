@@ -19,8 +19,10 @@ import com.avatye.cashblock.base.component.support.CoreUtil
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.extraParcel
 import com.avatye.cashblock.base.component.support.launchFortResult
+import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
+import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallDetailViewBinding
@@ -88,27 +90,44 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         supportFinishAfterTransition()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // banners
+        vb.bannerLinearView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // banners
+        vb.bannerLinearView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // banner
+        vb.bannerLinearView.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
-
         parcel = extraParcel(OfferWallViewParcel.NAME)
-
         // header
         vb.headerView.actionBack { finish() }
-
         // onClick
         vb.adRewardInquiry.setOnClickListener(this)
         vb.adClose.setOnClickListener(this)
         vb.adHide.setOnClickListener(this)
-
-
         transactionFragment(fragment = OfferwallDetailViewFragment().apply {
             val bundle = Bundle()
             bundle.putParcelable(OfferWallViewParcel.NAME, this@OfferwallDetailViewActivity.parcel)
             arguments = bundle
         })
+        // region { banner }
+        vb.bannerLinearView.bannerData = ADController.createBannerData()
+        vb.bannerLinearView.sourceType = BannerLinearView.SourceType.OFFERWALL
+        vb.bannerLinearView.requestBanner()
+        // endregion
     }
 
 

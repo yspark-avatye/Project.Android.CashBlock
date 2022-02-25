@@ -118,8 +118,8 @@ class OfferwallApiContractor(private val blockType: BlockType) {
         advertiseID: String,
         title: String? = null,
         contents: String,
-        state: Int = 0,
-        resultMsgType: Int = 0,
+        state: Int? = null,
+        resultMsgType: Int? = null,
         deviceID: String? = null,
         deviceADID: String,
         phone: String? = null,
@@ -144,47 +144,21 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             })
     }
 
-    fun retrieveContactRewardInfo(advertiseID: String, response: (contract: ContractResult<OfferwallContactRewardEntity>) -> Unit) {
+    fun retrieveContactRewardInfo(advertiseID: String, response: (contract: ContractResult<OfferwallContactRewardInfoEntity>) -> Unit) {
         APIOfferwall.getOfferwallContactRewardInfo(
             blockType = blockType,
             advertiseID = advertiseID,
-            response = object : ServeResponse<ResContactRewardInfo> {
-                override fun onSuccess(success: ResContactRewardInfo) = response(Contract.onSuccess(success = success.offerwallContactRewardInfoEntity))
+            response = object : ServeResponse<ResOfferwallContactRewardInfo> {
+                override fun onSuccess(success: ResOfferwallContactRewardInfo) = response(Contract.onSuccess(success = success.contactRewardInfo))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
             })
     }
 
-    fun retrieveContactRewards(
-        contactID: String? = null,
-        advertiseID: String,
-        title: String? = null,
-        contents: String,
-        type: Int = 0,
-        state: Int = 0,
-        deviceID: String? = null,
-        deviceADID: String,
-        phone: String? = null,
-        userName: String? = null,
-        resultMsgType: Int = 0,
-        customMsg: String? = null,
-        response: (contract: ContractResult<OfferwallContactRewardsEntity>) -> Unit
-    ) {
+    fun retrieveContactRewardList(blockType: BlockType, response: (contract: ContractResult<MutableList<OfferwallContactRewardEntity>>) -> Unit) {
         APIOfferwall.getOfferwallContactRewards(
             blockType = blockType,
-            contactID = contactID,
-            advertiseID = advertiseID,
-            title = title,
-            contents = contents,
-            type = type,
-            state = state,
-            deviceID = deviceID,
-            deviceADID = deviceADID,
-            phone = phone,
-            userName = userName,
-            resultMsgType = resultMsgType,
-            customMsg = customMsg,
             response = object : ServeResponse<ResOfferwallContactRewards> {
-                override fun onSuccess(success: ResOfferwallContactRewards) = response(Contract.onSuccess(success = success.offerwallContactRewardEntity))
+                override fun onSuccess(success: ResOfferwallContactRewards) = response(Contract.onSuccess(success = success.contactRewards))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
             })
     }

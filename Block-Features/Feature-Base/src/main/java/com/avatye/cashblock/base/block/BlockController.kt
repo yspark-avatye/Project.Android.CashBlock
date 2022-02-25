@@ -13,7 +13,7 @@ object BlockController {
     private const val tagName: String = "BlockController"
 
     /** block module checker */
-    internal fun hasBlock(blockType: BlockType): Boolean {
+    fun hasBlock(blockType: BlockType): Boolean {
         return kotlin.runCatching { Class.forName(blockType.connector) }.isSuccess
     }
 
@@ -83,7 +83,9 @@ object BlockController {
             // 2. popup or etc sync
             // 3. sync session
             AccountContractor.login(blockType = blockType, listener = object : ILoginListener {
-                override fun onSuccess() = callback(true)
+                override fun onSuccess() {
+                    callback(true)
+                }
 
                 override fun onFailure(reason: String) {
                     showToast(reason)

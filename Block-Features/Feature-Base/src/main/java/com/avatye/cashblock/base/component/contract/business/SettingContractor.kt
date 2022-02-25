@@ -43,6 +43,10 @@ object SettingContractor {
     val ticketBoxSetting
         get() = RemotePreferenceData.ticketBox
 
+    // reward banner setting
+    val rewardBannerSetting
+        get() = RemotePreferenceData.rewardBanner
+
 
     internal object Controller {
         // is-synced
@@ -58,67 +62,75 @@ object SettingContractor {
         fun synchronization(blockType: BlockType, synchronized: (success: Boolean) -> Unit) {
             if (syncTime >= DateTime().millis) {
                 synchronized(true)
+                return
             }
             // synchronization
-            CoreApiContractor(blockType = blockType).let { core ->
-                core.retrieveAppSettings { res ->
-                    when (res) {
-                        is ContractResult.Success -> {
-                            // synctime
-                            syncTime = DateTime().plusMinutes(1).millis
-                            if (RemotePreferenceData.needUpdate(version = res.contract.updateDateTime)) {
-                                try {
-                                    res.contract.settings?.let { settings ->
-                                        // block info settings
-                                        settings.toJSONObjectValue("blockInfo")?.let {
-                                            //syncAppConfig(it)
-                                        }
-                                        // app info settings
-                                        settings.toJSONObjectValue("appInfo")?.let {
-                                            syncAppConfig(config = it)
-                                        }
-                                        // notification settings
-                                        settings.toJSONObjectValue("notification")?.let {
-                                            syncNotificationConfig(config = it)
-                                        }
-                                        // advertise network settings
-                                        settings.toJSONObjectValue("adNetwork")?.let {
-                                            syncAdvertiseNetworkConfig(config = it)
-                                        }
-                                        // in-app settings
-                                        settings.toJSONObjectValue("inApp")?.let {
-                                            syncInAppConfig(config = it)
-                                        }
-                                        // p-id: touch ticket settings
-                                        settings.toJSONObjectValue("touchTicket")?.let {
-                                            syncTouchTicketConfig(config = it)
-                                        }
-                                        // p-id: video ticket settings
-                                        settings.toJSONObjectValue("videoTicket")?.let {
-                                            syncVideoTicketConfig(config = it)
-                                        }
-                                        // p-id: ticket box settings
-                                        settings.toJSONObjectValue("ticketBox")?.let {
-                                            syncTicketBoxConfig(config = it)
-                                        }
-                                        // mission settings
-                                        settings.toJSONObjectValue("mission")?.let {
-                                            syncMissionConfig(config = it)
-                                        }
-                                        // version
-                                        syncVersion(res.contract.updateDateTime)
-                                    }
-                                } catch (e: Exception) {
-                                    synchronized(false)
-                                }
-                            }
-                            synchronized(true)
+            CoreApiContractor(blockType = blockType).retrieveAppSettings { response ->
+                when (response) {
+                    is ContractResult.Success -> {
+                        // sync-time
+                        var synchronizationResult: Boolean = true
+                        syncTime = DateTime().plusMinutes(1).millis
+                        if (RemotePreferenceData.needUpdate(version = response.contract.updateDateTime)) {
+                            synchronizationResult = requestFetch(response = response.contract.settings, updateDateTime = response.contract.updateDateTime)
                         }
-                        is ContractResult.Failure -> synchronized(false)
+                        synchronized(synchronizationResult)
                     }
+                    is ContractResult.Failure -> synchronized(false)
                 }
             }
         }
+
+
+        private fun requestFetch(response: JSONObject?, updateDateTime: Long): Boolean {
+            return kotlin.runCatching {
+                response?.let { settings ->
+                    // block info settings
+                    settings.toJSONObjectValue("blockInfo")?.let {
+                        //syncAppConfig(it)
+                    }
+                    // app info settings
+                    settings.toJSONObjectValue("appInfo")?.let {
+                        syncAppConfig(config = it)
+                    }
+                    // notification settings
+                    settings.toJSONObjectValue("notification")?.let {
+                        syncNotificationConfig(config = it)
+                    }
+                    // advertise network settings
+                    settings.toJSONObjectValue("adNetwork")?.let {
+                        syncAdvertiseNetworkConfig(config = it)
+                    }
+                    // in-app settings
+                    settings.toJSONObjectValue("inApp")?.let {
+                        syncInAppConfig(config = it)
+                    }
+                    // p-id: touch ticket settings
+                    settings.toJSONObjectValue("touchTicket")?.let {
+                        syncTouchTicketConfig(config = it)
+                    }
+                    // p-id: video ticket settings
+                    settings.toJSONObjectValue("videoTicket")?.let {
+                        syncVideoTicketConfig(config = it)
+                    }
+                    // p-id: ticket box settings
+                    settings.toJSONObjectValue("ticketBox")?.let {
+                        syncTicketBoxConfig(config = it)
+                    }
+                    // mission settings
+                    settings.toJSONObjectValue("mission")?.let {
+                        syncMissionConfig(config = it)
+                    }
+                    // banner settings
+                    settings.toJSONObjectValue("rewardBanner")?.let {
+                        syncRewardBannerConfig(config = it)
+                    }
+                    // version
+                    syncVersion(updateDateTime)
+                }
+            }.isSuccess
+        }
+
 
         // sync version
         private fun syncVersion(version: Long) {
@@ -143,7 +155,8 @@ object SettingContractor {
                 allowLinearAD = config.toBooleanValue("allowLinearAD", d.allowLinearAD),
                 allowMoreMenu = config.toBooleanValue("allowMoreMenu", d.allowMoreMenu),
                 allowTicketBox = config.toBooleanValue("allowTicketBox", d.allowTicketBox),
-                allowAgeVerification = config.toBooleanValue("useAgeVerification", d.allowAgeVerification)
+                allowAgeVerification = config.toBooleanValue("useAgeVerification", d.allowAgeVerification),
+                allowBlockOfferwall = config.toBooleanValue("useBlockOfferwall", d.allowBlockOfferwall)
             )
             RemotePreferenceData.fetchAppInfoSetting(setting = setting)
         }
@@ -180,26 +193,29 @@ object SettingContractor {
         private fun syncInAppConfig(config: JSONObject) {
             val d = InAppSettingEntity.empty()
             // make value
-            var rewardBannerDelay = d.main.rewardBannerDelay
             var rewardBanner = d.main.pid.rewardBanner
-            var linearSSP = d.main.pid.linearSSP
-            var linearNative = d.main.pid.linearNative
+            var linearSSP_320X50 = d.main.pid.linearSSP_320x50
+            var linearSSP_320X100 = d.main.pid.linearSSP_320x100
+            var linearNative_320X50 = d.main.pid.linearNative_320x50
+            var linearNative_320X100 = d.main.pid.linearNative_320x100
             config.toJSONObjectValue("main")?.let { main ->
-                rewardBannerDelay = main.toLongValue("rewardBannerDelay", d.main.rewardBannerDelay)
                 main.toJSONObjectValue("pid")?.let { pid ->
                     rewardBanner = pid.toStringValue("rewardBanner", d.main.pid.rewardBanner)
-                    linearSSP = pid.toStringValue("linearSSP", d.main.pid.linearSSP)
-                    linearNative = pid.toStringValue("linearNative", d.main.pid.linearNative)
+                    linearSSP_320X50 = pid.toStringValue("linearSSP", d.main.pid.linearSSP_320x50)
+                    linearSSP_320X100 = pid.toStringValue("linearSSP_320x100", d.main.pid.linearSSP_320x100)
+                    linearNative_320X50 = pid.toStringValue("linearNative", d.main.pid.linearNative_320x50)
+                    linearNative_320X100 = pid.toStringValue("linearNative_320x100", d.main.pid.linearNative_320x100)
                 }
             }
             // make model
             val setting = InAppSettingEntity(
                 main = InAppSettingEntity.Main(
-                    rewardBannerDelay = rewardBannerDelay,
                     pid = InAppSettingEntity.Main.PlacementID(
                         rewardBanner = rewardBanner,
-                        linearSSP = linearSSP,
-                        linearNative = linearNative
+                        linearSSP_320x50 = linearSSP_320X50,
+                        linearSSP_320x100 = linearSSP_320X100,
+                        linearNative_320x50 = linearNative_320X50,
+                        linearNative_320x100 = linearNative_320X100
                     )
                 )
             )
@@ -223,33 +239,16 @@ object SettingContractor {
                     excludePosition = pop?.toFloatValue("excludePosition") ?: d.popAD.excludePosition
                 ),
                 pid = TouchTicketSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue(
-                        "linearSSP", d.pid.linearSSP
-                    ) ?: d.pid.linearSSP,
-                    popupSSP = pid?.toStringValue(
-                        "popupSSP", d.pid.popupSSP
-                    ) ?: d.pid.popupSSP,
-                    popupNative = pid?.toStringValue(
-                        "popupNative", d.pid.popupNative
-                    ) ?: d.pid.popupNative,
-                    openInterstitialSSP = pid?.toStringValue(
-                        "openInterstitialSSP", d.pid.openInterstitialSSP
-                    ) ?: d.pid.openInterstitialSSP,
-                    openInterstitialNative = pid?.toStringValue(
-                        "openInterstitialNative", d.pid.openInterstitialNative
-                    ) ?: d.pid.openInterstitialNative,
-                    openInterstitialVideoSSP = pid?.toStringValue(
-                        "openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP
-                    ) ?: d.pid.openInterstitialVideoSSP,
-                    openBoxBannerSSP = pid?.toStringValue(
-                        "openBoxBannerSSP", d.pid.openBoxBannerSSP
-                    ) ?: d.pid.openBoxBannerSSP,
-                    closeInterstitialSSP = pid?.toStringValue(
-                        "closeInterstitialSSP", d.pid.closeInterstitialSSP
-                    ) ?: d.pid.closeInterstitialSSP,
-                    closeInterstitialNative = pid?.toStringValue(
-                        "closeInterstitialNative", d.pid.closeInterstitialNative
-                    ) ?: d.pid.closeInterstitialNative
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP", d.pid.linearSSP_320x50) ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100", d.pid.linearSSP_320x100) ?: d.pid.linearSSP_320x100,
+                    popupSSP = pid?.toStringValue("popupSSP", d.pid.popupSSP) ?: d.pid.popupSSP,
+                    popupNative = pid?.toStringValue("popupNative", d.pid.popupNative) ?: d.pid.popupNative,
+                    openInterstitialSSP = pid?.toStringValue("openInterstitialSSP", d.pid.openInterstitialSSP) ?: d.pid.openInterstitialSSP,
+                    openInterstitialNative = pid?.toStringValue("openInterstitialNative", d.pid.openInterstitialNative) ?: d.pid.openInterstitialNative,
+                    openInterstitialVideoSSP = pid?.toStringValue("openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP) ?: d.pid.openInterstitialVideoSSP,
+                    openBoxBannerSSP = pid?.toStringValue("openBoxBannerSSP", d.pid.openBoxBannerSSP) ?: d.pid.openBoxBannerSSP,
+                    closeInterstitialSSP = pid?.toStringValue("closeInterstitialSSP", d.pid.closeInterstitialSSP) ?: d.pid.closeInterstitialSSP,
+                    closeInterstitialNative = pid?.toStringValue("closeInterstitialNative", d.pid.closeInterstitialNative) ?: d.pid.closeInterstitialNative
                 )
             )
             RemotePreferenceData.fetchTouchTicketSetting(setting = setting)
@@ -264,7 +263,8 @@ object SettingContractor {
                 period = config.toIntValue("period", d.period),
                 limitCount = config.toIntValue("limitCount", d.limitCount),
                 pid = VideoTicketSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue("linearSSP") ?: d.pid.linearSSP,
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP") ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100") ?: d.pid.linearSSP_320x100,
                     openRewardVideoSSP = pid?.toStringValue("openRewardVideoSSP") ?: d.pid.openRewardVideoSSP,
                     openInterstitialSSP = pid?.toStringValue("openInterstitialSSP") ?: d.pid.openInterstitialSSP,
                     openInterstitialNative = pid?.toStringValue("openInterstitialNative") ?: d.pid.openInterstitialNative,
@@ -291,33 +291,16 @@ object SettingContractor {
                     excludePosition = pop?.toFloatValue("excludePosition") ?: d.popAD.excludePosition
                 ),
                 pid = TicketBoxSettingEntity.PlacementID(
-                    linearSSP = pid?.toStringValue(
-                        "linearSSP", d.pid.linearSSP
-                    ) ?: d.pid.linearSSP,
-                    popupSSP = pid?.toStringValue(
-                        "popupSSP", d.pid.popupSSP
-                    ) ?: d.pid.popupSSP,
-                    popupNative = pid?.toStringValue(
-                        "popupNative", d.pid.popupNative
-                    ) ?: d.pid.popupNative,
-                    openInterstitialSSP = pid?.toStringValue(
-                        "openInterstitialSSP", d.pid.openInterstitialSSP
-                    ) ?: d.pid.openInterstitialSSP,
-                    openInterstitialNative = pid?.toStringValue(
-                        "openInterstitialNative", d.pid.openInterstitialNative
-                    ) ?: d.pid.openInterstitialNative,
-                    openInterstitialVideoSSP = pid?.toStringValue(
-                        "openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP
-                    ) ?: d.pid.openInterstitialVideoSSP,
-                    openBoxBannerSSP = pid?.toStringValue(
-                        "openBoxBannerSSP", d.pid.openBoxBannerSSP
-                    ) ?: d.pid.openBoxBannerSSP,
-                    closeInterstitialSSP = pid?.toStringValue(
-                        "closeInterstitialSSP", d.pid.closeInterstitialSSP
-                    ) ?: d.pid.closeInterstitialSSP,
-                    closeInterstitialNative = pid?.toStringValue(
-                        "closeInterstitialNative", d.pid.closeInterstitialNative
-                    ) ?: d.pid.closeInterstitialNative
+                    linearSSP_320x50 = pid?.toStringValue("linearSSP", d.pid.linearSSP_320x50) ?: d.pid.linearSSP_320x50,
+                    linearSSP_320x100 = pid?.toStringValue("linearSSP_320x100", d.pid.linearSSP_320x100) ?: d.pid.linearSSP_320x100,
+                    popupSSP = pid?.toStringValue("popupSSP", d.pid.popupSSP) ?: d.pid.popupSSP,
+                    popupNative = pid?.toStringValue("popupNative", d.pid.popupNative) ?: d.pid.popupNative,
+                    openInterstitialSSP = pid?.toStringValue("openInterstitialSSP", d.pid.openInterstitialSSP) ?: d.pid.openInterstitialSSP,
+                    openInterstitialNative = pid?.toStringValue("openInterstitialNative", d.pid.openInterstitialNative) ?: d.pid.openInterstitialNative,
+                    openInterstitialVideoSSP = pid?.toStringValue("openInterstitialVideoSSP", d.pid.openInterstitialVideoSSP) ?: d.pid.openInterstitialVideoSSP,
+                    openBoxBannerSSP = pid?.toStringValue("openBoxBannerSSP", d.pid.openBoxBannerSSP) ?: d.pid.openBoxBannerSSP,
+                    closeInterstitialSSP = pid?.toStringValue("closeInterstitialSSP", d.pid.closeInterstitialSSP) ?: d.pid.closeInterstitialSSP,
+                    closeInterstitialNative = pid?.toStringValue("closeInterstitialNative", d.pid.closeInterstitialNative) ?: d.pid.closeInterstitialNative
                 )
             )
             RemotePreferenceData.fetchTicketBoxSetting(setting = setting)
@@ -329,6 +312,47 @@ object SettingContractor {
                 attendanceId = config.toStringValue("attendance")
             )
             RemotePreferenceData.fetchMissionSetting(setting = setting)
+        }
+
+
+        // reward banner setting
+        private fun syncRewardBannerConfig(config: JSONObject) {
+            val d = RewardBannerSettingEntity.empty()
+            // roulette
+            val roulettManplus = config.toJSONObjectValue("roulette")?.toJSONObjectValue("manplus")
+            val rouletteQuantumbit = config.toJSONObjectValue("roulette")?.toJSONObjectValue("quantumbit")
+            // offerwall
+            val offerwallManplus = config.toJSONObjectValue("offerwall")?.toJSONObjectValue("manplus")
+            val offerwallQuantumbit = config.toJSONObjectValue("offerwall")?.toJSONObjectValue("quantumbit")
+            // instance
+            val setting = RewardBannerSettingEntity(
+                roulette = RewardBannerSettingEntity.BannerNetwork(
+                    manplus = RewardBannerSettingEntity.BannerSetting(
+                        allowAd = roulettManplus?.toBooleanValue("allowAd") ?: d.roulette.manplus.allowAd,
+                        rewardDelay = roulettManplus?.toLongValue("rewardDelayMillis") ?: d.roulette.manplus.rewardDelay,
+                        rewardFrequency = roulettManplus?.toLongValue("rewardFrequencyMillis") ?: d.roulette.manplus.rewardFrequency
+                    ),
+                    quantumbit = RewardBannerSettingEntity.BannerSetting(
+                        allowAd = rouletteQuantumbit?.toBooleanValue("allowAd") ?: d.roulette.quantumbit.allowAd,
+                        rewardDelay = rouletteQuantumbit?.toLongValue("rewardDelayMillis") ?: d.roulette.quantumbit.rewardDelay,
+                        rewardFrequency = rouletteQuantumbit?.toLongValue("rewardFrequencyMillis") ?: d.roulette.quantumbit.rewardFrequency
+                    )
+                ),
+                offerwall = RewardBannerSettingEntity.BannerNetwork(
+                    manplus = RewardBannerSettingEntity.BannerSetting(
+                        allowAd = offerwallManplus?.toBooleanValue("allowAd") ?: d.offerwall.manplus.allowAd,
+                        rewardDelay = offerwallManplus?.toLongValue("rewardDelayMillis") ?: d.offerwall.manplus.rewardDelay,
+                        rewardFrequency = offerwallManplus?.toLongValue("rewardFrequencyMillis") ?: d.offerwall.manplus.rewardFrequency
+                    ),
+                    quantumbit = RewardBannerSettingEntity.BannerSetting(
+                        allowAd = offerwallQuantumbit?.toBooleanValue("allowAd") ?: d.offerwall.quantumbit.allowAd,
+                        rewardDelay = offerwallQuantumbit?.toLongValue("rewardDelayMillis") ?: d.offerwall.quantumbit.rewardDelay,
+                        rewardFrequency = offerwallQuantumbit?.toLongValue("rewardFrequencyMillis") ?: d.offerwall.quantumbit.rewardFrequency
+                    )
+                )
+            )
+            // fetch
+            RemotePreferenceData.fetchRewardBannerSetting(setting = setting)
         }
     }
 }

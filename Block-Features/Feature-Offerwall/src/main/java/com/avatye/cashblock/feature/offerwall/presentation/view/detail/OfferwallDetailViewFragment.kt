@@ -19,6 +19,7 @@ import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.toLocale
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
+import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoFragmentOfferwallDetailViewBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseFragment
@@ -43,7 +44,6 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
 
     override fun onResume() {
         super.onResume()
-        binding.bannerLinearView.onResume()
         if (isRequestConfiirm) {
             isRequestConfiirm = false
             requestImpression()
@@ -52,12 +52,10 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
 
     override fun onPause() {
         super.onPause()
-        binding.bannerLinearView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        binding.bannerLinearView.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,26 +63,15 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
         parcel = arguments?.getParcelable(OfferWallViewParcel.NAME)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         with(binding.confirmButton) {
 
         }
-
         with(binding.validateButton) {
 
         }
-
-        // region # banner
-        binding.bannerLinearView.bannerData = AdvertiseController.createBannerData()
-        binding.bannerLinearView.requestBanner()
-        // endregion
-
         requestImpression()
-
     }
 
 

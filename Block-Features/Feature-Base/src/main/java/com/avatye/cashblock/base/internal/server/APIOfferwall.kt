@@ -172,8 +172,8 @@ internal object APIOfferwall {
         advertiseID: String,
         title: String? = null,
         contents: String,
-        state: Int = 0,
-        resultMsgType: Int = 0,
+        state: Int? = null,
+        resultMsgType: Int? = null,
         deviceID: String? = null,
         deviceADID: String,
         phone: String? = null,
@@ -183,8 +183,6 @@ internal object APIOfferwall {
         val bodyArgs = hashMapOf<String, Any>(
             "advertiseID" to advertiseID,
             "contents" to contents,
-            "state" to state,
-            "resultMsgType" to resultMsgType,
             "deviceADID" to deviceADID,
         ).apply {
             contactID?.let {
@@ -192,6 +190,12 @@ internal object APIOfferwall {
             }
             title?.let {
                 "title" to it
+            }
+            state?.let {
+                "state" to it
+            }
+            resultMsgType?.let {
+                "resultMsgType" to it
             }
             deviceID?.let {
                 "deviceID" to deviceID
@@ -215,69 +219,26 @@ internal object APIOfferwall {
         ).execute()
     }
 
-    fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResContactRewardInfo>) {
+    fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResOfferwallContactRewardInfo>) {
         ServeTask(
             blockType = blockType,
-            authorization = ServeTask.Authorization.BEARER,
+            authorization = ServeTask.Authorization.BASIC,
             method = ServeTask.Method.GET,
             requestUrl = "advertising/support/contact/reward/info",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf("advertiseID" to advertiseID),
-            responseClass = ResContactRewardInfo::class.java,
+            responseClass = ResOfferwallContactRewardInfo::class.java,
             responseCallback = response
         ).execute()
     }
 
-    fun getOfferwallContactRewards(
-        blockType: BlockType,
-        contactID: String? = null,
-        advertiseID: String,
-        title: String? = null,
-        contents: String,
-        type: Int = 0,
-        state: Int = 0,
-        deviceID: String? = null,
-        deviceADID: String,
-        phone: String? = null,
-        userName: String? = null,
-        resultMsgType: Int = 0,
-        customMsg: String? = null,
-        response: ServeResponse<ResOfferwallContactRewards>
-    ) {
-        val bodyArgs = hashMapOf<String, Any>(
-            "advertiseID" to advertiseID,
-            "contents" to contents,
-            "type" to type,
-            "state" to state,
-            "deviceADID" to deviceADID,
-            "resultMsgType" to resultMsgType,
-        ).apply {
-            contactID?.let {
-                "contactID" to it
-            }
-            title?.let {
-                "title" to it
-            }
-            deviceID?.let {
-                "deviceID" to it
-            }
-            phone?.let {
-                "phone" to it
-            }
-            userName?.let {
-                "userName" to it
-            }
-            customMsg?.let {
-                "customMsg" to it
-            }
-        }
+    fun getOfferwallContactRewards(blockType: BlockType, response: ServeResponse<ResOfferwallContactRewards>) {
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
             requestUrl = "advertising/support/contact/rewards",
             acceptVersion = "1.0.0",
-            argsBody = bodyArgs,
             responseClass = ResOfferwallContactRewards::class.java,
             responseCallback = response
         ).execute()
