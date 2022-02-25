@@ -1,8 +1,10 @@
 package com.avatye.cashblock.base.component.domain.entity.offerwall
 
+import org.joda.time.DateTime
+
 data class OfferwallImpressionItemEntity(
     val advertiseID: String = "",
-    val productID: OfferWallProductType = OfferWallProductType.NONE,
+    val productID: OfferwallProductType = OfferwallProductType.NONE,
     val title: String = "",
     val displayTitle: String = "",
     val iconUrl: String = "",
@@ -15,7 +17,8 @@ data class OfferwallImpressionItemEntity(
     val impressionID: String = "",
     val actionGuide: String = "",
     val clickID: String? = "",
-    val pointName: String? = "",
+    val clickDateTime: DateTime? = null,
+    val pointName: String = "",
 ) {
     data class RewardItem(
         var appRevenue: Int = 0,

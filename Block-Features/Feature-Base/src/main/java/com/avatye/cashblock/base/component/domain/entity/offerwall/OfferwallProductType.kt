@@ -1,6 +1,6 @@
 package com.avatye.cashblock.base.component.domain.entity.offerwall
 
-enum class OfferWallProductType(val value: String) {
+enum class OfferwallProductType(val value: String) {
 
     NONE(""),
     CPA("CPA"),
@@ -26,7 +26,7 @@ enum class OfferWallProductType(val value: String) {
     fun equals(other: String): Boolean = this.value.equals(other = other, ignoreCase = true)
 
     internal companion object {
-        fun from(value: String): OfferWallProductType = values().find { it.value.equals(other = value, ignoreCase = true) }
+        fun from(value: String): OfferwallProductType = values().find { it.value.equals(other = value, ignoreCase = true) }
             ?: NONE
     }
 

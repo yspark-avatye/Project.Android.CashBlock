@@ -60,6 +60,29 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         AcbsoActivityOfferwallDetailViewBinding.inflate(LayoutInflater.from(this))
     }
 
+    var advertiseStatus: OfferwallJourneyStateType = OfferwallJourneyStateType.NONE
+        set(value) {
+            field = value
+            when (field) {
+                OfferwallJourneyStateType.PARTICIPATE,
+                OfferwallJourneyStateType.COMPLETED_NOT_REWARDED -> {
+                    vb.adHide.isVisible = false
+                    vb.adClose.isVisible = true
+                    vb.adRewardInquiry.isVisible = true
+                }
+                else -> {
+                    vb.adHide.isVisible = true
+                    vb.adClose.isVisible = false
+                    vb.adRewardInquiry.isVisible = false
+                }
+            }
+        }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 
     override fun onBackPressed() {
         supportFinishAfterTransition()
@@ -83,7 +106,7 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
 
         transactionFragment(fragment = OfferwallDetailViewFragment().apply {
             val bundle = Bundle()
-            bundle.putParcelable(OfferWallViewParcel.NAME, parcel)
+            bundle.putParcelable(OfferWallViewParcel.NAME, this@OfferwallDetailViewActivity.parcel)
             arguments = bundle
         })
     }
@@ -104,15 +127,20 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                 deviceADID = aaidEntity.aaid,
                 advertiseID = parcel?.advertiseID ?: "",
             ) {
-                when(it) {
+                when (it) {
                     is ContractResult.Success -> {
                         loadingView?.dismiss()
-                        setResult(Activity.RESULT_OK, Intent().putExtra( OfferWallActionParcel.NAME,
-                            OfferWallActionParcel(
-                                currentPosition = parcel?.currentPos ?: 0,
-                                journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
-                            )
-                        ))
+                        setResult(
+                            Activity.RESULT_OK, Intent().apply {
+                                putExtra(
+                                    OfferWallActionParcel.NAME,
+                                    OfferWallActionParcel(
+                                        currentPosition = parcel?.currentPos ?: 0,
+                                        journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
+                                    )
+                                )
+                            }
+                        )
                         finish()
                     }
                     is ContractResult.Failure -> {
@@ -126,21 +154,10 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
 
 
     private fun startRewardInquiry(entity: OfferwallImpressionItemEntity) {
-
     }
 
 
-    private fun startCloseAdvertise(entity: OfferwallImpressionItemEntity) {
-        when (entity.journeyState) {
-            OfferwallJourneyStateType.PARTICIPATE,
-            OfferwallJourneyStateType.COMPLETED_NOT_REWARDED -> {
-                vb.adHide.isVisible = false
-                vb.adClose.isVisible = true
-                requestOfferWallClose()
-            }
-            else -> vb.adClose.isVisible = false
-        }
-    }
+    fun startCloseAdvertise() = requestOfferWallClose()
 
 
     private fun startHideAdvertise(entity: OfferwallImpressionItemEntity) {
@@ -161,7 +178,9 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                         forceRefresh = true
                     )
                 }
-                setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(OfferWallActionParcel.NAME, actionParcel)
+                })
                 finish()
             }
         }
@@ -181,7 +200,7 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
                     activity = this@OfferwallDetailViewActivity,
                     message = R.string.acbso_offerwall_do_you_want_to_remove_from_the_participating_list,
                     onPositive = {
-                        startCloseAdvertise(impressionItemEntity)
+                        startCloseAdvertise()
                     }
                 ).show(false)
             }

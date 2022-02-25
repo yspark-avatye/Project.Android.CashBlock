@@ -117,7 +117,7 @@
 
 
                     <EditText
-                        android:id="@+id/name"
+                        android:id="@+id/user_name"
                         style="@style/CashBlock.Widget.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="38dp"
@@ -221,7 +221,7 @@
                 </LinearLayout>
 
                 <ScrollView
-                    android:id="@+id/contents_info"
+                    android:id="@+id/user_contents_area"
                     android:layout_width="match_parent"
                     android:layout_height="113dp"
                     android:layout_marginStart="24dp"
@@ -234,7 +234,7 @@
                     android:paddingBottom="20dp">
 
                     <EditText
-                        android:id="@+id/content"
+                        android:id="@+id/user_contents"
                         style="@style/CashBlock.Widget.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -298,6 +298,7 @@
     <Button
         android:id="@+id/inquiry_button"
         style="@style/CashBlock.Widget.Button"
+        android:background="@drawable/acb_common_selector_button_type_c1"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_marginStart="24dp"

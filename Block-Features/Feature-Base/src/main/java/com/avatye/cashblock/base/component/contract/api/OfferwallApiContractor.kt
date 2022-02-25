@@ -62,6 +62,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
     fun postClick(
         deviceADID: String,
         advertiseID: String,
+        impressionID: String,
         deviceID: String? = null,
         deviceModel: String? = null,
         deviceNetwork: String? = null,
@@ -75,6 +76,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             blockType = blockType,
             deviceADID = deviceADID,
             advertiseID = advertiseID,
+            impressionID = impressionID,
             deviceID = deviceID,
             deviceModel = deviceModel,
             deviceNetwork = deviceNetwork,
@@ -142,12 +144,12 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             })
     }
 
-    fun retrieveContactRewardInfo(advertiseID: String, response: (contract: ContractResult<Unit>) -> Unit) {
+    fun retrieveContactRewardInfo(advertiseID: String, response: (contract: ContractResult<OfferwallContactRewardEntity>) -> Unit) {
         APIOfferwall.getOfferwallContactRewardInfo(
             blockType = blockType,
             advertiseID = advertiseID,
-            response = object : ServeResponse<ResVoid> {
-                override fun onSuccess(success: ResVoid) = response(Contract.onSuccess(success = Unit))
+            response = object : ServeResponse<ResContactRewardInfo> {
+                override fun onSuccess(success: ResContactRewardInfo) = response(Contract.onSuccess(success = success.offerwallContactRewardInfoEntity))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))
             })
     }
@@ -187,7 +189,7 @@ class OfferwallApiContractor(private val blockType: BlockType) {
             })
     }
 
-    fun retrieveTabs(response: (contract: ContractResult<MutableList<OfferWallTabEntity>>) -> Unit) {
+    fun retrieveTabs(response: (contract: ContractResult<MutableList<OfferwallTabEntity>>) -> Unit) {
         APIOfferwall.getOfferwallTabs(
             blockType = blockType,
             response = object : ServeResponse<ResOfferwallTabs> {

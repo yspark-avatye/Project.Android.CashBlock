@@ -27,7 +27,18 @@
     <string name="acbso_offerwall_inquiry_reward_description_3">3. 이미 보상이 적립되진 않았나요?</string>
     <string name="acbso_offerwall_inquiry_reward_term_agree_provide_personal_information">개인정보 수집 및 이용 동의</string>
     <string name="acbso_offerwall_inquiry_reward_view_terms_and_conditions">약관보기</string>
-    <string name="acbso_offerwall_inquiry_reward_button_inquiry">약관보기</string>
+    <string name="acbso_offerwall_inquiry_reward_button_inquiry">문의하기</string>
+    <string name="acbso_offerwall_inquiry_reward_message_time_40_minute_not_yet">적립까지 40분 가량 소요될 수 있습니다.\n해당 시간 이후 문의해주세요.</string>
+    <string name="acbso_offerwall_inquiry_reward_message_time_24_hour_not_yet">적립까지 24시간 가량 소요될 수 있습니다.\n해당 시간 이후 문의해주세요.</string>
+    <string name="acbso_offerwall_inquiry_reward_message_complete"><![CDATA[<strong>미적립 문의가 접수되었습니다.</strong><br/><br/>진행 상황은 <strong>더보기>미적립문의</strong> 메뉴를 통해 확인 가능합니다.<br/></br>광고주 확인이 필요할 경우 처리가 다소 길어질 수 있는 점 양해 부탁드립니다.]]></string>
+    <string name="acbso_offerwall_inquiry_reward_toast_is_not_available_name">올바른 이름을 적어주세요</string>
+    <string name="acbso_offerwall_inquiry_reward_toast_is_not_available_phone_num">휴대폰 번호를 정확히 입력해주세요</string>
+    <string name="acbso_offerwall_inquiry_reward_toast_is_not_agree_service">개인정보 제공에 동의해주세요</string>
+    <!-- endregion -->
+
+    <!-- region # Setting -->
+    <string name="acbso_offerwall_hide_restore_nothing_toast">복구할 광고가 없습니다.</string>
+    <string name="acbso_offerwall_hide_restore_toast">숨긴 광고가 복구되었습니다.</string>
     <!-- endregion -->
 
     <!-- region # Participation-->

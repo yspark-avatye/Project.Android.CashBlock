@@ -4,24 +4,25 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import androidx.fragment.app.Fragment
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
 import com.avatye.cashblock.base.component.support.launch
-import com.avatye.cashblock.base.component.widget.dialog.DialogLoadingView
-import com.avatye.cashblock.base.component.widget.dialog.IDialogView
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
 import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
 import com.avatye.cashblock.feature.offerwall.databinding.AcbsoActivityOfferwallMainBinding
 import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
+import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallActionParcel
+import com.avatye.cashblock.feature.offerwall.presentation.view.detail.OfferwallDetailViewActivity
 import com.avatye.cashblock.feature.offerwall.presentation.view.setting.OfferwallSettingActivity
 
 internal class OfferwallMainActivity : AppBaseActivity() {
+
+    lateinit var offerwallMainFragment: OfferwallMainFragment
 
     companion object {
         fun open(
@@ -54,6 +55,26 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         }
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return
+        }
+
+        if (requestCode == OfferwallDetailViewActivity.REQUEST_CODE) {
+            data?.extras?.getParcelable<OfferWallActionParcel>(OfferWallActionParcel.NAME)?.let {
+                if (it.journeyType == OfferwallJourneyStateType.NONE) {
+                    if (it.forceRefresh) {
+                        offerwallMainFragment.requestOfferWallList()
+                    }
+                } else {
+                    offerwallMainFragment.offerwallListPagerAdapter.changeAllList(it.currentPosition, it.journeyType)
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(vb.root)
@@ -79,7 +100,10 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         }
         // endregion
 
-        transactionFragment(fragment = OfferwallMainFragment())
+        // transaction fragment
+        offerwallMainFragment = OfferwallMainFragment()
+        transactionFragment()
+        // endregion
     }
 
     override fun onResume() {
@@ -98,9 +122,9 @@ internal class OfferwallMainActivity : AppBaseActivity() {
     }
 
 
-    private fun transactionFragment(fragment: Fragment) {
+    private fun transactionFragment() {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.offerwall_list_container, fragment)
+            replace(R.id.offerwall_list_container, offerwallMainFragment)
             commit()
         }
     }

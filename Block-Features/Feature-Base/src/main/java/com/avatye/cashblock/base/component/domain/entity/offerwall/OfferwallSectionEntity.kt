@@ -7,6 +7,9 @@ data class OfferwallSectionEntity(
     val sectionSortOrder: Int = 0,
     val items: MutableList<OfferwallItemEntity> = mutableListOf(),
     val categories: MutableList<OfferwallCategoryEntity> = mutableListOf(),
+
+    // Join Completed Items
+    var joinCompleteItems : MutableList<OfferwallItemEntity> = mutableListOf(),
 ) {
     data class OfferwallCategoryEntity(
         val categoryID: String = "",

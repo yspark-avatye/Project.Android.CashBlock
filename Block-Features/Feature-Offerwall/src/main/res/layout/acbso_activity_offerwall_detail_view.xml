@@ -30,7 +30,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adHide"
+                android:id="@+id/ad_hide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -47,7 +47,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adClose"
+                android:id="@+id/ad_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -65,7 +65,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/adRewardInquiry"
+                android:id="@+id/ad_reward_inquiry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

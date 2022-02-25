@@ -1,35 +1,36 @@
 package com.avatye.cashblock.feature.offerwall.component.controller
 
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferWallListType
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferWallTabEntity
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallItemEntity
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallSectionEntity
+import com.avatye.cashblock.base.component.domain.entity.offerwall.*
 import com.avatye.cashblock.feature.offerwall.component.data.PreferenceData
 
 object AdvertiseListController {
+    // list refresh
+    var needRefreshList: Boolean = false
 
-    // section
-//    private var sectionList: MutableList<OfferwallSectionEntity> = mutableListOf()
+    // sectionEntity
+    private lateinit var sectionEntity:OfferwallSectionEntity
 
     // categoryItem
     private var categoryItemList: MutableList<OfferwallItemEntity> = mutableListOf()
-    private var categoryItemCount: Int = 0
+    private var categoryItemPos: Int = 0
 
     // items
     private var offerwalls: MutableList<OfferwallItemEntity> = mutableListOf()
 
 
-    fun makeOfferwallList(sectionList: MutableList<OfferwallSectionEntity>, tabEntity: OfferWallTabEntity): MutableList<OfferwallItemEntity> {
+
+    fun makeOfferwallList(sectionList: MutableList<OfferwallSectionEntity>, tabEntity: OfferwallTabEntity): MutableList<OfferwallItemEntity> {
         offerwalls = mutableListOf()
 
         when (tabEntity.listType) {
             // Mix
-            OfferWallListType.MIX.value -> {
+            OfferwallListType.MIX.value -> {
                 sectionList.filter { tabEntity.sectionIDList.contains(it.sectionID) }.forEach {
+                    sectionEntity = it
                     if (it.categories.size > 0) {
                         it.categories.forEach { category ->
                             val filterItems = getFilterItems(category.items)
-                            categoryItemCount += filterItems[0].sectionCount
+                            categoryItemPos += filterItems[0].sectionPos
                             categoryItemList.addAll(
                                 getHiddenSections(
                                     tabEntity = tabEntity,
@@ -38,42 +39,39 @@ object AdvertiseListController {
                             )
                         }
 
-                        it.items[0].sectionCount = categoryItemCount
+                        it.items[0].sectionPos = categoryItemPos
                         categoryItemList.add(0, it.items[0])
 
                         offerwalls.addAll(
-                            getHiddenSections(
-                                tabEntity = tabEntity,
-                                list = categoryItemList
-                            )
+                            getHiddenSections(tabEntity = tabEntity, list = categoryItemList)
                         )
 
                     } else {
                         offerwalls.addAll(
-                            getHiddenSections(
-                                tabEntity = tabEntity,
-                                list = getFilterItems(it.items)
-                            )
+                            getHiddenSections(tabEntity = tabEntity, list = getFilterItems(it.items))
                         )
                     }
+                }
 
+                if(sectionEntity.joinCompleteItems.size > 1) {
+                    offerwalls.addAll(getHiddenSections(tabEntity = tabEntity, list = getFilterItems(sectionEntity.joinCompleteItems)))
                 }
             }
 
             // Section
-            OfferWallListType.ONLY_SECTION.value -> {
+            OfferwallListType.ONLY_SECTION.value -> {
                 sectionList.filter { tabEntity.sectionIDList.contains(it.sectionID) }.forEach {
                     offerwalls.addAll(
                         getHiddenSections(
                             tabEntity = tabEntity,
-                            list = it.items,
+                            list = getFilterItems(it.items),
                         )
                     )
                 }
             }
 
             // Category
-            OfferWallListType.ONLY_CATEGORY.value -> {
+            OfferwallListType.ONLY_CATEGORY.value -> {
                 sectionList.filter { tabEntity.sectionIDList.contains(it.sectionID) }.forEach {
                     it.categories.forEach { category ->
                         offerwalls.addAll(
@@ -95,10 +93,45 @@ object AdvertiseListController {
         return offerwalls
     }
 
-    fun getHiddenSectionID(tabEntity: OfferWallTabEntity, list: MutableList<OfferwallItemEntity>): String {
+    fun getHiddenSectionID(tabEntity: OfferwallTabEntity, entity:OfferwallItemEntity): String {
         val tabID = tabEntity.tabID
-        val sectionID = list[0].sectionID
+        val sectionID = if(entity.sectionName.isEmpty()) {
+            entity.sectionID
+        } else {
+            entity.sectionName
+        }
+//        val sectionID = if(list[0].sectionName.isEmpty()) {
+//            list[0].sectionID
+//        } else {
+//            list[0].sectionName
+//        }
+//        val sectionID = list[0].sectionID
         return tabID.plus(sectionID)
+    }
+
+
+    fun changeAllList(sections: MutableList<OfferwallSectionEntity>, entity: OfferwallItemEntity, journeyStateType: OfferwallJourneyStateType) {
+        when (journeyStateType) {
+            OfferwallJourneyStateType.COMPLETED_REWARDED,
+            OfferwallJourneyStateType.COMPLETED_FAILED -> {
+                entity.journeyState = journeyStateType
+                entity.progressType = OfferwallProgressType.COMPLETED
+                sectionEntity.joinCompleteItems.add(entity)
+
+                if (entity.viewType == OfferwallViewStateType.VIEW_TYPE_ITEM) {
+                    sections[entity.sectionPos].items.remove(entity)
+                } else if (entity.viewType == OfferwallViewStateType.VIEW_TYPE_CATEGORY_ITEM) {
+                    sections[entity.sectionPos].categories[entity.categoryPos].items.remove(entity)
+                }
+            }
+            else -> {
+                if (entity.viewType == OfferwallViewStateType.VIEW_TYPE_ITEM) {
+                    sections[entity.sectionPos].items.find { it == entity }?.journeyState = journeyStateType
+                } else if (entity.viewType == OfferwallViewStateType.VIEW_TYPE_CATEGORY_ITEM) {
+                    sections[entity.sectionPos].categories[entity.categoryPos].items.find { it == entity }?.journeyState = journeyStateType
+                }
+            }
+        }
     }
 
 
@@ -110,7 +143,7 @@ object AdvertiseListController {
         val unHiddenItems = list.filter {
             !(PreferenceData.Hidden.hiddenItems ?: listOf()).contains(it.advertiseID)
         }
-        unHiddenItems[0].sectionCount = unHiddenItems.size - 1
+        unHiddenItems[0].sectionPos = unHiddenItems.size - 1
 
         if (unHiddenItems.lastIndex != 0) {
             unHiddenItems[unHiddenItems.lastIndex - 1].isLast = false
@@ -122,12 +155,12 @@ object AdvertiseListController {
     }
 
 
-    private fun getHiddenSections(tabEntity: OfferWallTabEntity, list: MutableList<OfferwallItemEntity>): MutableList<OfferwallItemEntity> {
+    private fun getHiddenSections(tabEntity: OfferwallTabEntity, list: MutableList<OfferwallItemEntity>): MutableList<OfferwallItemEntity> {
         if (list.isEmpty()) {
             return mutableListOf()
         }
 
-        val hiddenSectionID = getHiddenSectionID(tabEntity = tabEntity, list = list)
+        val hiddenSectionID = getHiddenSectionID(tabEntity = tabEntity, entity = list[0])
 
         if ((PreferenceData.Hidden.hiddenSections ?: listOf()).contains(hiddenSectionID)) {
             return listOf(list[0]).toMutableList()

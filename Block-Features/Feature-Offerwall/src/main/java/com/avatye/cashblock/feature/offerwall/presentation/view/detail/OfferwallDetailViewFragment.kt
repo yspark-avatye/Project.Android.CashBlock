@@ -11,7 +11,7 @@ import androidx.core.view.isVisible
 import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferWallProductType
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallProductType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallImpressionItemEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
@@ -40,7 +40,6 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
     var isRequestConfiirm: Boolean = false
 
     var parcel: OfferWallViewParcel? = null
-
 
     override fun onResume() {
         super.onResume()
@@ -139,7 +138,7 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
             binding.description.text = actionGuide
             binding.reward.text = reward?.ImpressionReward?.toLocale()
             binding.detailDescription.text = userGuide
-            binding.confirmButton.text = if (productID == OfferWallProductType.CPI) {
+            binding.confirmButton.text = if (productID == OfferwallProductType.CPI) {
                 getString(R.string.acbso_offerwall_button_confirm_cpi)
             } else {
                 getString(R.string.acbso_offerwall_button_confirm).format(reward?.ImpressionReward)
@@ -149,7 +148,8 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
 
             // region # visible
             binding.iconBadge.isVisible = (journeyState == OfferwallJourneyStateType.PARTICIPATE)
-            binding.validateButton.isVisible = (productID == OfferWallProductType.CPI)
+            binding.validateButton.isVisible = (productID == OfferwallProductType.CPI)
+            parentActivity.advertiseStatus = impressionItem.journeyState
             // endregion
 
             // region # onClick
@@ -159,8 +159,6 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
             }
             // endregion
         }
-
-
     }
 
 
@@ -172,6 +170,7 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
             api.postClick(
                 deviceADID = aaidEntity.aaid,
                 advertiseID = parcel?.advertiseID ?: "",
+                impressionID = impressionItem.impressionID,
                 service = serviceType ?: ServiceType.OFFERWALL,
             ) {
                 when (it) {
@@ -182,17 +181,18 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
                                 journeyType = OfferwallJourneyStateType.PARTICIPATE,
                                 forceRefresh = false
                             )
-                            parentActivity.setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
-                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.contract.landingUrl)))
+                            parentActivity.setResult(Activity.RESULT_OK, Intent().apply { putExtra(OfferWallActionParcel.NAME, actionParcel) })
+                            parentActivity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.contract.landingUrl)))
                         }.onSuccess {
                             isRequestConfiirm = true
-                        }.onFailure {
+                        }.onFailure { e ->
+                            e.printStackTrace()
                             isRequestConfiirm = false
                             MessageDialogHelper.confirm(
                                 activity = parentActivity,
                                 message = R.string.acbso_offerwall_failed_to_participate_please_try_again,
                                 onConfirm = { parentActivity.finish() }
-                            )
+                            ).show(false)
                         }.also {
                             loadingView?.dismiss()
                         }
@@ -200,21 +200,37 @@ internal class OfferwallDetailViewFragment : AppBaseFragment<AcbsoFragmentOfferw
 
                     is ContractResult.Failure -> {
                         loadingView?.dismiss()
-                        val actionParcel = OfferWallActionParcel(
-                            currentPosition = 0,
-                            journeyType = OfferwallJourneyStateType.NONE,
-                            forceRefresh = true
-                        )
-                        parentActivity.setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
+
+                        if (it.errorCode.equals(other = "err_invalid_parameter", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_not_support_network", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_not_exists_advertise", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_already", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_invalid", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_closed", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_not_exists", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_exhausted", ignoreCase = true)
+                            || it.errorCode.equals(other = "err_fail_click_not_target", ignoreCase = true)
+                        ) {
+
+
+
+//                            val actionParcel = OfferWallActionParcel(
+//                                currentPosition = 0,
+//                                journeyType = OfferwallJourneyStateType.NONE,
+//                                forceRefresh = true
+//                            )
+//                            parentActivity.setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
+                        }
+
                         MessageDialogHelper.confirm(
                             activity = parentActivity,
-                            message = getString(R.string.acb_common_message_error),
-                            onConfirm = { parentActivity.finish() }
+                            message = it.message,
+                            onConfirm = { parentActivity.startCloseAdvertise() }
                         ).show(false)
+
                     }
                 }
             }
         }
-
     }
 }

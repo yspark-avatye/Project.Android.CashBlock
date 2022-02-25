@@ -82,6 +82,7 @@ internal object APIOfferwall {
         blockType: BlockType,
         deviceADID: String,
         advertiseID: String,
+        impressionID: String,
         deviceID: String? = null,
         deviceModel: String? = null,
         deviceNetwork: String? = null,
@@ -95,6 +96,7 @@ internal object APIOfferwall {
         val bodyArgs = hashMapOf<String, Any>(
             "deviceADID" to deviceADID,
             "advertiseID" to advertiseID,
+            "impressionID" to impressionID,
             "serviceID" to service.value,
         ).apply {
             deviceID?.let {
@@ -213,7 +215,7 @@ internal object APIOfferwall {
         ).execute()
     }
 
-    fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResVoid>) {
+    fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResContactRewardInfo>) {
         ServeTask(
             blockType = blockType,
             authorization = ServeTask.Authorization.BEARER,
@@ -221,7 +223,7 @@ internal object APIOfferwall {
             requestUrl = "advertising/support/contact/reward/info",
             acceptVersion = "1.0.0",
             argsBody = hashMapOf("advertiseID" to advertiseID),
-            responseClass = ResVoid::class.java,
+            responseClass = ResContactRewardInfo::class.java,
             responseCallback = response
         ).execute()
     }

@@ -12,7 +12,7 @@ data class OfferwallItemEntity(
     val actionName: String = "",
     val reward: Int = 0,
     val packageName: String = "",
-    val journeyState: OfferwallJourneyStateType = OfferwallJourneyStateType.NONE,
+    var journeyState: OfferwallJourneyStateType = OfferwallJourneyStateType.NONE,
     val actionBGColor: String = "",
     val additionalDescription: String = "",
 
@@ -27,16 +27,19 @@ data class OfferwallItemEntity(
     var sectionTitle:String = "",
 
     // 섹션 개수
-    var sectionCount: Int = 0,
+    var sectionPos: Int = 0,
 
     // 카테고리 개수
-    var categoryCount: Int = 0,
+    var categoryPos: Int = 0,
 
     // Last item 여부
     var isLast: Boolean = false,
 
     // View State Type
     var viewType: OfferwallViewStateType = OfferwallViewStateType.VIEW_TYPE_ITEM,
+
+    // 광고 진행 type
+    var progressType: OfferwallProgressType = OfferwallProgressType.INPROGRESS
 )
 
 

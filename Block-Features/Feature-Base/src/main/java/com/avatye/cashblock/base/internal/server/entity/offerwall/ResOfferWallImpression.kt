@@ -1,9 +1,10 @@
 package com.avatye.cashblock.base.internal.server.entity.offerwall
 
-import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferWallProductType
+import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallProductType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallImpressionItemEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.internal.server.serve.ServeSuccess
+import com.avatye.cashblock.base.library.miscellaneous.toDateTimeValue
 import com.avatye.cashblock.base.library.miscellaneous.toIntValue
 import com.avatye.cashblock.base.library.miscellaneous.toJSONObjectValue
 import com.avatye.cashblock.base.library.miscellaneous.toStringValue
@@ -19,7 +20,7 @@ internal class ResOfferWallImpression : ServeSuccess() {
 
             offerwallImpressionItemEntity = OfferwallImpressionItemEntity(
                 advertiseID = it.toStringValue("advertiseID"),
-                productID = OfferWallProductType.from(it.toStringValue("productID")),
+                productID = OfferwallProductType.from(it.toStringValue("productID")),
                 title = it.toStringValue("title"),
                 displayTitle = it.toStringValue("displayTitle"),
                 iconUrl = it.toStringValue("iconUrl"),
@@ -37,6 +38,7 @@ internal class ResOfferWallImpression : ServeSuccess() {
                 impressionID = it.toStringValue("impressionID"),
                 actionGuide = it.toStringValue("actionGuide"),
                 clickID = it.toStringValue("clickID"),
+                clickDateTime = it.toDateTimeValue("clickDateTime"),
                 pointName = it.toStringValue("pointName"),
             )
         }
