@@ -40,6 +40,7 @@ internal class ResOfferWallImpression : ServeSuccess() {
                 clickID = it.toStringValue("clickID"),
                 clickDateTime = it.toDateTimeValue("clickDateTime"),
                 pointName = it.toStringValue("pointName"),
+                contactState = it.toIntValue("contactState", -1),
             )
         }
     }

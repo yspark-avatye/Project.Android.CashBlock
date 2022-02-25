@@ -35,6 +35,9 @@
     <string name="acbso_offerwall_inquiry_reward_toast_is_not_available_name">올바른 이름을 적어주세요</string>
     <string name="acbso_offerwall_inquiry_reward_toast_is_not_available_phone_num">휴대폰 번호를 정확히 입력해주세요</string>
     <string name="acbso_offerwall_inquiry_reward_toast_is_not_agree_service">개인정보 제공에 동의해주세요</string>
+    <string name="acbso_offerwall_inquiry_reward_contact_complete">확인이 완료되었습니다.\n\'더보기 > 미적립문의\'에서 내용을 확인해주세요.</string>
+    <string name="acbso_offerwall_inquiry_reward_contact_has_answer">미적립문의에 대한 답변이 있습니다.\n\'더보기 > 미적립문의\'에서 내용을 확인해주세요</string>
+    <string name="acbso_offerwall_inquiry_reward_contact_ing">적립 확인 진행 중입니다.</string>
     <!-- endregion -->
 
     <!-- region # Setting -->
@@ -44,6 +47,9 @@
 
     <!-- region # Participation-->
     <string name="acbso_offerwall_rewarded_completed">이미 적립이 완료되었거나 참여 불가능한 광고입니다.</string>
+    <string name="acbso_offerwall_not_installed_click_after_installation">미션이 완료되지 않았습니다.\n미션 수행 후 다시 시도해 주세요.</string>
+    <string name="acbso_offerwall_button_offerwall_install">참여하러 가기</string>
+    <string name="acbso_offerwall_cash_has_been_earned_please_check_your_accumulation_details">적립 요청이 완료되었습니다. 잠시 후 적립내역에서 확인하세요.</string>
     <!-- endregion -->
 
     <!-- region # transition name in Offerwall-->
