@@ -83,7 +83,9 @@ object BlockController {
             // 2. popup or etc sync
             // 3. sync session
             AccountContractor.login(blockType = blockType, listener = object : ILoginListener {
-                override fun onSuccess() = callback(true)
+                override fun onSuccess() {
+                    callback(true)
+                }
 
                 override fun onFailure(reason: String) {
                     showToast(reason)

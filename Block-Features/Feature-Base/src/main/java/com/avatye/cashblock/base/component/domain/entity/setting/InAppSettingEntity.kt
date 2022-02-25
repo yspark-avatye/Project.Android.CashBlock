@@ -2,7 +2,7 @@ package com.avatye.cashblock.base.component.domain.entity.setting
 
 data class InAppSettingEntity(val main: Main) {
 
-    data class Main(val rewardBannerDelay: Long = 1300L, val pid: PlacementID) {
+    data class Main(val pid: PlacementID) {
         data class PlacementID(
             val rewardBanner: String,
             val linearSSP_320x50: String,

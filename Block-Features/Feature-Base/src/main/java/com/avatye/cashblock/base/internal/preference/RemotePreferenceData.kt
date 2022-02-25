@@ -127,7 +127,6 @@ internal object RemotePreferenceData {
     // region { in app }
     private var _inApp = InAppSettingEntity(
         main = InAppSettingEntity.Main(
-            rewardBannerDelay = Preference.InAppConfig.Main.rewardBannerDelay,
             pid = InAppSettingEntity.Main.PlacementID(
                 rewardBanner = Preference.InAppConfig.Main.PID.rewardBanner,
                 linearSSP_320x50 = Preference.InAppConfig.Main.PID.linearSSP_320X50,
@@ -246,8 +245,50 @@ internal object RemotePreferenceData {
     // endregion
 
 
+    // region { reward banner }
+    private var _rewardBanner = RewardBannerSettingEntity(
+        roulette = RewardBannerSettingEntity.BannerNetwork(
+            manplus = RewardBannerSettingEntity.BannerSetting(
+                allowAd = Preference.RewardBannerConfig.Roulette.ManPlus.allowAd,
+                rewardDelay = Preference.RewardBannerConfig.Roulette.ManPlus.rewardDelay,
+                rewardFrequency = Preference.RewardBannerConfig.Roulette.ManPlus.rewardFrequency
+            ),
+            quantumbit = RewardBannerSettingEntity.BannerSetting(
+                allowAd = Preference.RewardBannerConfig.Roulette.QuantumBit.allowAd,
+                rewardDelay = Preference.RewardBannerConfig.Roulette.QuantumBit.rewardDelay,
+                rewardFrequency = Preference.RewardBannerConfig.Roulette.QuantumBit.rewardFrequency
+            )
+        ),
+        offerwall = RewardBannerSettingEntity.BannerNetwork(
+            manplus = RewardBannerSettingEntity.BannerSetting(
+                allowAd = Preference.RewardBannerConfig.Offerwall.ManPlus.allowAd,
+                rewardDelay = Preference.RewardBannerConfig.Offerwall.ManPlus.rewardDelay,
+                rewardFrequency = Preference.RewardBannerConfig.Offerwall.ManPlus.rewardFrequency
+            ),
+            quantumbit = RewardBannerSettingEntity.BannerSetting(
+                allowAd = Preference.RewardBannerConfig.Offerwall.QuantumBit.allowAd,
+                rewardDelay = Preference.RewardBannerConfig.Offerwall.QuantumBit.rewardDelay,
+                rewardFrequency = Preference.RewardBannerConfig.Offerwall.QuantumBit.rewardFrequency
+            )
+        )
+    )
+
+    val rewardBanner: RewardBannerSettingEntity
+        get() {
+            return _rewardBanner
+        }
+
+    fun fetchRewardBannerSetting(setting: RewardBannerSettingEntity) {
+        Preference.RewardBannerConfig.fetch(setting = setting)
+        _rewardBanner = setting
+    }
+    // endregion
+
+
     // region { preference data }
-    private object Preference {
+    private
+
+    object Preference {
         private const val preferenceName = "cash-block:core:remote-setting"
         private val pref: SharedPreferences by lazy {
             Core.application.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
@@ -488,7 +529,6 @@ internal object RemotePreferenceData {
 
 
         object InAppConfig {
-            private const val IN_APP_MAIN_REWARD_BANNER_DELAY = "inapp:main:reward-banner-delay"
             private const val IN_APP_MAIN_PID_REWARD_BANNER = "inapp:main:pid:reward-banner"
             private const val IN_APP_MAIN_PID_LINEAR_SSP_320X50 = "inapp:main:pid:linear-ssp:320X50"
             private const val IN_APP_MAIN_PID_LINEAR_SSP_320X100 = "inapp:main:pid:linear-ssp:320X100"
@@ -497,11 +537,6 @@ internal object RemotePreferenceData {
             private val D = InAppSettingEntity.empty()
 
             object Main {
-                val rewardBannerDelay: Long
-                    get() {
-                        return pref.getLong(IN_APP_MAIN_REWARD_BANNER_DELAY, D.main.rewardBannerDelay)
-                    }
-
                 object PID {
                     val rewardBanner: String
                         get() {
@@ -532,7 +567,6 @@ internal object RemotePreferenceData {
 
             fun fetch(setting: InAppSettingEntity) {
                 pref.edit {
-                    putLong(IN_APP_MAIN_REWARD_BANNER_DELAY, setting.main.rewardBannerDelay)
                     putString(IN_APP_MAIN_PID_REWARD_BANNER, setting.main.pid.rewardBanner)
                     putString(IN_APP_MAIN_PID_LINEAR_SSP_320X50, setting.main.pid.linearSSP_320x50)
                     putString(IN_APP_MAIN_PID_LINEAR_SSP_320X100, setting.main.pid.linearSSP_320x100)
@@ -1028,6 +1062,142 @@ internal object RemotePreferenceData {
                     pref.edit { remove(it) }
                 }
             }
+        }
+
+
+        object RewardBannerConfig {
+            // roulette -> is a service not a block
+            private const val REWARD_BANNER_ROULETTE_MANPLUS_ALLOW_AD = "reward-banner:roulette:manplus:allow-ad"
+            private const val REWARD_BANNER_ROULETTE_MANPLUS_REWARD_DELAY = "reward-banner:roulette:manplus:reward-delay"
+            private const val REWARD_BANNER_ROULETTE_MANPLUS_REWARD_FREQUENCY = "reward-banner:roulette:manplu:reward-frequency"
+            private const val REWARD_BANNER_ROULETTE_QUANTUMBIT_ALLOW_AD = "reward-banner:roulette:quantumbit:allow-ad"
+            private const val REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_DELAY = "reward-banner:roulette:quantumbit:reward-delay"
+            private const val REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_FREQUENCY = "reward-banner:roulette:quantumbit:reward-frequency"
+
+            // offerwall -> is a service not a block
+            private const val REWARD_BANNER_OFFERWALL_MANPLUS_ALLOW_AD = "reward-banner:offerwall:manplus:allow-ad"
+            private const val REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_DELAY = "reward-banner:offerwall:manplus:reward-delay"
+            private const val REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_FREQUENCY = "reward-banner:offerwall:manplu:reward-frequency"
+            private const val REWARD_BANNER_OFFERWALL_QUANTUMBIT_ALLOW_AD = "reward-banner:offerwall:quantumbit:allow-ad"
+            private const val REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_DELAY = "reward-banner:offerwall:quantumbit:reward-delay"
+            private const val REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_FREQUENCY = "reward-banner:offerwall:quantumbit:reward-frequency"
+
+            // default
+            private val D = RewardBannerSettingEntity.empty()
+
+            object Roulette {
+                object ManPlus {
+                    val allowAd: Boolean
+                        get() {
+                            return pref.getBoolean(REWARD_BANNER_ROULETTE_MANPLUS_ALLOW_AD, D.roulette.manplus.allowAd)
+                        }
+
+                    val rewardDelay: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_ROULETTE_MANPLUS_REWARD_DELAY, D.roulette.manplus.rewardDelay)
+                        }
+
+                    val rewardFrequency: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_ROULETTE_MANPLUS_REWARD_DELAY, D.roulette.manplus.rewardFrequency)
+                        }
+                }
+
+                object QuantumBit {
+                    val allowAd: Boolean
+                        get() {
+                            return pref.getBoolean(REWARD_BANNER_ROULETTE_QUANTUMBIT_ALLOW_AD, D.roulette.quantumbit.allowAd)
+                        }
+
+                    val rewardDelay: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_DELAY, D.roulette.quantumbit.rewardDelay)
+                        }
+
+                    val rewardFrequency: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_FREQUENCY, D.roulette.quantumbit.rewardFrequency)
+                        }
+                }
+            }
+
+            object Offerwall {
+                object ManPlus {
+                    val allowAd: Boolean
+                        get() {
+                            return pref.getBoolean(REWARD_BANNER_OFFERWALL_MANPLUS_ALLOW_AD, D.offerwall.manplus.allowAd)
+                        }
+
+                    val rewardDelay: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_DELAY, D.offerwall.manplus.rewardDelay)
+                        }
+
+                    val rewardFrequency: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_DELAY, D.offerwall.manplus.rewardFrequency)
+                        }
+                }
+
+                object QuantumBit {
+                    val allowAd: Boolean
+                        get() {
+                            return pref.getBoolean(REWARD_BANNER_OFFERWALL_QUANTUMBIT_ALLOW_AD, D.offerwall.quantumbit.allowAd)
+                        }
+
+                    val rewardDelay: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_DELAY, D.offerwall.quantumbit.rewardDelay)
+                        }
+
+                    val rewardFrequency: Long
+                        get() {
+                            return pref.getLong(REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_FREQUENCY, D.offerwall.quantumbit.rewardFrequency)
+                        }
+                }
+            }
+
+
+            fun fetch(setting: RewardBannerSettingEntity) {
+                pref.edit {
+                    // roulette - man-plus
+                    putBoolean(REWARD_BANNER_ROULETTE_MANPLUS_ALLOW_AD, setting.roulette.manplus.allowAd)
+                    putLong(REWARD_BANNER_ROULETTE_MANPLUS_REWARD_DELAY, setting.roulette.manplus.rewardDelay)
+                    putLong(REWARD_BANNER_ROULETTE_MANPLUS_REWARD_FREQUENCY, setting.roulette.manplus.rewardFrequency)
+                    // roulette - quantum-bit
+                    putBoolean(REWARD_BANNER_ROULETTE_QUANTUMBIT_ALLOW_AD, setting.roulette.quantumbit.allowAd)
+                    putLong(REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_DELAY, setting.roulette.quantumbit.rewardDelay)
+                    putLong(REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_FREQUENCY, setting.roulette.quantumbit.rewardFrequency)
+                    // offerwall man-plus
+                    putBoolean(REWARD_BANNER_OFFERWALL_MANPLUS_ALLOW_AD, setting.offerwall.manplus.allowAd)
+                    putLong(REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_DELAY, setting.offerwall.manplus.rewardDelay)
+                    putLong(REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_FREQUENCY, setting.offerwall.manplus.rewardFrequency)
+                    // offerwall quantum-bit
+                    putBoolean(REWARD_BANNER_OFFERWALL_QUANTUMBIT_ALLOW_AD, setting.offerwall.quantumbit.allowAd)
+                    putLong(REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_DELAY, setting.offerwall.quantumbit.rewardDelay)
+                    putLong(REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_FREQUENCY, setting.offerwall.quantumbit.rewardFrequency)
+                }
+            }
+
+            fun clear() {
+                arrayOf(
+                    REWARD_BANNER_ROULETTE_MANPLUS_ALLOW_AD,
+                    REWARD_BANNER_ROULETTE_MANPLUS_REWARD_DELAY,
+                    REWARD_BANNER_ROULETTE_MANPLUS_REWARD_FREQUENCY,
+                    REWARD_BANNER_ROULETTE_QUANTUMBIT_ALLOW_AD,
+                    REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_DELAY,
+                    REWARD_BANNER_ROULETTE_QUANTUMBIT_REWARD_FREQUENCY,
+                    REWARD_BANNER_OFFERWALL_MANPLUS_ALLOW_AD,
+                    REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_DELAY,
+                    REWARD_BANNER_OFFERWALL_MANPLUS_REWARD_FREQUENCY,
+                    REWARD_BANNER_OFFERWALL_QUANTUMBIT_ALLOW_AD,
+                    REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_DELAY,
+                    REWARD_BANNER_OFFERWALL_QUANTUMBIT_REWARD_FREQUENCY
+                ).forEach {
+                    pref.edit { remove(it) }
+                }
+            }
+
         }
     }
     // endregion

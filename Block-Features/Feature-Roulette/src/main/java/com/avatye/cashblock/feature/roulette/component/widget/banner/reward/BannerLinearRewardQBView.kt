@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import com.avatye.cashblock.base.component.contract.api.RewardBannerApiContractor
 import com.avatye.cashblock.base.component.contract.business.AccountContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
+import com.avatye.cashblock.base.component.contract.business.SettingContractor
 import com.avatye.cashblock.base.component.domain.entity.banner.BannerRewardCampaignEntity
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.entity.user.AgeVerifiedType
@@ -54,10 +55,19 @@ internal class BannerLinearRewardQBView(
     private val vb: AcbsrWidgetBannerLinearRewardQbBinding by lazy {
         AcbsrWidgetBannerLinearRewardQbBinding.inflate(LayoutInflater.from(context), this, true)
     }
+
+
+    private val allowAd: Boolean
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.quantumbit.allowAd
+        }
+
     private val ageVerified: Boolean
         get() {
             return AccountContractor.ageVerified == AgeVerifiedType.VERIFIED
         }
+
+
     private val api: RewardBannerApiContractor by lazy {
         RewardBannerApiContractor(blockType = RouletteConfig.blockType, serviceType = ServiceType.ROULETTE)
     }
@@ -77,7 +87,7 @@ internal class BannerLinearRewardQBView(
 
 
     fun requestAD() {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             this@BannerLinearRewardQBView.isVisible = false
             rewardCallback?.onAdFail()
             return

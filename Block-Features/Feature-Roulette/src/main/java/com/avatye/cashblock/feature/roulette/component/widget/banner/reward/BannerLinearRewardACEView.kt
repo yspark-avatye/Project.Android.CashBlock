@@ -75,10 +75,22 @@ internal class BannerLinearRewardACEView(
     private val hostAppName = SettingContractor.appInfoSetting.appName
     private val hostStoreUrl = SettingContractor.appInfoSetting.storeUrl
 
-    private var lastClickTime: Long = 0
-    private val frequency: Long = (10 * 60 * 1000)
-    private val messageDelay: Long get() = SettingContractor.inAppSetting.main.rewardBannerDelay
+    private val allowAd: Boolean
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.allowAd
+        }
 
+    private val frequency: Long
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.rewardFrequency
+        }
+
+    private val messageDelay: Long
+        get() {
+            return SettingContractor.rewardBannerSetting.roulette.manplus.rewardDelay
+        }
+
+    private var lastClickTime: Long = 0
     private val weakContext = WeakReference(context)
     private var bannerView: AdManView? = null
     private val publisherCode: Int by lazy { SettingContractor.advertiseNetworkSetting.manPlus.publisherCode }
@@ -99,7 +111,7 @@ internal class BannerLinearRewardACEView(
     }
 
     private fun requestLinearRewardView() {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             this@BannerLinearRewardACEView.isVisible = false
             rewardCallback?.onAdFail()
             return
@@ -166,7 +178,7 @@ internal class BannerLinearRewardACEView(
     }
 
     override fun onAdSuccessCode(v: Any?, id: String?, type: String?, status: String?, jsonDataString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         (context as Activity).runOnUiThread {
@@ -193,7 +205,7 @@ internal class BannerLinearRewardACEView(
     }
 
     override fun onAdFailCode(v: Any?, id: String?, type: String?, status: String?, jsonString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         post {
@@ -205,7 +217,7 @@ internal class BannerLinearRewardACEView(
     }
 
     override fun onAdErrorCode(v: Any?, id: String?, type: String?, status: String?, failingUrl: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         post {
@@ -217,7 +229,7 @@ internal class BannerLinearRewardACEView(
     }
 
     override fun onAdEvent(v: Any?, id: String?, type: String?, status: String?, jsonDataString: String?) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         if (type == AdEvent.Type.CLICK) {
@@ -241,7 +253,7 @@ internal class BannerLinearRewardACEView(
     }
 
     private fun requestReward() {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         api.retrieveDirectReward {
@@ -264,7 +276,7 @@ internal class BannerLinearRewardACEView(
     }
 
     private fun postReward(transactionID: String) {
-        if (!ageVerified) {
+        if (!ageVerified || !allowAd) {
             return
         }
         try {
