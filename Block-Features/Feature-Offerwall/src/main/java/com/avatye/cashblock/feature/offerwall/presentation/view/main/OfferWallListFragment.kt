@@ -80,7 +80,7 @@ internal class OfferWallListFragment : AppBaseFragment<AcbsoFragmentOfferwallLis
             status = PlaceHolderRecyclerView.Status.LOADING
             actionRetry {
                 if (isAvailable) {
-                    parentActivity.requestOfferWallList()
+                    parentActivity.requestList()
                 }
             }
         }

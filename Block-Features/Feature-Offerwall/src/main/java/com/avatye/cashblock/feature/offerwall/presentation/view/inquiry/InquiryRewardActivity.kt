@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.view.isVisible
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
@@ -59,6 +60,7 @@ internal class InquiryRewardActivity : AppBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentViewWith(vb.root)
         extraParcel<InquiryParcel>(InquiryParcel.NAME)?.let {
             parcel = it
         } ?: run {
@@ -68,7 +70,6 @@ internal class InquiryRewardActivity : AppBaseActivity() {
                 onConfirm = { finish() }
             ).show(cancelable = false)
         }
-        setContentViewWith(vb.root)
         // header
         with(vb.headerView) {
             actionBack { finish() }
@@ -92,10 +93,12 @@ internal class InquiryRewardActivity : AppBaseActivity() {
                 }
                 is ViewModelResult.Error -> {
                     loadingView?.dismiss()
+                    CoreUtil.showToast(com.avatye.cashblock.R.string.acb_common_message_error)
                 }
                 is ViewModelResult.Complete -> {
                     loadingView?.dismiss()
                     vb.inquiryContent.setText(it.result)
+                    vb.inquiryContentArea.isVisible = it.result.isNotEmpty()
                 }
             }
         }

@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.contract.business.ViewOpenContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
@@ -23,8 +22,8 @@ import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallItem
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallSectionEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallTabEntity
-import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
+import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.MessageDialogHelper
 import com.avatye.cashblock.base.component.support.launch
 import com.avatye.cashblock.base.component.support.toPX
@@ -32,7 +31,6 @@ import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.component.widget.miscellaneous.PlaceHolderRecyclerView
 import com.avatye.cashblock.base.library.LogHandler
 import com.avatye.cashblock.feature.offerwall.MODULE_NAME
-import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.OfferwallConfig.logger
 import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.component.controller.ADController
@@ -43,6 +41,7 @@ import com.avatye.cashblock.feature.offerwall.presentation.AppBaseActivity
 import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallActionParcel
 import com.avatye.cashblock.feature.offerwall.presentation.view.detail.OfferwallDetailViewActivity
 import com.avatye.cashblock.feature.offerwall.presentation.view.setting.SettingActivity
+import com.avatye.cashblock.feature.offerwall.presentation.viewmodel.list.OfferwallListModel
 import org.joda.time.DateTime
 
 internal class OfferwallMainActivity : AppBaseActivity() {
@@ -74,12 +73,12 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         }
     }
 
-    private val api: OfferwallApiContractor by lazy {
-        OfferwallApiContractor(blockType = OfferwallConfig.blockType)
-    }
-
     private val vb: AcbsoActivityOfferwallMainBinding by lazy {
         AcbsoActivityOfferwallMainBinding.inflate(LayoutInflater.from(this))
+    }
+
+    private val viewModel by lazy {
+        OfferwallListModel.create(this)
     }
 
     override fun onResume() {
@@ -126,7 +125,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
             data?.extras?.getParcelable<OfferWallActionParcel>(OfferWallActionParcel.NAME)?.let {
                 if (it.journeyType == OfferwallJourneyStateType.NONE) {
                     if (it.forceRefresh) {
-                        requestOfferWallList()
+                        requestList()
                     }
                 } else {
                     offerwallListPagerAdapter.changeAllList(it.currentPosition, it.journeyType)
@@ -163,80 +162,92 @@ internal class OfferwallMainActivity : AppBaseActivity() {
         }
         // endregion
 
-        // region # request
-        requestOfferwallTabs {
-            initOfferwallList()
+        // region # observe
+        observeViewModel {
+            init()
         }
         // endregion
     }
 
 
-    private fun requestOfferwallTabs(callback: () -> Unit) {
-        api.retrieveTabs {
+    private fun observeViewModel(callback: () -> Unit) {
+        // region # tab
+        viewModel.tabResult.observe(this) {
             when (it) {
-                is ContractResult.Success -> {
+                is ViewModelResult.InProgress -> loadingView?.show(cancelable = false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    tabList = mutableListOf()
+                    LogHandler.e(moduleName = MODULE_NAME) {
+                        "$tagName -> requestTabs() { statusCode:${it.statusCode}, code: ${it.errorCode}, message: ${it.message} }"
+                    }
+                    callback()
+                }
+                is ViewModelResult.Complete -> {
+                    loadingView?.dismiss()
                     val conditionTime = if (DateTime().toString("HH").toLong() >= 12) {
                         DateTime().plusDays(1).toString("yyyyMMdd00")
                     } else {
                         DateTime().toString("yyyyMMdd12")
                     }.toLong()
                     PreferenceData.Tab.update(conditionTime = conditionTime)
-                    tabList = it.contract
+                    tabList = it.result
                     callback()
                 }
+            }
+        }
+        requestTabs()
+        // endregion
 
-                is ContractResult.Failure -> {
-                    tabList = mutableListOf()
-                    callback()
+        // region # item-list
+        viewModel.listResult.observe(this) {
+            when (it) {
+                is ViewModelResult.InProgress -> loadingView?.show(cancelable = false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    offerwallListPagerAdapter.setStatusView(PlaceHolderRecyclerView.Status.ERROR)
                     LogHandler.e(moduleName = MODULE_NAME) {
-                        "$tagName -> requestOfferwallTabs() { statusCode:${it.statusCode}, code: ${it.errorCode}, message: ${it.message} }"
+                        "$tagName -> requestList() { statusCode:${it.statusCode}, code: ${it.errorCode}, message: ${it.message} }"
+                    }
+                }
+                is ViewModelResult.Complete -> {
+                    loadingView?.dismiss()
+                    sectionList = it.result
+                    it.result.forEach { sectionEntity ->
+                        sectionEntity.items.forEach { item ->
+                            offerwallListPagerAdapter.setData()
+                        }
                     }
                 }
             }
         }
+        // endregion
     }
 
 
-    private fun initOfferwallList() {
+    private fun requestTabs() = viewModel.requestTab()
+
+    fun requestList() {
+        CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
+            viewModel.requestList(deviceADID = aaidEntity.aaid, service = serviceType)
+        }
+    }
+
+
+    private fun init() {
         if (tabList.isNotEmpty()) {
             tabList.forEachIndexed { index, tab ->
                 addTapButton(this, index, tab.tabName)
             }
             setTabBackground(0)
             initViewPager()
-            requestOfferWallList()
+            requestList()
         } else {
             MessageDialogHelper.confirm(
                 activity = this,
                 message = getString(R.string.acb_common_message_error),
                 onConfirm = { finish() }
             ).show(false)
-        }
-    }
-
-
-    fun requestOfferWallList(callback: () -> Unit = {}) {
-        loadingView?.show(cancelable = false)
-        CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
-            api.retrieveList(deviceADID = aaidEntity.aaid, serviceID = serviceType ?: ServiceType.OFFERWALL) {
-                when (it) {
-                    is ContractResult.Success -> {
-                        callback()
-                        sectionList = it.contract
-                        it.contract.forEach { sectionEntity ->
-                            sectionEntity.items.forEach { item ->
-                                offerwallListPagerAdapter.setData()
-                            }
-                        }
-                        loadingView?.dismiss()
-                    }
-                    is ContractResult.Failure -> {
-                        callback()
-                        offerwallListPagerAdapter.setStatusView(PlaceHolderRecyclerView.Status.ERROR)
-                        loadingView?.dismiss()
-                    }
-                }
-            }
         }
     }
 
@@ -379,7 +390,7 @@ internal class OfferwallMainActivity : AppBaseActivity() {
 
         fun changeAllList(currentPosition: Int, journeyStateType: OfferwallJourneyStateType) {
             if (offerwalls.size - 1 < currentPosition) {
-                requestOfferWallList()
+                requestList()
                 return
             }
             AdvertiseListController.changeAllList(

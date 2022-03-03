@@ -13,12 +13,12 @@ import com.avatye.cashblock.base.internal.server.serve.ServeResponse
 
 class OfferwallApiContractor(private val blockType: BlockType) {
 
-    fun retrieveList(deviceADID: String, tabID: String? = null, serviceID: ServiceType, response: (contract: ContractResult<MutableList<OfferwallSectionEntity>>) -> Unit) {
+    fun retrieveList(deviceADID: String, tabID: String? = null, service: ServiceType, response: (contract: ContractResult<MutableList<OfferwallSectionEntity>>) -> Unit) {
         APIOfferwall.getOfferwalls(
             blockType = blockType,
             deviceADID = deviceADID,
             tabID = tabID,
-            service = serviceID,
+            service = service,
             response = object : ServeResponse<ResOfferwallList> {
                 override fun onSuccess(success: ResOfferwallList) = response(Contract.onSuccess(success = success.sections))
                 override fun onFailure(failure: ServeFailure) = response(Contract.onFailure(failure = failure))

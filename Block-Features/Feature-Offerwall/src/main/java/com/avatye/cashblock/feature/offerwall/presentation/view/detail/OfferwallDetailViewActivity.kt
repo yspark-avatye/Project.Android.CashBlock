@@ -9,19 +9,17 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
-import com.avatye.cashblock.base.component.contract.api.OfferwallApiContractor
 import com.avatye.cashblock.base.component.contract.business.CoreContractor
 import com.avatye.cashblock.base.component.domain.entity.base.ActivityTransitionType
 import com.avatye.cashblock.base.component.domain.entity.base.ServiceType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallImpressionItemEntity
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallJourneyStateType
 import com.avatye.cashblock.base.component.domain.entity.offerwall.OfferwallProductType
-import com.avatye.cashblock.base.component.domain.model.contract.ContractResult
 import com.avatye.cashblock.base.component.domain.model.parcel.ServiceNameParcel
+import com.avatye.cashblock.base.component.domain.model.sealed.ViewModelResult
 import com.avatye.cashblock.base.component.support.*
 import com.avatye.cashblock.base.component.widget.banner.BannerLinearView
 import com.avatye.cashblock.base.library.LogHandler
-import com.avatye.cashblock.feature.offerwall.OfferwallConfig
 import com.avatye.cashblock.feature.offerwall.R
 import com.avatye.cashblock.feature.offerwall.component.controller.ADController
 import com.avatye.cashblock.feature.offerwall.component.controller.AdvertiseController
@@ -32,6 +30,7 @@ import com.avatye.cashblock.feature.offerwall.presentation.parcel.InquiryParcel
 import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallActionParcel
 import com.avatye.cashblock.feature.offerwall.presentation.parcel.OfferWallViewParcel
 import com.avatye.cashblock.feature.offerwall.presentation.view.inquiry.InquiryRewardActivity
+import com.avatye.cashblock.feature.offerwall.presentation.viewmodel.detail.OfferwallDetailViewModel
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import org.joda.time.DateTime
@@ -60,8 +59,8 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         }
     }
 
-    private val api: OfferwallApiContractor by lazy {
-        OfferwallApiContractor(blockType = OfferwallConfig.blockType)
+    private val viewModel by lazy {
+        OfferwallDetailViewModel.create(this)
     }
 
     private var parcel: OfferWallViewParcel? = null
@@ -139,40 +138,164 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         vb.adRewardInquiry.setOnClickListener(this)
         vb.adClose.setOnClickListener(this)
         vb.adHide.setOnClickListener(this)
-        // requestImpression
+        // observe
+        observeViewModel()
+    }
+
+
+    private fun observeViewModel() {
+        // region # impression
+        viewModel.impressionResult.observe(this) {
+            when (it) {
+                is ViewModelResult.InProgress -> loadingView?.show(cancelable = false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    MessageDialogHelper.confirm(
+                        activity = this,
+                        message = getString(R.string.acb_common_message_error),
+                        onConfirm = { finish() }
+                    ).show(false)
+                }
+                is ViewModelResult.Complete -> {
+                    loadingView?.dismiss()
+                    AdvertiseController.impressionItemEntity = it.result
+
+                    // delay
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        loadingView?.dismiss()
+                    }, 1000)
+                    // bindView
+                    bindView(it.result)
+                }
+            }
+        }
         requestImpression()
+        // endregion
+
+        // region # confirm
+        viewModel.clickResult.observe(this) {
+            when (it) {
+                is ViewModelResult.InProgress -> loadingView?.show(false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    MessageDialogHelper.confirm(
+                        activity = this,
+                        message = it.message,
+                        onConfirm = { actionCloseAdvertise() }
+                    ).show(false)
+
+                    // error case
+//                    if (it.errorCode.equals(other = "err_invalid_parameter", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_not_support_network", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_not_exists_advertise", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_already", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_invalid", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_closed", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_not_exists", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_exhausted", ignoreCase = true)
+//                        || it.errorCode.equals(other = "err_fail_click_not_target", ignoreCase = true)
+//                    )
+
+                }
+                is ViewModelResult.Complete -> {
+                    runCatching {
+                        val actionParcel = OfferWallActionParcel(
+                            currentPosition = parcel?.currentPos ?: 0,
+                            journeyType = OfferwallJourneyStateType.PARTICIPATE,
+                            forceRefresh = false
+                        )
+                        setResult(Activity.RESULT_OK, Intent().apply { putExtra(OfferWallActionParcel.NAME, actionParcel) })
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.result.landingUrl)))
+                    }.onSuccess {
+                        isRequestConfiirm = true
+                    }.onFailure { e ->
+                        e.printStackTrace()
+                        isRequestConfiirm = false
+                        MessageDialogHelper.confirm(
+                            activity = this,
+                            message = R.string.acbso_offerwall_failed_to_participate_please_try_again,
+                            onConfirm = { finish() }
+                        ).show(false)
+                    }.also {
+                        loadingView?.dismiss()
+                    }
+                }
+            }
+        }
+        // endregion
+
+        // region # conversion
+        viewModel.conversionResult.observe(this) {
+            when (it) {
+                is ViewModelResult.InProgress -> loadingView?.show(false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    MessageDialogHelper.confirm(
+                        activity = this,
+                        message = getString(R.string.acb_common_message_error),
+                        onConfirm = { finish() }
+                    ).show(false)
+                }
+                is ViewModelResult.Complete -> {
+                    loadingView?.dismiss()
+                    MessageDialogHelper.confirm(
+                        activity = this,
+                        message = R.string.acbso_offerwall_cash_has_been_earned_please_check_your_accumulation_details,
+                        onConfirm = {
+                            val intent: Intent = Intent().apply {
+                                putExtra(
+                                    OfferWallActionParcel.NAME, OfferWallActionParcel(
+                                        currentPosition = parcel?.currentPos ?: 0,
+                                        journeyType = OfferwallJourneyStateType.COMPLETED_REWARDED,
+                                        forceRefresh = false
+                                    )
+                                )
+                            }
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
+                    ).show(false)
+                }
+            }
+        }
+        // endregion
+
+        // region # close
+        viewModel.closeResult.observe(this) {
+            when (it) {
+                is ViewModelResult.InProgress -> loadingView?.show(false)
+                is ViewModelResult.Error -> {
+                    loadingView?.dismiss()
+                    CoreUtil.showToast(R.string.acbso_offerwall_failed_to_remove_please_try_again)
+                }
+                is ViewModelResult.Complete -> {
+                    loadingView?.dismiss()
+                    setResult(
+                        Activity.RESULT_OK, Intent().apply {
+                            putExtra(
+                                OfferWallActionParcel.NAME,
+                                OfferWallActionParcel(
+                                    currentPosition = parcel?.currentPos ?: 0,
+                                    journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
+                                )
+                            )
+                        }
+                    )
+                    finish()
+                }
+            }
+        }
+        // endregion
     }
 
 
     private fun requestImpression() {
-        loadingView?.show(cancelable = false)
         CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
-            api.postImpression(
+            viewModel.requestImpression(
                 deviceADID = aaidEntity.aaid,
                 advertiseID = parcel?.advertiseID ?: "",
                 service = serviceType,
-            ) {
-                when (it) {
-                    is ContractResult.Success -> {
-                        loadingView?.dismiss()
-                        AdvertiseController.impressionItemEntity = it.contract
-                        // delay
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            loadingView?.dismiss()
-                        }, 1000)
-
-                        bindView(it.contract)
-                    }
-                    is ContractResult.Failure -> {
-                        loadingView?.dismiss()
-                        MessageDialogHelper.confirm(
-                            activity = this,
-                            message = getString(R.string.acb_common_message_error),
-                            onConfirm = { finish() }
-                        ).show(false)
-                    }
-                }
-            }
+            )
         }
     }
 
@@ -216,74 +339,43 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
     }
 
 
+    private fun isInstalled(packageName: String?): Boolean {
+        this.packageManager.getLaunchIntentForPackage(packageName ?: "")?.run {
+            return true
+        }
+        val installPackage = packageManager.getInstalledPackages(0)
+        installPackage.forEach {
+            if (it.packageName.equals(packageName)) {
+                LogHandler.i(moduleName = this::class.java.simpleName) { "$tagName -> isInstalled -> $${it.packageName.equals(packageName)}" }
+                return true
+            }
+        }
+        return false
+    }
+
+
     private fun requestConfirm(impressionItem: OfferwallImpressionItemEntity) {
         // TODO 연령심사
 
-        loadingView?.show(false)
         CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
-            api.postClick(
+            viewModel.requestConfirm(
                 deviceADID = aaidEntity.aaid,
                 advertiseID = parcel?.advertiseID ?: "",
                 impressionID = impressionItem.impressionID,
-                service = serviceType ?: ServiceType.OFFERWALL,
-            ) {
-                when (it) {
-                    is ContractResult.Success -> {
-                        runCatching {
-                            val actionParcel = OfferWallActionParcel(
-                                currentPosition = parcel?.currentPos ?: 0,
-                                journeyType = OfferwallJourneyStateType.PARTICIPATE,
-                                forceRefresh = false
-                            )
-                            setResult(Activity.RESULT_OK, Intent().apply { putExtra(OfferWallActionParcel.NAME, actionParcel) })
-                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.contract.landingUrl)))
-                        }.onSuccess {
-                            isRequestConfiirm = true
-                        }.onFailure { e ->
-                            e.printStackTrace()
-                            isRequestConfiirm = false
-                            MessageDialogHelper.confirm(
-                                activity = this,
-                                message = R.string.acbso_offerwall_failed_to_participate_please_try_again,
-                                onConfirm = { finish() }
-                            ).show(false)
-                        }.also {
-                            loadingView?.dismiss()
-                        }
-                    }
-
-                    is ContractResult.Failure -> {
-                        loadingView?.dismiss()
-
-                        if (it.errorCode.equals(other = "err_invalid_parameter", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_not_support_network", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_not_exists_advertise", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_already", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_invalid", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_closed", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_not_exists", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_exhausted", ignoreCase = true)
-                            || it.errorCode.equals(other = "err_fail_click_not_target", ignoreCase = true)
-                        ) {
+                service = serviceType,
+            )
+        }
+    }
 
 
-//                            val actionParcel = OfferWallActionParcel(
-//                                currentPosition = 0,
-//                                journeyType = OfferwallJourneyStateType.NONE,
-//                                forceRefresh = true
-//                            )
-//                            parentActivity.setResult(Activity.RESULT_OK, Intent().putExtra(OfferWallActionParcel.NAME, actionParcel))
-                        }
-
-                        MessageDialogHelper.confirm(
-                            activity = this,
-                            message = it.message,
-                            onConfirm = { startCloseAdvertise() }
-                        ).show(false)
-
-                    }
-                }
-            }
+    private fun requestConversion(impressionItem: OfferwallImpressionItemEntity) {
+        CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
+            viewModel.requestConversion(
+                deviceADID = aaidEntity.aaid,
+                advertiseID = impressionItem.advertiseID,
+                clickID = impressionItem.clickID ?: "",
+                service = serviceType
+            )
         }
     }
 
@@ -306,101 +398,16 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
     }
 
 
-    private fun isInstalled(packageName: String?): Boolean {
-        this.packageManager.getLaunchIntentForPackage(packageName ?: "")?.run {
-            return true
-        }
-        val installPackage = packageManager.getInstalledPackages(0)
-        installPackage.forEach {
-            if (it.packageName.equals(packageName)) {
-                LogHandler.i(moduleName = this::class.java.simpleName) { "$tagName -> isInstalled -> $${it.packageName.equals(packageName)}" }
-                return true
-            }
-        }
-        return false
-    }
-
-
-    private fun requestConversion(impressionItem: OfferwallImpressionItemEntity) {
-        loadingView?.show(false)
+    private fun requestClose() {
         CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
-            api.postConversion(
-                deviceADID = aaidEntity.aaid,
-                advertiseID = impressionItem.advertiseID,
-                clickID = impressionItem.clickID ?: "",
-                service = serviceType
-            ) {
-                when (it) {
-                    is ContractResult.Success -> {
-                        loadingView?.dismiss()
-                        MessageDialogHelper.confirm(
-                            activity = this,
-                            message = R.string.acbso_offerwall_cash_has_been_earned_please_check_your_accumulation_details,
-                            onConfirm = {
-                                val intent: Intent = Intent().apply {
-                                    putExtra(
-                                        OfferWallActionParcel.NAME, OfferWallActionParcel(
-                                            currentPosition = parcel?.currentPos ?: 0,
-                                            journeyType = OfferwallJourneyStateType.COMPLETED_REWARDED,
-                                            forceRefresh = false
-                                        )
-                                    )
-                                }
-                                setResult(Activity.RESULT_OK, intent)
-                                finish()
-                            }
-                        ).show(false)
-
-                    }
-                    is ContractResult.Failure -> {
-                        loadingView?.dismiss()
-                        MessageDialogHelper.confirm(
-                            activity = this,
-                            message = getString(R.string.acb_common_message_error),
-                            onConfirm = { finish() }
-                        ).show(false)
-                    }
-                }
-            }
-
+            viewModel.requestClose(deviceADID = aaidEntity.aaid, advertiseID = parcel?.advertiseID ?: "")
         }
     }
 
-
-    private fun requestOfferWallClose() {
-        loadingView?.show(false)
-        CoreContractor.DeviceSetting.retrieveAAID { aaidEntity ->
-            api.postClose(
-                deviceADID = aaidEntity.aaid,
-                advertiseID = parcel?.advertiseID ?: "",
-            ) {
-                when (it) {
-                    is ContractResult.Success -> {
-                        loadingView?.dismiss()
-                        setResult(
-                            Activity.RESULT_OK, Intent().apply {
-                                putExtra(
-                                    OfferWallActionParcel.NAME,
-                                    OfferWallActionParcel(
-                                        currentPosition = parcel?.currentPos ?: 0,
-                                        journeyType = OfferwallJourneyStateType.COMPLETED_FAILED,
-                                    )
-                                )
-                            }
-                        )
-                        finish()
-                    }
-                    is ContractResult.Failure -> {
-                        loadingView?.dismiss()
-                        CoreUtil.showToast(R.string.acbso_offerwall_failed_to_remove_please_try_again)
-                    }
-                }
-            }
-        }
-    }
+    private fun actionCloseAdvertise() = requestClose()
 
 
-    private fun startRewardInquiry(entity: OfferwallImpressionItemEntity) {
+    private fun actionRewardInquiry(entity: OfferwallImpressionItemEntity) {
         if (entity.contactState == 0 || entity.contactState == 1 || entity.contactState == 5 || entity.contactState == 8 || entity.contactState == 9) {
             val inquiryMessage = when (entity.contactState) {
                 9 -> R.string.acbso_offerwall_inquiry_reward_contact_complete
@@ -418,41 +425,51 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
             return
         }
 
-        val now = DateTime().millis
-        val participateTime: Long? = when (entity.productID) {
-            OfferwallProductType.CPFL,
-            OfferwallProductType.CPIF -> {
-                entity.clickDateTime?.plusHours(24)?.millis
-            }
-            else -> entity.clickDateTime?.plusMinutes(40)?.millis
-        }
-        if (now >= participateTime ?: 0) {
-            InquiryRewardActivity.openForResult(
-                activity = this@OfferwallDetailViewActivity,
-                serviceType = serviceType,
-                parcel = InquiryParcel(
-                    advertiseId = entity.advertiseID,
-                    contactId = null,
-                    title = entity.title,
-                    state = 0
-                )
+        // test
+        InquiryRewardActivity.openForResult(
+            activity = this@OfferwallDetailViewActivity,
+            serviceType = serviceType,
+            parcel = InquiryParcel(
+                advertiseId = entity.advertiseID,
+                contactId = null,
+                title = entity.title,
+                state = 0
             )
-        } else {
-            MessageDialogHelper.confirm(
-                activity = this@OfferwallDetailViewActivity,
-                message = when (entity.productID) {
-                    OfferwallProductType.CPFL -> getString(R.string.acbso_offerwall_inquiry_reward_message_time_24_hour_not_yet)
-                    else -> getString(R.string.acbso_offerwall_inquiry_reward_message_time_40_minute_not_yet)
-                }
-            ).show(false)
-        }
+        )
+
+
+//        val now = DateTime().millis
+//        val participateTime: Long? = when (entity.productID) {
+//            OfferwallProductType.CPFL,
+//            OfferwallProductType.CPIF -> {
+//                entity.clickDateTime?.plusHours(24)?.millis
+//            }
+//            else -> entity.clickDateTime?.plusMinutes(40)?.millis
+//        }
+//        if (now >= participateTime ?: 0) {
+//            InquiryRewardActivity.openForResult(
+//                activity = this@OfferwallDetailViewActivity,
+//                serviceType = serviceType,
+//                parcel = InquiryParcel(
+//                    advertiseId = entity.advertiseID,
+//                    contactId = null,
+//                    title = entity.title,
+//                    state = 0
+//                )
+//            )
+//        } else {
+//            MessageDialogHelper.confirm(
+//                activity = this@OfferwallDetailViewActivity,
+//                message = when (entity.productID) {
+//                    OfferwallProductType.CPFL -> getString(R.string.acbso_offerwall_inquiry_reward_message_time_24_hour_not_yet)
+//                    else -> getString(R.string.acbso_offerwall_inquiry_reward_message_time_40_minute_not_yet)
+//                }
+//            ).show(false)
+//        }
     }
 
 
-    private fun startCloseAdvertise() = requestOfferWallClose()
-
-
-    private fun startHideAdvertise(entity: OfferwallImpressionItemEntity) {
+    private fun actionHideAdvertise(entity: OfferwallImpressionItemEntity) {
         val hiddenItems: MutableList<String>? = PreferenceData.Hidden.hiddenItems?.toMutableList()
         hiddenItems?.let {
             if (!it.contains(entity.advertiseID)) {
@@ -483,26 +500,24 @@ internal class OfferwallDetailViewActivity : AppBaseActivity(), View.OnClickList
         val impressionItemEntity = AdvertiseController.impressionItemEntity
 
         when (v?.id) {
-            vb.adRewardInquiry.id -> {
-                startRewardInquiry(impressionItemEntity)
-            }
-
             vb.adClose.id -> {
                 MessageDialogHelper.determine(
                     activity = this@OfferwallDetailViewActivity,
                     message = R.string.acbso_offerwall_do_you_want_to_remove_from_the_participating_list,
                     onPositive = {
-                        startCloseAdvertise()
+                        actionCloseAdvertise()
                     }
                 ).show(false)
             }
-
+            vb.adRewardInquiry.id -> {
+                actionRewardInquiry(impressionItemEntity)
+            }
             vb.adHide.id -> {
                 MessageDialogHelper.determine(
                     activity = this@OfferwallDetailViewActivity,
                     message = R.string.acbso_offerwall_do_you_want_to_hide_from_the_participating_list,
                     onPositive = {
-                        startHideAdvertise(impressionItemEntity)
+                        actionHideAdvertise(impressionItemEntity)
                     }
                 ).show(false)
             }

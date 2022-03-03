@@ -24,6 +24,7 @@ internal class InquiryListViewModel : ViewModel() {
     val result: LiveData<ViewModelResult<MutableList<OfferwallContactRewardEntity>>> = _result
 
     fun request() {
+        _result.value = Contract.postInProgress()
         api.retrieveContactRewardList(blockType = OfferwallConfig.blockType) {
             when (it) {
                 is ContractResult.Success -> _result.value = Contract.postComplete(it.contract)

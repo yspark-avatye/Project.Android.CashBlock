@@ -14,7 +14,7 @@ internal object APIOfferwall {
             "deviceADID" to deviceADID,
         ).apply {
             tabID?.let {
-                "tabID" to it
+                this["tabID"] = it
             }
         }
         ServeTask(
@@ -100,22 +100,22 @@ internal object APIOfferwall {
             "serviceID" to service.value,
         ).apply {
             deviceID?.let {
-                "deviceID" to it
+                this["deviceID"] = it
             }
             deviceModel?.let {
-                "deviceModel" to it
+                this["deviceModel"] = it
             }
             deviceNetwork?.let {
-                "deviceNetwork" to it
+                this["deviceNetwork"] = it
             }
             deviceOS?.let {
-                "deviceOS" to it
+                this["deviceOS"] = it
             }
             deviceCarrier?.let {
-                "deviceCarrier" to it
+                this["deviceCarrier"] = it
             }
             customData?.let {
-                "customData" to it
+                this["customData"] = it
             }
         }
 
@@ -148,10 +148,10 @@ internal object APIOfferwall {
             "serviceID" to service.value,
         ).apply {
             deviceID?.let {
-                "deviceID" to it
+                this["deviceID"] = it
             }
             deviceNetwork?.let {
-                "deviceNetwork" to it
+                this["deviceNetwork"] = it
             }
         }
         ServeTask(
@@ -186,25 +186,25 @@ internal object APIOfferwall {
             "deviceADID" to deviceADID,
         ).apply {
             contactID?.let {
-                "contactID" to it
+                this["contactID"] = it
             }
             title?.let {
-                "title" to it
+                this["title"] = it
             }
             state?.let {
-                "state" to it
+                this["state"] = it
             }
             resultMsgType?.let {
-                "resultMsgType" to it
+                this["resultMsgType"] = it
             }
             deviceID?.let {
-                "deviceID" to deviceID
+                this["deviceID"] = it
             }
             phone?.let {
-                "phone" to phone
+                this["phone"] = it
             }
             userName?.let {
-                "userName" to userName
+                this["userName"] = it
             }
         }
         ServeTask(
@@ -222,7 +222,7 @@ internal object APIOfferwall {
     fun getOfferwallContactRewardInfo(blockType: BlockType, advertiseID: String, response: ServeResponse<ResOfferwallContactRewardInfo>) {
         ServeTask(
             blockType = blockType,
-            authorization = ServeTask.Authorization.BASIC,
+            authorization = ServeTask.Authorization.BEARER,
             method = ServeTask.Method.GET,
             requestUrl = "advertising/support/contact/reward/info",
             acceptVersion = "1.0.0",

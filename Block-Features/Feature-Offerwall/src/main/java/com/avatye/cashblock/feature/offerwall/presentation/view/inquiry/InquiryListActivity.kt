@@ -46,6 +46,7 @@ internal class InquiryListActivity : AppBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWith(view = vb.root, logKey = "view:offerwall:inquiry-list")
+        vb.headerView.actionBack { finish() }
         vb.placeHolderList.setLayoutManager(LinearLayoutManager(this))
         vb.placeHolderList.status = PlaceHolderRecyclerView.Status.LOADING
         vb.placeHolderList.actionRetry { viewModel.request() }

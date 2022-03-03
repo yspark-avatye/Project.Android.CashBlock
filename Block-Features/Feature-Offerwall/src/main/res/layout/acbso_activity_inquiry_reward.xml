@@ -212,6 +212,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.core.widget.NestedScrollView
+                    android:id="@+id/inquiry_content_area"
                     android:layout_width="match_parent"
                     android:layout_height="113dp"
                     android:layout_marginStart="24dp"
@@ -287,7 +288,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/inquiry_button"
-        style="@style/CashBlock.Widget.Button"
+        style="@style/CashBlock.Widget.Button.c01"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_marginStart="24dp"
